@@ -40,6 +40,96 @@
 }
 </script>
 
+<!-- JSON-LD ItemList for all design styles (scraper-friendly) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Design Style Mashups",
+  "description": "A curated collection of design style mashups combining iconic design movements.",
+  "numberOfItems": 7,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Aurora × Brutal",
+        "description": "Mesh gradients meet hard edges — cosmic light with structural contrast.",
+        "url": "https://design-roulette.vercel.app/styles/aurora-x-brutal.html",
+        "keywords": ["mesh-gradient", "brutalism", "dark-theme", "cosmic", "high-contrast"]
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Neu × Brutal",
+        "description": "Soft clay surfaces framed by sharp ink borders — tactile and grounded.",
+        "url": "https://design-roulette.vercel.app/styles/neu-x-brutal.html",
+        "keywords": ["neumorphism", "brutalism", "earthy", "tactile", "soft-shadows"]
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Dopamine × Brutal",
+        "description": "Neon overload with blocky structure — loud, joyful, impossible to ignore.",
+        "url": "https://design-roulette.vercel.app/styles/dopamine-x-brutal.html",
+        "keywords": ["dopamine", "brutalism", "neon", "vibrant", "high-energy"]
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Glass × Brutal",
+        "description": "Frosted translucency pinned down by bold black frames — ethereal meets industrial.",
+        "url": "https://design-roulette.vercel.app/styles/glass-x-brutal.html",
+        "keywords": ["glassmorphism", "brutalism", "frosted", "translucent", "dark-theme"]
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Synthwave × Swiss",
+        "description": "Neon retro-future grids meet precise Swiss typography — structured glow.",
+        "url": "https://design-roulette.vercel.app/styles/synthwave-x-swiss.html",
+        "keywords": ["synthwave", "swiss", "retro", "neon", "grid-based", "typography"]
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Vapor × Clay",
+        "description": "Pastel vaporwave aesthetics with soft, puffy claymorphism surfaces — dreamy and tactile.",
+        "url": "https://design-roulette.vercel.app/styles/vapor-x-clay.html",
+        "keywords": ["vaporwave", "claymorphism", "pastel", "soft", "dreamy", "light-theme"]
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 7,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Deco × Memphis",
+        "description": "Art Deco gold geometry collides with 80s Memphis pop patterns — opulent and playful.",
+        "url": "https://design-roulette.vercel.app/styles/deco-x-memphis.html",
+        "keywords": ["art-deco", "memphis", "gold", "geometric", "retro", "pop"]
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
@@ -289,8 +379,27 @@ footer p {
   </div>
 </main>
 
+<!-- Scraper-friendly: hidden semantic data table for all styles -->
+<section id="style-data" aria-label="All design styles data" hidden>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Description</th><th>Style A</th><th>Style B</th><th>URL</th><th>Tags</th></tr>
+    </thead>
+    <tbody>
+      <tr data-style-id="aurora-x-brutal"><td>aurora-x-brutal</td><td>Aurora × Brutal</td><td>Mesh gradients meet hard edges — cosmic light with structural contrast.</td><td>Aurora</td><td>Brutalism</td><td>styles/aurora-x-brutal.html</td><td>mesh-gradient, brutalism, dark-theme, cosmic, high-contrast</td></tr>
+      <tr data-style-id="neu-x-brutal"><td>neu-x-brutal</td><td>Neu × Brutal</td><td>Soft clay surfaces framed by sharp ink borders — tactile and grounded.</td><td>Neumorphism</td><td>Brutalism</td><td>styles/neu-x-brutal.html</td><td>neumorphism, brutalism, earthy, tactile, soft-shadows</td></tr>
+      <tr data-style-id="dopamine-x-brutal"><td>dopamine-x-brutal</td><td>Dopamine × Brutal</td><td>Neon overload with blocky structure — loud, joyful, impossible to ignore.</td><td>Dopamine Design</td><td>Brutalism</td><td>styles/dopamine-x-brutal.html</td><td>dopamine, brutalism, neon, vibrant, high-energy</td></tr>
+      <tr data-style-id="glass-x-brutal"><td>glass-x-brutal</td><td>Glass × Brutal</td><td>Frosted translucency pinned down by bold black frames — ethereal meets industrial.</td><td>Glassmorphism</td><td>Brutalism</td><td>styles/glass-x-brutal.html</td><td>glassmorphism, brutalism, frosted, translucent, dark-theme</td></tr>
+      <tr data-style-id="synthwave-x-swiss"><td>synthwave-x-swiss</td><td>Synthwave × Swiss</td><td>Neon retro-future grids meet precise Swiss typography — structured glow.</td><td>Synthwave</td><td>Swiss Design</td><td>styles/synthwave-x-swiss.html</td><td>synthwave, swiss, retro, neon, grid-based, typography</td></tr>
+      <tr data-style-id="vapor-x-clay"><td>vapor-x-clay</td><td>Vapor × Clay</td><td>Pastel vaporwave aesthetics with soft, puffy claymorphism surfaces — dreamy and tactile.</td><td>Vaporwave</td><td>Claymorphism</td><td>styles/vapor-x-clay.html</td><td>vaporwave, claymorphism, pastel, soft, dreamy, light-theme</td></tr>
+      <tr data-style-id="deco-x-memphis"><td>deco-x-memphis</td><td>Deco × Memphis</td><td>Art Deco gold geometry collides with 80s Memphis pop patterns — opulent and playful.</td><td>Art Deco</td><td>Memphis Design</td><td>styles/deco-x-memphis.html</td><td>art-deco, memphis, gold, geometric, retro, pop</td></tr>
+    </tbody>
+  </table>
+</section>
+
 <footer>
   <p>Design Roulette &mdash; Style mashups for curious designers.</p>
+  <p style="margin-top:0.5rem;"><a href="/api/styles.json" style="color:var(--text-muted);font-size:0.7rem;">API: /api/styles.json</a></p>
 </footer>
 
 <script>

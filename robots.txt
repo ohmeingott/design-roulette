@@ -1,0 +1,11 @@
+# Design Roulette - Scraping Welcome!
+# We encourage developers to use our data.
+# For structured data, see /api/styles.json
+
+User-agent: *
+Allow: /
+
+# Machine-readable style data
+Allow: /api/styles.json
+
+Sitemap: https://design-roulette.vercel.app/sitemap.xml

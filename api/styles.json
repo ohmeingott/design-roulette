@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "name": "Design Roulette",
+    "description": "An interactive showcase that mixes iconic design movements into fresh UI aesthetics.",
+    "url": "https://design-roulette.vercel.app",
+    "version": "1.0.0",
+    "total_styles": 7
+  },
+  "styles": [
+    {
+      "id": "aurora-x-brutal",
+      "slug": "aurora",
+      "name": "Aurora × Brutal",
+      "tagline": "Mesh gradients meet hard edges — cosmic light with structural contrast.",
+      "style_a": "Aurora",
+      "style_b": "Brutalism",
+      "preview_url": "https://design-roulette.vercel.app/styles/aurora-x-brutal.html",
+      "colors": {
+        "primary": "#A29BFE",
+        "secondary": "#FD79A8",
+        "background": "#0D0D1A"
+      },
+      "tags": ["mesh-gradient", "brutalism", "dark-theme", "cosmic", "high-contrast"]
+    },
+    {
+      "id": "neu-x-brutal",
+      "slug": "neu",
+      "name": "Neu × Brutal",
+      "tagline": "Soft clay surfaces framed by sharp ink borders — tactile and grounded.",
+      "style_a": "Neumorphism",
+      "style_b": "Brutalism",
+      "preview_url": "https://design-roulette.vercel.app/styles/neu-x-brutal.html",
+      "colors": {
+        "primary": "#C4654A",
+        "secondary": "#7A9E7E",
+        "background": "#E8E0D4"
+      },
+      "tags": ["neumorphism", "brutalism", "earthy", "tactile", "soft-shadows"]
+    },
+    {
+      "id": "dopamine-x-brutal",
+      "slug": "dopamine",
+      "name": "Dopamine × Brutal",
+      "tagline": "Neon overload with blocky structure — loud, joyful, impossible to ignore.",
+      "style_a": "Dopamine Design",
+      "style_b": "Brutalism",
+      "preview_url": "https://design-roulette.vercel.app/styles/dopamine-x-brutal.html",
+      "colors": {
+        "primary": "#FF2D87",
+        "secondary": "#39FF14",
+        "background": "#1A0A2E"
+      },
+      "tags": ["dopamine", "brutalism", "neon", "vibrant", "high-energy"]
+    },
+    {
+      "id": "glass-x-brutal",
+      "slug": "glass",
+      "name": "Glass × Brutal",
+      "tagline": "Frosted translucency pinned down by bold black frames — ethereal meets industrial.",
+      "style_a": "Glassmorphism",
+      "style_b": "Brutalism",
+      "preview_url": "https://design-roulette.vercel.app/styles/glass-x-brutal.html",
+      "colors": {
+        "primary": "#FF6B6B",
+        "secondary": "#6BFFC2",
+        "background": "#0A1628"
+      },
+      "tags": ["glassmorphism", "brutalism", "frosted", "translucent", "dark-theme"]
+    },
+    {
+      "id": "synthwave-x-swiss",
+      "slug": "synthwave",
+      "name": "Synthwave × Swiss",
+      "tagline": "Neon retro-future grids meet precise Swiss typography — structured glow.",
+      "style_a": "Synthwave",
+      "style_b": "Swiss Design",
+      "preview_url": "https://design-roulette.vercel.app/styles/synthwave-x-swiss.html",
+      "colors": {
+        "primary": "#00FFFF",
+        "secondary": "#FF00FF",
+        "background": "#0D0221"
+      },
+      "tags": ["synthwave", "swiss", "retro", "neon", "grid-based", "typography"]
+    },
+    {
+      "id": "vapor-x-clay",
+      "slug": "vapor",
+      "name": "Vapor × Clay",
+      "tagline": "Pastel vaporwave aesthetics with soft, puffy claymorphism surfaces — dreamy and tactile.",
+      "style_a": "Vaporwave",
+      "style_b": "Claymorphism",
+      "preview_url": "https://design-roulette.vercel.app/styles/vapor-x-clay.html",
+      "colors": {
+        "primary": "#B967FF",
+        "secondary": "#01CDFE",
+        "background": "#F0E6FF"
+      },
+      "tags": ["vaporwave", "claymorphism", "pastel", "soft", "dreamy", "light-theme"]
+    },
+    {
+      "id": "deco-x-memphis",
+      "slug": "deco",
+      "name": "Deco × Memphis",
+      "tagline": "Art Deco gold geometry collides with 80s Memphis pop patterns — opulent and playful.",
+      "style_a": "Art Deco",
+      "style_b": "Memphis Design",
+      "preview_url": "https://design-roulette.vercel.app/styles/deco-x-memphis.html",
+      "colors": {
+        "primary": "#D4A853",
+        "secondary": "#FF6B9D",
+        "background": "#1A1A2E"
+      },
+      "tags": ["art-deco", "memphis", "gold", "geometric", "retro", "pop"]
+    }
+  ]
+}
