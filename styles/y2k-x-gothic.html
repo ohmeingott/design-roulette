@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y2K x Gothic - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #0A0A0F;
+  --bg-card: #121218;
+  --chrome: #C0C0C0;
+  --chrome-light: #E8E8E8;
+  --y2k-pink: #FF69B4;
+  --y2k-lilac: #DDA0DD;
+  --y2k-aqua: #7FFFD4;
+  --y2k-silver: #B8C6DB;
+  --gothic-purple: #4A1A6B;
+  --gothic-wine: #722F37;
+  --gothic-gold: #8B7536;
+  --ink: #D0D0D8;
+  --ink-muted: rgba(208,208,216,0.4);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Gothic texture overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.04;
+  background:radial-gradient(ellipse at 30% 20%, var(--gothic-purple) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, var(--gothic-wine) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid rgba(192,192,192,0.15);
+}
+.logo{
+  font-family:'UnifrakturCook',cursive;font-weight:700;font-size:2.6rem;
+  line-height:1;
+  color:var(--chrome-light);
+  text-shadow:0 0 30px rgba(255,105,180,0.2);
+}
+.logo span{
+  font-family:'Inter',sans-serif;font-weight:800;
+  color:var(--y2k-pink);
+  font-size:1.8rem;
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:linear-gradient(180deg, rgba(192,192,192,0.15) 0%, rgba(192,192,192,0.05) 100%);
+  border:1px solid rgba(192,192,192,0.2);
+  border-radius:20px;
+  padding:0.5rem 1.2rem;
+  font-size:0.7rem;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--y2k-silver);
+}
+.nav-pill:hover{
+  border-color:var(--y2k-pink);color:var(--y2k-pink);
+}
+.nav-pill.active{
+  background:linear-gradient(135deg, var(--y2k-pink), var(--y2k-lilac));
+  color:#fff;border:none;
+}
+
+.card{
+  background:var(--bg-card);
+  border:1px solid rgba(192,192,192,0.1);
+  border-radius:0;
+  padding:1.8rem;
+  transition:all 0.15s;
+  position:relative;
+}
+.card:hover{
+  border-color:rgba(255,105,180,0.2);
+  box-shadow:0 0 30px rgba(255,105,180,0.04);
+}
+
+/* Gothic pointed arch top decoration */
+.card::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:40px;height:3px;
+  background:linear-gradient(90deg, transparent, var(--gothic-purple), transparent);
+}
+
+.card-pink{border-top:2px solid var(--y2k-pink);}
+.card-lilac{border-top:2px solid var(--y2k-lilac);}
+.card-aqua{border-top:2px solid var(--y2k-aqua);}
+.card-wine{border-top:2px solid var(--gothic-wine);}
+.card-purple{border-top:2px solid var(--gothic-purple);}
+.card-chrome{border-top:2px solid var(--chrome);}
+
+.grid-hero{display:grid;gap:1.5rem;grid-template-columns:1.5fr 1fr;margin-bottom:1.5rem;}
+.grid-3{display:grid;gap:1.5rem;grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;}
+.grid-2{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr;}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{
+  font-family:'UnifrakturCook',cursive;font-weight:700;font-size:1.5rem;
+  margin-bottom:0.5rem;
+  color:var(--chrome-light);
+}
+.card-subtitle{
+  font-size:0.65rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);
+}
+.card-body{font-size:0.85rem;line-height:1.65;color:rgba(208,208,216,0.6);}
+
+.stat-value{
+  font-family:'Inter',sans-serif;font-weight:800;font-size:3.2rem;
+  line-height:1;
+  background:linear-gradient(180deg, var(--chrome-light), var(--chrome));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-label{
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:3px;
+  margin-top:0.4rem;color:var(--ink-muted);
+}
+
+/* Y2K chrome orb */
+.y2k-orb{
+  width:90px;height:90px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #fff 0%, var(--chrome) 30%, var(--gothic-purple) 100%);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  box-shadow:0 0 30px rgba(255,105,180,0.15);
+}
+
+.progress-track{width:100%;height:4px;background:rgba(192,192,192,0.08);margin-top:0.8rem;border-radius:2px;}
+.progress-fill{height:100%;border-radius:2px;}
+.pf-pink{background:linear-gradient(90deg, var(--y2k-pink), var(--y2k-lilac));}
+.pf-aqua{background:linear-gradient(90deg, var(--y2k-aqua), var(--y2k-silver));}
+.pf-chrome{background:linear-gradient(90deg, var(--chrome), var(--chrome-light));}
+
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  border:1px solid var(--y2k-pink);border-radius:12px;
+  padding:0.25rem 0.65rem;
+  font-size:0.65rem;font-weight:700;
+  color:var(--y2k-pink);
+}
+
+.tag{
+  display:inline-block;
+  padding:0.2rem 0.7rem;font-size:0.6rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;margin:0.15rem;
+  border-radius:10px;
+}
+.tag-pink{background:rgba(255,105,180,0.15);color:var(--y2k-pink);}
+.tag-lilac{background:rgba(221,160,221,0.15);color:var(--y2k-lilac);}
+.tag-aqua{background:rgba(127,255,212,0.15);color:var(--y2k-aqua);}
+.tag-chrome{background:rgba(192,192,192,0.15);color:var(--chrome);}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:0.8rem;color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-size:0.75rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  padding:0.7rem 1.4rem;border-radius:20px;
+  border:1px solid var(--y2k-pink);
+  cursor:pointer;transition:all 0.15s;
+  background:transparent;color:var(--y2k-pink);
+}
+.btn:hover{background:var(--y2k-pink);color:#fff;}
+.btn-chrome{
+  background:linear-gradient(180deg, var(--chrome-light), var(--chrome));
+  color:var(--bg);border:none;
+}
+.btn-chrome:hover{box-shadow:0 0 15px rgba(192,192,192,0.3);}
+
+.task-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid rgba(192,192,192,0.06);}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px solid rgba(192,192,192,0.3);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;font-weight:900;
+}
+.task-check.done{background:var(--y2k-aqua);border:none;color:var(--bg);}
+.task-text{font-size:0.85rem;color:rgba(208,208,216,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+@keyframes gothIn{
+  0%{opacity:0;transform:translateY(20px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.card,.header{animation:gothIn 0.6s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.08s}
+.grid-hero .card:nth-child(2){animation-delay:0.16s}
+.grid-3 .card:nth-child(1){animation-delay:0.24s}
+.grid-3 .card:nth-child(2){animation-delay:0.30s}
+.grid-3 .card:nth-child(3){animation-delay:0.36s}
+.grid-2 .card:nth-child(1){animation-delay:0.42s}
+.grid-2 .card:nth-child(2){animation-delay:0.48s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Y2K<span>&times;</span>Gothic</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Crypt</div>
+      <div class="nav-pill">Archive</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-pink">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42 pts</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;opacity:0.4;">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn-chrome btn">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-purple">
+      <div class="card-subtitle">Completion</div>
+      <div class="y2k-orb" style="margin:1.2rem auto;">
+        <div style="text-align:center;">
+          <div style="font-weight:800;font-size:1.4rem;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5);">86%</div>
+        </div>
+      </div>
+      <div class="progress-track" style="margin-top:1.2rem;">
+        <div class="progress-fill pf-pink" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-aqua">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 35%, #fff, var(--y2k-aqua));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;color:var(--bg);">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--y2k-pink);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:55%;background:var(--y2k-lilac);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:80%;background:var(--y2k-aqua);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:45%;background:var(--gothic-purple);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:100%;background:var(--chrome);border-radius:3px 3px 0 0;"></div>
+      </div>
+    </div>
+
+    <div class="card card-lilac">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:linear-gradient(135deg, var(--y2k-pink), var(--y2k-lilac));">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg, var(--gothic-purple), var(--gothic-wine));">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg, var(--y2k-aqua), var(--y2k-silver));">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg, var(--chrome), var(--y2k-pink));">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Design</span>
+        <span class="tag tag-lilac">Frontend</span>
+        <span class="tag tag-aqua">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;">
+        <div class="progress-fill pf-aqua" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div class="card card-chrome">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-weight:800;font-size:1.8rem;background:linear-gradient(180deg,#fff,var(--chrome));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:1px;background:rgba(192,192,192,0.15);"></div>
+        <div style="text-align:center;">
+          <div style="font-weight:800;font-size:1.8rem;background:linear-gradient(180deg,#fff,var(--chrome));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-chrome" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-size:0.6rem;font-weight:700;color:var(--y2k-aqua);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-wine">
+      <div class="card-title">Tasks</div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-aqua" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-lilac" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-chrome" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--y2k-aqua);background:rgba(127,255,212,0.03);">
+          <div class="avatar" style="background:linear-gradient(135deg, var(--y2k-pink), var(--y2k-lilac));width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div>
+            <span class="tag tag-aqua" style="font-size:0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--y2k-pink);background:rgba(255,105,180,0.03);">
+          <div class="avatar" style="background:linear-gradient(135deg, var(--gothic-purple), var(--gothic-wine));width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div>
+            <span class="tag tag-pink" style="font-size:0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--chrome);background:rgba(192,192,192,0.03);">
+          <div class="avatar" style="background:linear-gradient(135deg, var(--chrome), var(--y2k-pink));width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div>
+            <span class="tag tag-chrome" style="font-size:0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

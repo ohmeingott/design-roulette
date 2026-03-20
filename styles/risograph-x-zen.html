@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risograph x Zen - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #F5F0E8;
+  --bg-card: #FFFDF7;
+  --riso-red: #E55934;
+  --riso-blue: #2D5FAA;
+  --riso-yellow: #FFB600;
+  --riso-green: #00834B;
+  --riso-pink: #E84B8A;
+  --riso-purple: #6A4C9C;
+  --zen-stone: #8B8378;
+  --zen-sand: #D4C9B0;
+  --zen-moss: #6B7B5E;
+  --ink: #2C2C2C;
+  --ink-muted: rgba(44,44,44,0.4);
+  --border: rgba(44,44,44,0.08);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Noto Serif',serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:3rem 1.5rem;
+  position:relative;
+}
+
+/* Riso grain texture */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.15;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size:200px;
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:3rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--zen-sand);
+}
+.logo{
+  font-family:'Noto Serif',serif;font-weight:700;font-size:2.2rem;
+  letter-spacing:-1px;line-height:1;
+  color:var(--riso-red);
+}
+.logo span{
+  color:var(--zen-stone);
+  font-weight:400;
+}
+
+.nav-pills{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;
+  border:none;border-bottom:2px solid transparent;
+  padding:0.4rem 0;
+  font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:2px;
+  color:var(--ink-muted);
+}
+.nav-pill:hover{color:var(--ink);border-bottom-color:var(--zen-stone);}
+.nav-pill.active{color:var(--riso-red);border-bottom-color:var(--riso-red);}
+
+.card{
+  background:var(--bg-card);
+  border:none;
+  padding:2rem;
+  transition:all 0.2s;
+  position:relative;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+}
+.card:hover{box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+
+.card-red{border-top:4px solid var(--riso-red);}
+.card-blue{border-top:4px solid var(--riso-blue);}
+.card-yellow{border-top:4px solid var(--riso-yellow);}
+.card-green{border-top:4px solid var(--riso-green);}
+.card-pink{border-top:4px solid var(--riso-pink);}
+.card-stone{border-top:4px solid var(--zen-stone);}
+
+.grid-hero{display:grid;gap:1.5rem;grid-template-columns:1.5fr 1fr;margin-bottom:1.5rem;}
+.grid-3{display:grid;gap:1.5rem;grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;}
+.grid-2{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr;}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{font-family:'Noto Serif',serif;font-weight:700;font-size:1.3rem;margin-bottom:0.5rem;color:var(--ink);}
+.card-subtitle{font-family:'Inter',sans-serif;font-size:0.65rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);}
+.card-body{font-size:0.85rem;line-height:1.7;color:rgba(44,44,44,0.6);}
+
+.stat-value{font-family:'Space Mono',monospace;font-weight:700;font-size:3rem;line-height:1;color:var(--riso-red);}
+.stat-label{font-family:'Inter',sans-serif;font-size:0.65rem;text-transform:uppercase;letter-spacing:3px;margin-top:0.4rem;color:var(--ink-muted);}
+
+/* Zen circle (enso) */
+.zen-circle{
+  width:90px;height:90px;border-radius:50%;
+  border:3px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  position:relative;
+}
+.zen-circle::after{
+  content:'';position:absolute;top:5px;right:5px;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--riso-red);
+}
+
+.progress-track{width:100%;height:4px;background:var(--zen-sand);margin-top:0.8rem;border-radius:2px;}
+.progress-fill{height:100%;border-radius:2px;}
+.pf-red{background:var(--riso-red);}
+.pf-blue{background:var(--riso-blue);}
+.pf-green{background:var(--riso-green);}
+
+.badge{display:inline-flex;align-items:center;gap:0.3rem;border:1px solid var(--riso-red);padding:0.25rem 0.65rem;font-family:'Inter',sans-serif;font-size:0.65rem;font-weight:600;color:var(--riso-red);border-radius:2px;}
+
+.tag{display:inline-block;padding:0.2rem 0.7rem;font-family:'Inter',sans-serif;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin:0.15rem;border-radius:2px;}
+.tag-red{background:rgba(229,89,52,0.1);color:var(--riso-red);}
+.tag-blue{background:rgba(45,95,170,0.1);color:var(--riso-blue);}
+.tag-green{background:rgba(0,131,75,0.1);color:var(--riso-green);}
+.tag-pink{background:rgba(232,75,138,0.1);color:var(--riso-pink);}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif',serif;font-weight:700;font-size:0.8rem;color:#fff;}
+
+.btn{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',sans-serif;font-size:0.75rem;font-weight:600;padding:0.65rem 1.3rem;border:1.5px solid var(--riso-red);cursor:pointer;transition:all 0.15s;background:transparent;color:var(--riso-red);border-radius:2px;}
+.btn:hover{background:var(--riso-red);color:#fff;}
+.btn-zen{border-color:var(--zen-stone);color:var(--zen-stone);}
+.btn-zen:hover{background:var(--zen-stone);color:#fff;}
+
+.task-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid var(--border);}
+.task-item:last-child{border-bottom:none;}
+.task-check{width:18px;height:18px;border:1.5px solid var(--zen-sand);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:var(--riso-green);}
+.task-check.done{background:var(--riso-green);border-color:var(--riso-green);color:#fff;}
+.task-text{font-size:0.85rem;color:rgba(44,44,44,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+@keyframes zenIn{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+.card,.header{animation:zenIn 0.5s ease both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Riso<span>&times;Zen</span></div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Garden</div>
+      <div class="nav-pill">Archive</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-red">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.</div>
+      <div style="display:flex;gap:2rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;color:var(--zen-stone);">34</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn">View report &rarr;</button>
+        <button class="btn btn-zen">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-stone">
+      <div class="card-subtitle">Completion</div>
+      <div class="zen-circle" style="margin:1.5rem auto;">
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--ink);">86%</div>
+        </div>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;"><div class="progress-fill pf-red" style="width:86%"></div></div>
+      <div style="margin-top:0.8rem;text-align:center;"><span class="badge">&uarr; 18% vs last</span></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-blue">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--riso-blue);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;color:#fff;">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--riso-red);border-radius:2px 2px 0 0;"></div>
+        <div style="flex:1;height:55%;background:var(--riso-blue);border-radius:2px 2px 0 0;"></div>
+        <div style="flex:1;height:80%;background:var(--riso-yellow);border-radius:2px 2px 0 0;"></div>
+        <div style="flex:1;height:45%;background:var(--riso-green);border-radius:2px 2px 0 0;"></div>
+        <div style="flex:1;height:100%;background:var(--riso-pink);border-radius:2px 2px 0 0;"></div>
+      </div>
+    </div>
+
+    <div class="card card-green">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:var(--riso-red);">P</div>
+        <div class="avatar" style="background:var(--riso-blue);">A</div>
+        <div class="avatar" style="background:var(--riso-yellow);color:var(--ink);">M</div>
+        <div class="avatar" style="background:var(--riso-green);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-red">Design</span>
+        <span class="tag tag-blue">Frontend</span>
+        <span class="tag tag-green">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;"><div class="progress-fill pf-blue" style="width:72%"></div></div>
+    </div>
+
+    <div class="card card-yellow">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.7rem;color:var(--riso-blue);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:1px;background:var(--zen-sand);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.7rem;color:var(--riso-blue);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-green" style="width:96%"></div></div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--riso-green);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-stone">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">Tasks <span class="tag tag-red" style="font-size:0.55rem;">3 open</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">Design system audit</span><span class="tag tag-red" style="margin-left:auto;">Design</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">API rate-limit fix</span><span class="tag tag-blue" style="margin-left:auto;">Backend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Dashboard chart refactor</span><span class="tag tag-green" style="margin-left:auto;">Frontend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Onboarding flow v2</span><span class="tag tag-pink" style="margin-left:auto;">UX</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Write release notes</span><span class="tag tag-blue" style="margin-left:auto;">Docs</span></div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--riso-green);background:rgba(0,131,75,0.03);">
+          <div class="avatar" style="background:var(--riso-red);width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div><span class="tag tag-green" style="font-size:0.5rem;">PR #421</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--riso-red);background:rgba(229,89,52,0.03);">
+          <div class="avatar" style="background:var(--riso-blue);width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div><span class="tag tag-red" style="font-size:0.5rem;">Bug #89</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--riso-blue);background:rgba(45,95,170,0.03);">
+          <div class="avatar" style="background:var(--riso-yellow);color:var(--ink);width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div><span class="tag tag-blue" style="font-size:0.5rem;">v2.4.1</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

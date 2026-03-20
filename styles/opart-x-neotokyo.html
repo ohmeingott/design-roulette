@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpArt x NeoTokyo - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #0A0A12;
+  --bg-card: #12121E;
+  --op-white: #FFFFFF;
+  --op-black: #000000;
+  --neo-red: #FF1744;
+  --neo-blue: #2979FF;
+  --neo-violet: #7C4DFF;
+  --neo-pink: #F50057;
+  --neo-yellow: #FFEA00;
+  --neo-green: #00E676;
+  --ink: #D8D8E8;
+  --ink-muted: rgba(216,216,232,0.4);
+  --border: rgba(255,255,255,0.08);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Op Art concentric pattern */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.03;
+  background:repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px);
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.5rem;
+  border-bottom:2px solid var(--neo-red);
+}
+.logo{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:2.4rem;
+  letter-spacing:-1px;line-height:1;
+  color:var(--op-white);
+}
+.logo span{
+  color:var(--neo-red);
+  text-shadow:0 0 20px rgba(255,23,68,0.4);
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;
+  border:2px solid var(--border);
+  padding:0.5rem 1.2rem;
+  font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:2px;
+  color:var(--ink-muted);
+}
+.nav-pill:hover{border-color:var(--neo-blue);color:var(--neo-blue);}
+.nav-pill.active{
+  background:var(--neo-red);color:#fff;
+  border-color:var(--neo-red);
+}
+
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  padding:1.8rem;
+  transition:all 0.15s;
+  position:relative;
+}
+.card:hover{
+  border-color:rgba(255,255,255,0.15);
+  box-shadow:0 0 20px rgba(255,23,68,0.05);
+}
+
+/* Op Art stripe accent */
+.card-red{border-left:4px solid var(--neo-red);}
+.card-blue{border-left:4px solid var(--neo-blue);}
+.card-violet{border-left:4px solid var(--neo-violet);}
+.card-pink{border-left:4px solid var(--neo-pink);}
+.card-yellow{border-left:4px solid var(--neo-yellow);}
+.card-green{border-left:4px solid var(--neo-green);}
+
+.grid-hero{display:grid;gap:1.5rem;grid-template-columns:1.5fr 1fr;margin-bottom:1.5rem;}
+.grid-3{display:grid;gap:1.5rem;grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;}
+.grid-2{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr;}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{font-family:'Anybody',sans-serif;font-weight:900;font-size:1.3rem;margin-bottom:0.5rem;color:#fff;}
+.card-subtitle{font-family:'Space Mono',monospace;font-size:0.6rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);}
+.card-body{font-size:0.85rem;line-height:1.65;color:rgba(216,216,232,0.6);}
+
+.stat-value{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:3rem;
+  line-height:1;color:var(--neo-red);
+  text-shadow:0 0 25px rgba(255,23,68,0.3);
+}
+.stat-label{font-family:'Space Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:3px;margin-top:0.4rem;color:var(--ink-muted);}
+
+/* Op Art hypnotic circle */
+.op-circle{
+  width:100px;height:100px;border-radius:50%;
+  background:repeating-radial-gradient(circle, var(--op-white) 0px, var(--op-white) 8px, var(--op-black) 8px, var(--op-black) 16px);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  position:relative;
+}
+.op-circle::after{
+  content:'';position:absolute;inset:15px;border-radius:50%;
+  background:var(--bg-card);
+}
+
+.progress-track{width:100%;height:4px;background:rgba(255,255,255,0.04);margin-top:0.8rem;}
+.progress-fill{height:100%;}
+.pf-red{background:var(--neo-red);box-shadow:0 0 8px rgba(255,23,68,0.4);}
+.pf-blue{background:var(--neo-blue);box-shadow:0 0 8px rgba(41,121,255,0.4);}
+.pf-violet{background:var(--neo-violet);box-shadow:0 0 8px rgba(124,77,255,0.4);}
+.pf-green{background:var(--neo-green);box-shadow:0 0 8px rgba(0,230,118,0.4);}
+
+.badge{display:inline-flex;align-items:center;gap:0.3rem;border:1px solid var(--neo-red);padding:0.25rem 0.65rem;font-family:'Space Mono',monospace;font-size:0.6rem;font-weight:700;color:var(--neo-red);}
+
+.tag{display:inline-block;padding:0.2rem 0.7rem;font-family:'Space Mono',monospace;font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0.15rem;}
+.tag-red{background:rgba(255,23,68,0.12);color:var(--neo-red);}
+.tag-blue{background:rgba(41,121,255,0.12);color:var(--neo-blue);}
+.tag-violet{background:rgba(124,77,255,0.12);color:var(--neo-violet);}
+.tag-pink{background:rgba(245,0,87,0.12);color:var(--neo-pink);}
+.tag-yellow{background:rgba(255,234,0,0.12);color:var(--neo-yellow);}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-family:'Anybody',sans-serif;font-weight:900;font-size:0.8rem;color:#fff;}
+
+.btn{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:0.7rem 1.4rem;border:2px solid var(--neo-red);cursor:pointer;transition:all 0.15s;background:transparent;color:var(--neo-red);}
+.btn:hover{background:var(--neo-red);color:#fff;box-shadow:0 0 20px rgba(255,23,68,0.3);}
+.btn-neo{border-color:var(--neo-blue);color:var(--neo-blue);}
+.btn-neo:hover{background:var(--neo-blue);color:#fff;box-shadow:0 0 20px rgba(41,121,255,0.3);}
+
+.task-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid var(--border);}
+.task-item:last-child{border-bottom:none;}
+.task-check{width:18px;height:18px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:var(--neo-green);}
+.task-check.done{background:var(--neo-green);border-color:var(--neo-green);color:var(--bg);}
+.task-text{font-size:0.85rem;color:rgba(216,216,232,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+@keyframes neoIn{0%{opacity:0;transform:translateX(-10px)}100%{opacity:1;transform:translateX(0)}}
+.card,.header{animation:neoIn 0.4s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">OpArt<span>&times;</span>NeoTokyo</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">District</div>
+      <div class="nav-pill">Signal</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-red">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.</div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42 pts</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;color:var(--ink-muted);text-shadow:none;">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn">View report &rarr;</button>
+        <button class="btn btn-neo">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-violet">
+      <div class="card-subtitle">Completion</div>
+      <div class="op-circle" style="margin:1rem auto;">
+        <div style="text-align:center;position:relative;z-index:1;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.5rem;color:var(--neo-red);text-shadow:0 0 10px rgba(255,23,68,0.5);">86%</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-violet" style="width:86%"></div></div>
+      <div style="margin-top:0.8rem;text-align:center;"><span class="badge" style="border-color:var(--neo-violet);color:var(--neo-violet);">&uarr; 18%</span></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-blue">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:48px;height:48px;background:var(--neo-blue);display:flex;align-items:center;justify-content:center;font-family:'Anybody',sans-serif;font-weight:900;font-size:1.1rem;color:#fff;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--neo-red);"></div>
+        <div style="flex:1;height:55%;background:var(--neo-blue);"></div>
+        <div style="flex:1;height:80%;background:var(--neo-violet);"></div>
+        <div style="flex:1;height:45%;background:var(--neo-pink);"></div>
+        <div style="flex:1;height:100%;background:var(--neo-yellow);"></div>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:var(--neo-red);border-radius:50%;">P</div>
+        <div class="avatar" style="background:var(--neo-blue);">A</div>
+        <div class="avatar" style="background:var(--neo-violet);border-radius:50%;">M</div>
+        <div class="avatar" style="background:var(--neo-pink);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-red">Design</span>
+        <span class="tag tag-blue">Frontend</span>
+        <span class="tag tag-violet">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;"><div class="progress-fill pf-blue" style="width:72%"></div></div>
+    </div>
+
+    <div class="card card-yellow">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;color:var(--neo-yellow);text-shadow:0 0 10px rgba(255,234,0,0.3);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:2px;background:repeating-linear-gradient(180deg,var(--op-white) 0px,var(--op-white) 4px,transparent 4px,transparent 8px);opacity:0.2;"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;color:var(--neo-yellow);text-shadow:0 0 10px rgba(255,234,0,0.3);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-green" style="width:96%"></div></div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.6rem;font-weight:700;color:var(--neo-green);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-green">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">Tasks <span class="tag tag-red" style="font-size:0.5rem;">3 open</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">Design system audit</span><span class="tag tag-pink" style="margin-left:auto;">Design</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">API rate-limit fix</span><span class="tag tag-violet" style="margin-left:auto;">Backend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Dashboard chart refactor</span><span class="tag tag-blue" style="margin-left:auto;">Frontend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Onboarding flow v2</span><span class="tag tag-yellow" style="margin-left:auto;">UX</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Write release notes</span><span class="tag tag-red" style="margin-left:auto;">Docs</span></div>
+    </div>
+
+    <div class="card card-red">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--neo-green);background:rgba(0,230,118,0.03);">
+          <div class="avatar" style="background:var(--neo-red);border-radius:50%;width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div><span class="tag tag-blue" style="font-size:0.5rem;">PR #421</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--neo-pink);background:rgba(245,0,87,0.03);">
+          <div class="avatar" style="background:var(--neo-blue);width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div><span class="tag tag-pink" style="font-size:0.5rem;">Bug #89</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--neo-yellow);background:rgba(255,234,0,0.03);">
+          <div class="avatar" style="background:var(--neo-violet);border-radius:50%;width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div><span class="tag tag-yellow" style="font-size:0.5rem;">v2.4.1</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

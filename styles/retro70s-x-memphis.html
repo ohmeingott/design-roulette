@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retro70s x Memphis - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #2C1810;
+  --bg-card: #3A2418;
+  --retro-orange: #E8751A;
+  --retro-brown: #8B4513;
+  --retro-mustard: #DAA520;
+  --retro-avocado: #6B8E23;
+  --retro-cream: #FFF8DC;
+  --retro-rust: #B7410E;
+  --mem-pink: #FF6B9D;
+  --mem-blue: #45B7D1;
+  --mem-yellow: #FFD93D;
+  --mem-coral: #FF8A65;
+  --mem-mint: #6BCB77;
+  --mem-purple: #9B72CF;
+  --ink: #F0E6D2;
+  --ink-muted: rgba(240,230,210,0.4);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* 70s sunburst + Memphis dots */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.04;
+  background:
+    radial-gradient(circle at 50% 120%, var(--retro-orange) 0%, transparent 50%),
+    radial-gradient(circle 3px, var(--mem-pink) 100%, transparent 100%),
+    radial-gradient(circle 2px, var(--mem-blue) 100%, transparent 100%);
+  background-size:100% 100%, 100px 100px, 140px 140px;
+  background-position:center, 0 0, 50px 50px;
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.5rem;
+  border-bottom:3px solid var(--retro-orange);
+}
+.logo{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:2.4rem;
+  letter-spacing:-1px;line-height:1;
+  color:var(--retro-orange);
+}
+.logo span{
+  color:var(--mem-pink);
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;
+  border:2px solid var(--retro-mustard);
+  border-radius:25px;
+  padding:0.5rem 1.2rem;
+  font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--retro-mustard);
+}
+.nav-pill:hover{background:rgba(218,165,32,0.1);}
+.nav-pill.active{
+  background:var(--retro-orange);color:var(--retro-cream);
+  border-color:var(--retro-orange);
+}
+
+.card{
+  background:var(--bg-card);
+  border:2px solid rgba(232,117,26,0.1);
+  border-radius:12px;
+  padding:1.8rem;
+  transition:all 0.15s;
+  position:relative;
+  overflow:hidden;
+}
+.card:hover{border-color:rgba(232,117,26,0.25);}
+
+.card-orange{border-top:4px solid var(--retro-orange);}
+.card-mustard{border-top:4px solid var(--retro-mustard);}
+.card-avocado{border-top:4px solid var(--retro-avocado);}
+.card-pink{border-top:4px solid var(--mem-pink);}
+.card-blue{border-top:4px solid var(--mem-blue);}
+.card-coral{border-top:4px solid var(--mem-coral);}
+
+.grid-hero{display:grid;gap:1.5rem;grid-template-columns:1.5fr 1fr;margin-bottom:1.5rem;}
+.grid-3{display:grid;gap:1.5rem;grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;}
+.grid-2{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr;}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{font-family:'Anybody',sans-serif;font-weight:900;font-size:1.4rem;margin-bottom:0.5rem;color:var(--retro-cream);}
+.card-subtitle{font-family:'Space Mono',monospace;font-size:0.6rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);}
+.card-body{font-size:0.85rem;line-height:1.65;color:rgba(240,230,210,0.6);}
+
+.stat-value{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:3rem;
+  line-height:1;color:var(--retro-orange);
+}
+.stat-label{font-family:'Space Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:3px;margin-top:0.4rem;color:var(--ink-muted);}
+
+/* 70s sunburst circle */
+.retro-circle{
+  width:95px;height:95px;border-radius:50%;
+  background:radial-gradient(circle, var(--retro-mustard) 30%, var(--retro-orange) 60%, var(--retro-rust) 100%);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  box-shadow:0 0 25px rgba(232,117,26,0.2);
+}
+
+.progress-track{width:100%;height:6px;background:rgba(240,230,210,0.06);margin-top:0.8rem;border-radius:3px;}
+.progress-fill{height:100%;border-radius:3px;}
+.pf-orange{background:linear-gradient(90deg, var(--retro-rust), var(--retro-orange), var(--retro-mustard));}
+.pf-pink{background:linear-gradient(90deg, var(--mem-pink), var(--mem-coral));}
+.pf-blue{background:linear-gradient(90deg, var(--mem-blue), var(--mem-mint));}
+
+.badge{display:inline-flex;align-items:center;gap:0.3rem;border:2px solid var(--retro-orange);border-radius:15px;padding:0.25rem 0.65rem;font-family:'Space Mono',monospace;font-size:0.6rem;font-weight:700;color:var(--retro-orange);}
+
+.tag{display:inline-block;padding:0.2rem 0.7rem;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin:0.15rem;border:none;}
+.tag-pink{background:var(--mem-pink);color:#fff;border-radius:15px;}
+.tag-blue{background:var(--mem-blue);color:#fff;clip-path:polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);}
+.tag-yellow{background:var(--mem-yellow);color:var(--bg);border-radius:0;}
+.tag-coral{background:var(--mem-coral);color:#fff;border-radius:0 10px 0 10px;}
+.tag-mint{background:var(--mem-mint);color:var(--bg);border-radius:10px 0 10px 0;}
+.tag-orange{background:var(--retro-orange);color:var(--retro-cream);border-radius:15px;}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.8rem;
+  color:#fff;
+}
+
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  padding:0.7rem 1.4rem;border-radius:25px;
+  border:2px solid var(--retro-orange);
+  cursor:pointer;transition:all 0.15s;
+  background:transparent;color:var(--retro-orange);
+}
+.btn:hover{background:var(--retro-orange);color:var(--retro-cream);}
+.btn-memphis{
+  background:var(--mem-pink);color:#fff;border:none;
+  clip-path:polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  border-radius:0;
+}
+.btn-memphis:hover{background:var(--mem-blue);}
+
+.task-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid rgba(232,117,26,0.08);}
+.task-item:last-child{border-bottom:none;}
+.task-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--retro-mustard);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:var(--retro-orange);}
+.task-check.done{background:var(--mem-mint);border-color:var(--mem-mint);color:var(--bg);}
+.task-text{font-size:0.85rem;color:rgba(240,230,210,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+@keyframes retroIn{
+  0%{opacity:0;transform:translateY(16px) scale(0.98)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.card,.header{animation:retroIn 0.5s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Retro70s<span>&times;</span>Memphis</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Lounge</div>
+      <div class="nav-pill">Archive</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-orange">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.</div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42 pts</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;color:var(--ink-muted);">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn">View report &rarr;</button>
+        <button class="btn-memphis btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-subtitle">Completion</div>
+      <div class="retro-circle" style="margin:1.2rem auto;">
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.6rem;color:var(--retro-cream);text-shadow:1px 1px 0 rgba(0,0,0,0.3);">86%</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-orange" style="width:86%"></div></div>
+      <div style="margin-top:0.8rem;text-align:center;"><span class="badge">&uarr; 18% vs last</span></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-coral">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:48px;height:48px;border-radius:50%;background:radial-gradient(circle, var(--mem-coral), var(--retro-orange));display:flex;align-items:center;justify-content:center;font-family:'Anybody',sans-serif;font-weight:900;font-size:1.1rem;color:#fff;">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--retro-orange);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:55%;background:var(--mem-pink);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:80%;background:var(--retro-mustard);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:45%;background:var(--mem-blue);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:100%;background:var(--mem-yellow);border-radius:3px 3px 0 0;"></div>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:var(--retro-orange);border-radius:50%;">P</div>
+        <div class="avatar" style="background:var(--mem-pink);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);">A</div>
+        <div class="avatar" style="background:var(--retro-mustard);border-radius:50%;color:var(--bg);">M</div>
+        <div class="avatar" style="background:var(--mem-purple);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Design</span>
+        <span class="tag tag-blue">Frontend</span>
+        <span class="tag tag-orange">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;"><div class="progress-fill pf-blue" style="width:72%"></div></div>
+    </div>
+
+    <div class="card card-mustard">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;color:var(--retro-orange);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:2px;background:var(--retro-mustard);opacity:0.3;"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;color:var(--retro-orange);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-orange" style="width:96%"></div></div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--mem-mint);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-avocado">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">Tasks <span class="tag tag-mint" style="font-size:0.55rem;">3 open</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">Design system audit</span><span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Design</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">API rate-limit fix</span><span class="tag tag-blue" style="margin-left:auto;font-size:0.55rem;">Backend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Dashboard chart refactor</span><span class="tag tag-orange" style="margin-left:auto;font-size:0.55rem;">Frontend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Onboarding flow v2</span><span class="tag tag-coral" style="margin-left:auto;font-size:0.55rem;">UX</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Write release notes</span><span class="tag tag-yellow" style="margin-left:auto;font-size:0.55rem;">Docs</span></div>
+    </div>
+
+    <div class="card card-orange">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--mem-mint);background:rgba(107,203,119,0.04);border-radius:0 8px 8px 0;">
+          <div class="avatar" style="background:var(--retro-orange);border-radius:50%;width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div><span class="tag tag-mint" style="font-size:0.5rem;">PR #421</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--mem-pink);background:rgba(255,107,157,0.04);border-radius:0 8px 8px 0;">
+          <div class="avatar" style="background:var(--mem-pink);border-radius:50%;width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div><span class="tag tag-pink" style="font-size:0.5rem;">Bug #89</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--retro-mustard);background:rgba(218,165,32,0.04);border-radius:0 8px 8px 0;">
+          <div class="avatar" style="background:var(--retro-mustard);color:var(--bg);border-radius:50%;width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div><span class="tag tag-yellow" style="font-size:0.5rem;">v2.4.1</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

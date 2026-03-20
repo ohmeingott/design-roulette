@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyberpunk x Bauhaus - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #0D0D0D;
+  --bg-card: #1A1A1A;
+  --neon-green: #39FF14;
+  --neon-pink: #FF003C;
+  --neon-cyan: #00F0FF;
+  --bau-red: #E63946;
+  --bau-blue: #1D3557;
+  --bau-yellow: #FFD60A;
+  --bau-white: #F1FAEE;
+  --ink: #E0E0E0;
+  --ink-muted: rgba(224,224,224,0.4);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Cyberpunk scan lines */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.03;
+  background:repeating-linear-gradient(
+    0deg, transparent, transparent 2px, rgba(57,255,20,0.1) 2px, rgba(57,255,20,0.1) 4px
+  );
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* -- HEADER: Bauhaus geometry + cyber glow -- */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.5rem;
+  border-bottom:3px solid var(--bau-yellow);
+}
+.logo{
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:2.2rem;
+  letter-spacing:2px;line-height:1;
+  color:var(--neon-green);
+  text-shadow:0 0 20px rgba(57,255,20,0.4);
+}
+.logo span{
+  color:var(--bau-red);
+  text-shadow:none;
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;
+  border:2px solid var(--bau-yellow);
+  padding:0.5rem 1.2rem;
+  font-family:'Space Mono',monospace;font-size:0.7rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:2px;
+  color:var(--bau-yellow);
+}
+.nav-pill:hover{
+  background:var(--bau-yellow);color:var(--bg);
+}
+.nav-pill.active{
+  background:var(--bau-red);
+  color:var(--bau-white);
+  border-color:var(--bau-red);
+}
+
+/* -- CARDS: Bauhaus blocks + neon borders -- */
+.card{
+  background:var(--bg-card);
+  border:2px solid rgba(57,255,20,0.1);
+  padding:1.8rem;
+  transition:all 0.15s;
+  position:relative;
+}
+.card:hover{
+  border-color:rgba(57,255,20,0.3);
+  box-shadow:0 0 20px rgba(57,255,20,0.05);
+}
+
+/* Bauhaus primary color accents */
+.card-red{border-left:6px solid var(--bau-red);}
+.card-blue{border-left:6px solid var(--bau-blue);}
+.card-yellow{border-left:6px solid var(--bau-yellow);}
+.card-green{border-left:6px solid var(--neon-green);}
+.card-pink{border-left:6px solid var(--neon-pink);}
+.card-cyan{border-left:6px solid var(--neon-cyan);}
+
+/* -- GRIDS -- */
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* -- TYPOGRAPHY -- */
+.card-title{
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:1.2rem;
+  margin-bottom:0.5rem;letter-spacing:1px;
+  color:var(--bau-white);
+}
+.card-subtitle{
+  font-size:0.65rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);
+  font-family:'Space Mono',monospace;
+}
+.card-body{font-size:0.85rem;line-height:1.65;color:rgba(224,224,224,0.6);}
+
+/* -- STAT -- */
+.stat-value{
+  font-family:'Orbitron',sans-serif;font-weight:900;font-size:3rem;
+  line-height:1;color:var(--neon-green);
+  text-shadow:0 0 30px rgba(57,255,20,0.3);
+}
+.stat-label{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:3px;
+  margin-top:0.4rem;color:var(--ink-muted);
+}
+
+/* -- BAUHAUS CIRCLE indicator -- */
+.bauhaus-circle{
+  width:90px;height:90px;
+  border-radius:50%;
+  border:3px solid var(--bau-yellow);
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  background:rgba(255,214,10,0.05);
+}
+
+/* -- PROGRESS -- */
+.progress-track{
+  width:100%;height:6px;
+  background:rgba(224,224,224,0.06);
+  margin-top:0.8rem;
+}
+.progress-fill{height:100%;}
+.pf-green{background:var(--neon-green);box-shadow:0 0 8px rgba(57,255,20,0.4);}
+.pf-red{background:var(--bau-red);}
+.pf-yellow{background:var(--bau-yellow);}
+.pf-cyan{background:var(--neon-cyan);box-shadow:0 0 8px rgba(0,240,255,0.4);}
+
+/* -- BADGE -- */
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  border:1px solid var(--neon-green);
+  padding:0.25rem 0.65rem;
+  font-size:0.65rem;font-weight:700;
+  color:var(--neon-green);
+  font-family:'Space Mono',monospace;
+}
+
+/* -- TAG -- */
+.tag{
+  display:inline-block;
+  padding:0.2rem 0.7rem;font-size:0.6rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;margin:0.15rem;
+}
+.tag-red{background:var(--bau-red);color:#fff;}
+.tag-blue{background:var(--bau-blue);color:#fff;}
+.tag-yellow{background:var(--bau-yellow);color:var(--bg);}
+.tag-green{background:rgba(57,255,20,0.15);color:var(--neon-green);border:1px solid var(--neon-green);}
+.tag-cyan{background:rgba(0,240,255,0.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);}
+
+/* -- AVATAR -- */
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{
+  width:40px;height:40px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:0.75rem;
+  color:#fff;
+}
+.av-circle{border-radius:50%;}
+.av-square{border-radius:0;}
+.av-triangle{clip-path:polygon(50% 0%, 100% 100%, 0% 100%);}
+
+/* -- BUTTON -- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  padding:0.7rem 1.4rem;
+  border:2px solid var(--neon-green);
+  cursor:pointer;transition:all 0.15s;
+  background:transparent;color:var(--neon-green);
+}
+.btn:hover{
+  background:var(--neon-green);color:var(--bg);
+  box-shadow:0 0 20px rgba(57,255,20,0.3);
+}
+.btn-bauhaus{
+  background:var(--bau-red);color:#fff;
+  border:2px solid var(--bau-red);
+}
+.btn-bauhaus:hover{
+  background:var(--bau-yellow);color:var(--bg);
+  border-color:var(--bau-yellow);
+  box-shadow:none;
+}
+
+/* -- TASK LIST -- */
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.65rem 0;
+  border-bottom:1px solid rgba(57,255,20,0.06);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:18px;height:18px;
+  border:2px solid var(--bau-yellow);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;font-weight:900;color:var(--neon-green);
+}
+.task-check.done{background:var(--neon-green);border-color:var(--neon-green);color:var(--bg);}
+.task-text{font-size:0.85rem;color:rgba(224,224,224,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+/* -- ANIMATION -- */
+@keyframes cyberIn{
+  0%{opacity:0;transform:translateY(16px) skewX(-1deg)}
+  100%{opacity:1;transform:translateY(0) skewX(0)}
+}
+.card,.header{animation:cyberIn 0.5s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Cyber<span>&times;</span>Bauhaus</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Network</div>
+      <div class="nav-pill">Systems</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-green">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42 pts</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;color:var(--ink-muted);text-shadow:none;">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn">View report &rarr;</button>
+        <button class="btn-bauhaus btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-red">
+      <div class="card-subtitle">Completion</div>
+      <div class="bauhaus-circle" style="margin:1.2rem auto;">
+        <div style="text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.6rem;color:var(--bau-yellow);">86%</div>
+          <div style="font-size:0.5rem;text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);">Done</div>
+        </div>
+      </div>
+      <div class="progress-track" style="margin-top:1.2rem;">
+        <div class="progress-fill pf-yellow" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge" style="border-color:var(--bau-red);color:var(--bau-red);">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-yellow">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:48px;height:48px;background:var(--bau-yellow);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.1rem;color:var(--bg);">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--bau-red);"></div>
+        <div style="flex:1;height:55%;background:var(--bau-blue);"></div>
+        <div style="flex:1;height:80%;background:var(--bau-yellow);"></div>
+        <div style="flex:1;height:45%;background:var(--neon-green);box-shadow:0 0 6px rgba(57,255,20,0.3);"></div>
+        <div style="flex:1;height:100%;background:var(--neon-cyan);box-shadow:0 0 6px rgba(0,240,255,0.3);"></div>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar av-circle" style="background:var(--bau-red);">P</div>
+        <div class="avatar av-square" style="background:var(--bau-blue);">A</div>
+        <div class="avatar av-circle" style="background:var(--bau-yellow);color:var(--bg);">M</div>
+        <div class="avatar av-square" style="background:var(--neon-green);color:var(--bg);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-red">Design</span>
+        <span class="tag tag-blue">Frontend</span>
+        <span class="tag tag-green">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;">
+        <div class="progress-fill pf-cyan" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div class="card card-cyan">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.8rem;color:var(--neon-cyan);text-shadow:0 0 15px rgba(0,240,255,0.3);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:2px;background:var(--bau-yellow);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.8rem;color:var(--neon-cyan);text-shadow:0 0 15px rgba(0,240,255,0.3);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-green" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-size:0.6rem;font-weight:700;color:var(--neon-green);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-yellow">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-green" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-red" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-blue" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-cyan" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-yellow" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-green" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--neon-green);background:rgba(57,255,20,0.03);">
+          <div class="avatar av-circle" style="background:var(--bau-red);width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div>
+            <span class="tag tag-green" style="font-size:0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--bau-red);background:rgba(230,57,70,0.03);">
+          <div class="avatar av-square" style="background:var(--bau-blue);width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div>
+            <span class="tag tag-red" style="font-size:0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--bau-yellow);background:rgba(255,214,10,0.03);">
+          <div class="avatar av-circle" style="background:var(--bau-yellow);color:var(--bg);width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div>
+            <span class="tag tag-yellow" style="font-size:0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
