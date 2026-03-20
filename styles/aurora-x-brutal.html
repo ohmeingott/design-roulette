@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora x Brutal - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --brutal-border: 3px solid #1a1a2e;
+  --brutal-shadow: 7px 7px 0 #1a1a2e;
+  --brutal-shadow-lg: 10px 10px 0 #1a1a2e;
+  --ink: #1a1a2e;
+  --ink-soft: #3d3d5c;
+  --ink-muted: #7171a0;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Space Mono',monospace;
+  background:#0D0D1A;
+  color:#E8E4F0;
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 25% 20%, #6C3CE055 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 30%, #E8437755 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 70%, #3CE0B055 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 80%, #437CE844 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 75%, #E0C03C33 0%, transparent 40%);
+  animation:auroraDrift 20s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes auroraDrift{
+  0%{filter:hue-rotate(0deg) brightness(1);}
+  50%{filter:hue-rotate(15deg) brightness(1.1);}
+  100%{filter:hue-rotate(-10deg) brightness(0.95);}
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+.mesh-twilight{
+  background:
+    radial-gradient(circle at 20% 30%, #9B59B6cc 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, #E84393cc 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, #6C5CE7aa 0%, transparent 60%),
+    linear-gradient(135deg, #2D1B69, #1B2D5A);
+}
+.mesh-ocean{
+  background:
+    radial-gradient(circle at 30% 40%, #00CEC9cc 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, #0984E3cc 0%, transparent 50%),
+    radial-gradient(circle at 50% 20%, #6C5CE7aa 0%, transparent 55%),
+    linear-gradient(135deg, #0C2340, #1B3A5A);
+}
+.mesh-sunrise{
+  background:
+    radial-gradient(circle at 25% 35%, #FDCB6Ecc 0%, transparent 45%),
+    radial-gradient(circle at 75% 65%, #E84393cc 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, #E17055bb 0%, transparent 55%),
+    linear-gradient(135deg, #3D1520, #5A2D1B);
+}
+.mesh-forest{
+  background:
+    radial-gradient(circle at 30% 30%, #00B894cc 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, #00CEC9cc 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, #55EFC4aa 0%, transparent 55%),
+    linear-gradient(135deg, #0B3D2E, #1B3A40);
+}
+.mesh-nebula{
+  background:
+    radial-gradient(circle at 20% 50%, #A29BFEcc 0%, transparent 45%),
+    radial-gradient(circle at 80% 30%, #FD79A8cc 0%, transparent 45%),
+    radial-gradient(circle at 50% 80%, #FDCB6Eaa 0%, transparent 50%),
+    linear-gradient(135deg, #1B1440, #2D1B5A);
+}
+.mesh-arctic{
+  background:
+    radial-gradient(circle at 25% 40%, #74B9FFcc 0%, transparent 50%),
+    radial-gradient(circle at 75% 60%, #A29BFEbb 0%, transparent 50%),
+    radial-gradient(circle at 50% 20%, #DFE6E9aa 0%, transparent 50%),
+    linear-gradient(135deg, #0C1A3D, #1B2540);
+}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:2.2rem;
+  letter-spacing:-2px;
+  background:linear-gradient(135deg, #A29BFE, #FD79A8, #FDCB6E, #55EFC4);
+  background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:logoShimmer 6s ease infinite;
+  filter:drop-shadow(2px 2px 0 #1a1a2e);
+}
+@keyframes logoShimmer{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.logo span{
+  -webkit-text-fill-color:#E8E4F0;
+  filter:none;
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:rgba(255,255,255,0.06);
+  border:2px solid rgba(255,255,255,0.12);
+  border-radius:40px;
+  padding:0.5rem 1.2rem;
+  font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;
+  cursor:pointer;transition:all 0.2s;
+  text-transform:uppercase;letter-spacing:1px;
+  color:rgba(255,255,255,0.5);
+}
+.nav-pill:hover{
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(255,255,255,0.25);
+  color:#fff;
+}
+.nav-pill.active{
+  background:rgba(162,155,254,0.2);
+  border:var(--brutal-border);
+  box-shadow:var(--brutal-shadow);
+  color:#A29BFE;
+}
+
+.card{
+  border:var(--brutal-border);
+  border-radius:18px;
+  box-shadow:var(--brutal-shadow-lg);
+  padding:1.8rem;
+  transition:transform 0.15s, box-shadow 0.15s;
+  position:relative;overflow:hidden;
+  color:#E8E4F0;
+}
+.card:hover{
+  transform:translate(-4px,-4px);
+  box-shadow:14px 14px 0 var(--ink);
+}
+
+.card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, rgba(255,255,255,0.04) 80%, transparent 100%);
+  pointer-events:none;border-radius:18px;
+}
+
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+.card-title{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1.3rem;
+  margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:-0.5px;
+  color:#fff;
+}
+.card-subtitle{
+  font-size:0.7rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.45);
+}
+.card-body{font-size:0.85rem;line-height:1.65;color:rgba(255,255,255,0.75);}
+
+.stat-value{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:3.2rem;
+  line-height:1;color:#fff;
+}
+.stat-label{
+  font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;
+  margin-top:0.4rem;color:rgba(255,255,255,0.4);
+}
+
+.orb{
+  width:90px;height:90px;border-radius:50%;
+  border:var(--brutal-border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;
+  animation:orbFloat 4s ease-in-out infinite;
+  margin:0 auto;
+}
+.orb::before{
+  content:'';position:absolute;inset:3px;border-radius:50%;
+  background:inherit;filter:blur(8px);opacity:0.5;z-index:-1;
+}
+@keyframes orbFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+.orb-val{font-family:'Anybody',sans-serif;font-weight:900;font-size:1.5rem;color:#fff;line-height:1;}
+.orb-lbl{font-size:0.5rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.6);margin-top:2px;}
+
+.aurora-bars{display:flex;align-items:flex-end;gap:8px;height:90px;margin-top:1rem;}
+.aurora-bar{
+  flex:1;border:2px solid var(--ink);border-radius:6px 6px 0 0;
+  position:relative;min-width:0;
+}
+.aurora-bar-lbl{
+  position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+  font-size:0.6rem;color:rgba(255,255,255,0.4);white-space:nowrap;
+}
+
+.progress-track{
+  width:100%;height:12px;
+  border:2px solid var(--ink);border-radius:8px;
+  background:rgba(255,255,255,0.06);
+  overflow:hidden;margin-top:0.7rem;
+}
+.progress-fill{height:100%;border-radius:6px;}
+.pf-aurora-pink{background:linear-gradient(90deg, #A29BFE, #FD79A8);}
+.pf-aurora-green{background:linear-gradient(90deg, #00B894, #55EFC4);}
+.pf-aurora-blue{background:linear-gradient(90deg, #0984E3, #74B9FF);}
+.pf-aurora-warm{background:linear-gradient(90deg, #FDCB6E, #E17055, #E84393);}
+
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:rgba(162,155,254,0.2);
+  border:2px solid var(--ink);
+  border-radius:8px;padding:0.3rem 0.65rem;
+  font-size:0.7rem;font-weight:700;
+  box-shadow:3px 3px 0 var(--ink);
+  color:#A29BFE;
+}
+
+.tag{
+  display:inline-block;
+  border:2px solid var(--ink);border-radius:20px;
+  padding:0.2rem 0.7rem;font-size:0.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;margin:0.15rem;
+}
+.tag-purple{background:rgba(162,155,254,0.3);color:#A29BFE;}
+.tag-pink{background:rgba(253,121,168,0.3);color:#FD79A8;}
+.tag-teal{background:rgba(0,206,201,0.3);color:#00CEC9;}
+.tag-gold{background:rgba(253,203,110,0.3);color:#FDCB6E;}
+.tag-coral{background:rgba(225,112,85,0.3);color:#E17055;}
+
+.avatar-stack{display:flex;}
+.avatar{
+  width:40px;height:40px;border-radius:50%;
+  border:2.5px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.8rem;
+  color:#fff;margin-left:-8px;position:relative;
+}
+.avatar:first-child{margin-left:0;}
+
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Space Mono',monospace;font-size:0.78rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:0.65rem 1.3rem;border:var(--brutal-border);border-radius:10px;
+  cursor:pointer;transition:all 0.12s;
+  background:rgba(255,255,255,0.06);color:#E8E4F0;
+}
+.btn:hover{
+  background:rgba(255,255,255,0.12);
+  box-shadow:var(--brutal-shadow);transform:translate(-3px,-3px);
+}
+.btn-aurora{
+  background:linear-gradient(135deg, #6C5CE7, #E84393);
+  color:#fff;box-shadow:var(--brutal-shadow);
+}
+.btn-aurora:hover{
+  background:linear-gradient(135deg, #00CEC9, #55EFC4);
+  color:var(--ink);
+  box-shadow:10px 10px 0 var(--ink);transform:translate(-3px,-3px);
+}
+
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.6rem 0;
+  border-bottom:1.5px dashed rgba(255,255,255,0.08);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:22px;height:22px;border-radius:7px;
+  border:2px solid var(--ink);
+  background:rgba(255,255,255,0.05);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:900;color:#fff;
+}
+.task-check.done{
+  background:linear-gradient(135deg, #00B894, #55EFC4);
+  color:var(--ink);
+}
+.task-text{font-size:0.85rem;color:rgba(255,255,255,0.7);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+.aurora-ring{
+  width:48px;height:48px;border-radius:50%;
+  border:3px solid transparent;
+  background-image:linear-gradient(#0D0D1A,#0D0D1A), linear-gradient(135deg, #A29BFE, #FD79A8, #FDCB6E, #55EFC4);
+  background-origin:border-box;background-clip:padding-box,border-box;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.85rem;
+  color:#fff;flex-shrink:0;
+}
+
+.sparkline-wrap{margin-top:1rem;position:relative;height:50px;}
+.sparkline-svg{width:100%;height:100%;}
+
+.feed-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.65rem 0.8rem;margin-bottom:0.5rem;
+  border-radius:10px;
+  background:rgba(255,255,255,0.04);
+  border-left:3px solid transparent;
+  transition:background 0.15s;
+}
+.feed-item:hover{background:rgba(255,255,255,0.07);}
+.feed-purple{border-left-color:#A29BFE;}
+.feed-teal{border-left-color:#00CEC9;}
+.feed-pink{border-left-color:#FD79A8;}
+
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(20px) scale(0.98)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.card,.header{animation:fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+.aurora-divider{
+  height:2px;margin:0.5rem 2rem 1.5rem;
+  background:linear-gradient(90deg, transparent, #A29BFE55, #FD79A855, #55EFC455, transparent);
+  border-radius:1px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Aurora<span>&times;</span>Brutal</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card mesh-twilight">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title" style="font-size:1.55rem;">Momentum is accelerating</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.2rem;margin-top:1.3rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.4);">Velocity</div>
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;">42 pts</div>
+        </div>
+        <div>
+          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.4);">Target</div>
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;">34 pts</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <span class="badge">&uarr; 24%</span>
+        </div>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-aurora">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card mesh-ocean">
+      <div class="card-subtitle">Completion</div>
+      <div class="orb mesh-forest" style="margin:1.2rem auto;">
+        <div class="orb-val">86%</div>
+        <div class="orb-lbl">Done</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-aurora-green" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="aurora-divider"></div>
+
+  <div class="grid-3">
+    <div class="card mesh-sunrise">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div class="aurora-ring">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">Deploys</div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">this week</div>
+        </div>
+      </div>
+      <div class="aurora-bars" style="margin-bottom:1.4rem;">
+        <div class="aurora-bar" style="height:30%;background:linear-gradient(180deg,#FDCB6E,#E17055);">
+          <div class="aurora-bar-lbl">Mon</div>
+        </div>
+        <div class="aurora-bar" style="height:55%;background:linear-gradient(180deg,#E17055,#E84393);">
+          <div class="aurora-bar-lbl">Tue</div>
+        </div>
+        <div class="aurora-bar" style="height:80%;background:linear-gradient(180deg,#A29BFE,#6C5CE7);">
+          <div class="aurora-bar-lbl">Wed</div>
+        </div>
+        <div class="aurora-bar" style="height:45%;background:linear-gradient(180deg,#00CEC9,#0984E3);">
+          <div class="aurora-bar-lbl">Thu</div>
+        </div>
+        <div class="aurora-bar" style="height:100%;background:linear-gradient(180deg,#55EFC4,#00B894);">
+          <div class="aurora-bar-lbl">Fri</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mesh-nebula">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-stack" style="margin-bottom:0.8rem;">
+        <div class="avatar" style="background:linear-gradient(135deg,#6C5CE7,#A29BFE);z-index:4;">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#00B894,#55EFC4);z-index:3;">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#E84393,#FD79A8);z-index:2;">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#FDCB6E,#E17055);z-index:1;">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Design</span>
+        <span class="tag tag-teal">Frontend</span>
+        <span class="tag tag-purple">Backend</span>
+      </div>
+      <div class="sparkline-wrap">
+        <svg class="sparkline-svg" viewBox="0 0 200 50" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#A29BFE"/>
+              <stop offset="50%" stop-color="#FD79A8"/>
+              <stop offset="100%" stop-color="#FDCB6E"/>
+            </linearGradient>
+            <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#A29BFE" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#A29BFE" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,35 C20,30 35,15 55,20 C75,25 85,10 105,8 C125,6 140,22 160,18 C180,14 195,5 200,3" fill="none" stroke="url(#sparkGrad)" stroke-width="2.5"/>
+          <path d="M0,35 C20,30 35,15 55,20 C75,25 85,10 105,8 C125,6 140,22 160,18 C180,14 195,5 200,3 L200,50 L0,50 Z" fill="url(#sparkFill)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card mesh-arctic">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;color:#fff;">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:rgba(255,255,255,0.4);letter-spacing:1.5px;">P50</div>
+        </div>
+        <div style="width:2px;background:linear-gradient(180deg, transparent, rgba(255,255,255,0.15), transparent);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;color:#fff;">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:rgba(255,255,255,0.4);letter-spacing:1.5px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-aurora-blue" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.6rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:rgba(255,255,255,0.4);">Uptime</span>
+        <span style="font-size:0.65rem;font-weight:700;color:#74B9FF;">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="aurora-divider"></div>
+
+  <div class="grid-2">
+    <div class="card mesh-forest">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-teal" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-purple" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-teal" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-coral" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-gold" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card mesh-twilight">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;">
+        <div class="feed-item feed-purple">
+          <div class="aurora-ring" style="width:34px;height:34px;font-size:0.7rem;">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="opacity:0.5;">merged</span></div>
+            <span class="tag tag-teal" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.35);">2m</span>
+        </div>
+        <div class="feed-item feed-teal">
+          <div class="aurora-ring" style="width:34px;height:34px;font-size:0.7rem;">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="opacity:0.5;">opened</span></div>
+            <span class="tag tag-pink" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.35);">18m</span>
+        </div>
+        <div class="feed-item feed-pink">
+          <div class="aurora-ring" style="width:34px;height:34px;font-size:0.7rem;">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="opacity:0.5;">deployed</span></div>
+            <span class="tag tag-gold" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:rgba(255,255,255,0.35);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

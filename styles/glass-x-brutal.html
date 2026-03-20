@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glass x Brutal - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brutal-border: 3px solid #111;
+  --brutal-shadow: 6px 6px 0 #111;
+  --brutal-shadow-lg: 10px 10px 0 #111;
+  --glass-bg: rgba(255,255,255,0.1);
+  --glass-bg-strong: rgba(255,255,255,0.15);
+  --glass-blur: blur(24px);
+  --glass-border: 1.5px solid rgba(255,255,255,0.35);
+  --accent-yellow: #FFE156;
+  --accent-coral: #FF6B6B;
+  --accent-mint: #6BFFC2;
+  --accent-lilac: #C9A0FF;
+  --accent-blue: #6BB5FF;
+}
+body{
+  min-height:100vh;
+  font-family:'Space Mono',monospace;
+  background:#111128;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, #6a0dad66 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, #ff6b6b55 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, #00b4d844 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, #C9A0FF33 0%, transparent 40%);
+  color:#111;
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+}
+
+.container{max-width:900px;margin:0 auto;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.07);
+  border:2px solid rgba(255,255,255,0.12);
+  border-radius:50px;
+  padding:0.8rem 1.5rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.logo{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:2rem;
+  color:#fff;letter-spacing:-1px;
+  text-shadow:3px 3px 0 var(--accent-coral);
+}
+.logo span{color:var(--accent-yellow);}
+.nav-pills{display:flex;gap:0.5rem;}
+.nav-pill{
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  background:var(--glass-bg);
+  border:2px solid rgba(255,255,255,0.18);
+  border-radius:40px;
+  padding:0.5rem 1.2rem;
+  font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:1px;color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.nav-pill:hover{
+  background:var(--accent-yellow);color:#111;
+  box-shadow:var(--brutal-shadow);
+  transform:translate(-3px,-3px);
+}
+.nav-pill.active{
+  background:var(--accent-yellow);color:#111;
+  box-shadow:var(--brutal-shadow);
+}
+
+.card{
+  backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);
+  background:var(--glass-bg);
+  border:var(--brutal-border);
+  border-radius:16px;
+  box-shadow:var(--brutal-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2), inset 1px 0 0 rgba(255,255,255,0.1);
+  padding:1.8rem;
+  transition:transform 0.2s, box-shadow 0.2s;
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;z-index:2;
+}
+.card::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.03) 40%, transparent 60%);
+  pointer-events:none;border-radius:16px;
+}
+.card:hover{
+  transform:translate(-4px,-4px);
+  box-shadow:14px 14px 0 #111, inset 0 1px 0 rgba(255,255,255,0.25), inset 1px 0 0 rgba(255,255,255,0.15);
+}
+.card-yellow::before{background:var(--accent-yellow)}
+.card-coral::before{background:var(--accent-coral)}
+.card-mint::before{background:var(--accent-mint)}
+.card-lilac::before{background:var(--accent-lilac)}
+.card-blue::before{background:var(--accent-blue)}
+
+.grid{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  margin-bottom:2rem;
+}
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.4fr 1fr;
+  margin-bottom:2rem;
+}
+@media(max-width:600px){.grid-hero,.grid{grid-template-columns:1fr;}}
+
+.card-title{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1.3rem;
+  color:#fff;margin-bottom:0.6rem;
+  text-transform:uppercase;letter-spacing:-0.5px;
+}
+.card-subtitle{
+  font-size:0.75rem;color:rgba(255,255,255,0.6);
+  margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1.5px;
+}
+.card-body{
+  font-size:0.85rem;line-height:1.65;color:rgba(255,255,255,0.8);
+}
+
+.stat-value{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:3rem;
+  color:#fff;line-height:1;
+}
+.stat-label{
+  font-size:0.7rem;color:rgba(255,255,255,0.5);
+  text-transform:uppercase;letter-spacing:2px;margin-top:0.5rem;
+}
+.stat-change{
+  display:inline-block;
+  background:var(--accent-mint);color:#111;
+  border:2px solid #111;border-radius:20px;
+  padding:0.2rem 0.7rem;font-size:0.7rem;font-weight:700;
+  margin-top:0.8rem;
+}
+
+.tag{
+  display:inline-block;
+  border:2px solid #111;border-radius:20px;
+  padding:0.25rem 0.8rem;font-size:0.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;margin:0.2rem;
+}
+.tag-yellow{background:var(--accent-yellow);color:#111;}
+.tag-coral{background:var(--accent-coral);color:#111;}
+.tag-mint{background:var(--accent-mint);color:#111;}
+.tag-lilac{background:var(--accent-lilac);color:#111;}
+
+.progress-track{
+  width:100%;height:14px;
+  border:2px solid #111;border-radius:10px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  overflow:hidden;margin-top:0.8rem;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.progress-fill{
+  height:100%;border-radius:8px;
+  transition:width 1.2s cubic-bezier(0.22,1,0.36,1);
+}
+.pf-yellow{background:var(--accent-yellow);}
+.pf-coral{background:var(--accent-coral);}
+.pf-mint{background:var(--accent-mint);}
+
+.avatar-row{display:flex;gap:0.6rem;margin-bottom:1rem;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  border:var(--brutal-border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.85rem;
+  color:#111;
+}
+
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:'Space Mono',monospace;font-size:0.8rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:0.7rem 1.4rem;border:2px solid rgba(255,255,255,0.2);border-radius:10px;
+  cursor:pointer;transition:all 0.15s;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.08);color:#fff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.btn:hover{
+  background:var(--accent-yellow);color:#111;
+  box-shadow:var(--brutal-shadow);
+  transform:translate(-3px,-3px);
+}
+.btn-solid{
+  background:var(--accent-coral);color:#111;
+  box-shadow:var(--brutal-shadow);
+}
+.btn-solid:hover{
+  background:var(--accent-yellow);
+  box-shadow:8px 8px 0 #111;
+  transform:translate(-2px,-2px);
+}
+
+.task-item{
+  display:flex;align-items:center;gap:0.8rem;
+  padding:0.7rem 0;
+  border-bottom:1.5px dashed rgba(255,255,255,0.15);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:22px;height:22px;border:2px solid rgba(255,255,255,0.3);border-radius:6px;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.06);
+}
+.task-check.done{background:var(--accent-mint);border-color:#111;color:#111;}
+.task-text{font-size:0.85rem;color:rgba(255,255,255,0.85);}
+.task-text.done{text-decoration:line-through;opacity:0.4;}
+
+.blob{
+  position:fixed;border-radius:50%;
+  filter:blur(90px);opacity:0.45;pointer-events:none;z-index:-1;
+}
+.blob-1{width:500px;height:500px;background:#ff6b6b;top:-120px;left:-120px;}
+.blob-2{width:450px;height:450px;background:#6BFFC2;bottom:-100px;right:-100px;}
+.blob-3{width:380px;height:380px;background:#C9A0FF;top:35%;left:55%;}
+.blob-4{width:300px;height:300px;background:#6BB5FF;top:60%;left:10%;filter:blur(100px);opacity:0.35;}
+.blob-5{width:250px;height:250px;background:#FFE156;top:10%;left:40%;filter:blur(100px);opacity:0.25;}
+
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.card,.header{animation:slideUp 0.6s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.1s}
+.grid-hero .card:nth-child(2){animation-delay:0.2s}
+.grid .card:nth-child(1){animation-delay:0.25s}
+.grid .card:nth-child(2){animation-delay:0.35s}
+.grid .card:nth-child(3){animation-delay:0.45s}
+
+.glass-divider{
+  height:1px;margin:0.5rem 3rem 2rem;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), rgba(255,255,255,0.35), rgba(255,255,255,0.2), transparent);
+}
+.bottom-row{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:600px){.bottom-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+<div class="blob blob-5"></div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Glass<span>&times;</span>Brutal</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Team</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-yellow">
+      <div class="card-subtitle">Weekly overview</div>
+      <div class="card-title">Project velocity is up</div>
+      <div class="card-body">
+        Your team closed 34 tasks this sprint &mdash; the highest throughput since Q1.
+        Three milestones ahead of schedule.
+      </div>
+      <div style="margin-top:1.4rem;display:flex;gap:0.6rem;flex-wrap:wrap;">
+        <button class="btn-solid btn">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+    <div class="card card-mint">
+      <div class="card-subtitle">Sprint progress</div>
+      <div class="stat-value">78%</div>
+      <div class="stat-label">completion rate</div>
+      <div class="stat-change">&uarr; 12% vs last sprint</div>
+      <div class="progress-track"><div class="progress-fill pf-mint" style="width:78%"></div></div>
+    </div>
+  </div>
+
+  <div class="glass-divider"></div>
+
+  <div class="grid">
+    <div class="card card-coral">
+      <div class="card-subtitle">Open issues</div>
+      <div class="stat-value">12</div>
+      <div class="stat-label">remaining this sprint</div>
+      <div class="progress-track"><div class="progress-fill pf-coral" style="width:35%"></div></div>
+    </div>
+    <div class="card card-lilac">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:var(--accent-yellow)">P</div>
+        <div class="avatar" style="background:var(--accent-mint)">A</div>
+        <div class="avatar" style="background:var(--accent-coral)">M</div>
+        <div class="avatar" style="background:var(--accent-lilac)">K</div>
+      </div>
+      <div class="card-body">4 members active &middot; 2 in review</div>
+      <div style="margin-top:0.8rem;">
+        <span class="tag tag-yellow">Design</span>
+        <span class="tag tag-coral">Frontend</span>
+        <span class="tag tag-mint">Backend</span>
+      </div>
+    </div>
+    <div class="card card-blue">
+      <div class="card-subtitle">Deploys today</div>
+      <div class="stat-value">5</div>
+      <div class="stat-label">across 3 services</div>
+      <div class="stat-change">all green &check;</div>
+    </div>
+  </div>
+
+  <div class="glass-divider"></div>
+
+  <div class="bottom-row">
+    <div class="card card-yellow">
+      <div class="card-title">Tasks</div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+      </div>
+    </div>
+    <div class="card card-coral">
+      <div class="card-title">Activity</div>
+      <div class="card-body" style="margin-bottom:0">
+        <div style="margin-bottom:0.7rem;">
+          <strong style="color:var(--accent-yellow)">Paul</strong> merged
+          <span class="tag tag-mint" style="font-size:0.6rem;padding:0.15rem 0.5rem;">PR #421</span>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;">2 min ago</div>
+        </div>
+        <div style="margin-bottom:0.7rem;">
+          <strong style="color:var(--accent-mint)">Anna</strong> opened issue
+          <span class="tag tag-coral" style="font-size:0.6rem;padding:0.15rem 0.5rem;">Bug</span>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;">18 min ago</div>
+        </div>
+        <div>
+          <strong style="color:var(--accent-lilac)">Kai</strong> deployed
+          <span class="tag tag-yellow" style="font-size:0.6rem;padding:0.15rem 0.5rem;">v2.4.1</span>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.2rem;">1 hr ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

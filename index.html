@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Roulette &mdash; Mix Famous Design Styles Into Fresh UI Inspiration</title>
+<meta name="description" content="Design Roulette mixes iconic design movements like Brutalism, Glassmorphism, Neumorphism, and Dopamine Design into unexpected new aesthetics. Browse interactive demos and find your next UI inspiration.">
+<meta name="keywords" content="design inspiration, UI design, brutalism, glassmorphism, neumorphism, dopamine design, aurora design, design trends, web design, CSS, design system, style mashup">
+<meta name="author" content="Design Roulette">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://design-roulette.vercel.app/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Design Roulette &mdash; Mix Design Styles Into Fresh UI Inspiration">
+<meta property="og:description" content="Spin the wheel on iconic design movements. Brutalism meets Glassmorphism, Neumorphism meets Dopamine &mdash; discover unexpected aesthetic mashups.">
+<meta property="og:url" content="https://design-roulette.vercel.app/">
+<meta property="og:site_name" content="Design Roulette">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Design Roulette &mdash; Mix Design Styles Into Fresh UI Inspiration">
+<meta name="twitter:description" content="Spin the wheel on iconic design movements. Discover unexpected aesthetic mashups for your next project.">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Design Roulette",
+  "description": "An interactive showcase that mixes iconic design movements into fresh UI aesthetics. Browse mashups of Brutalism, Glassmorphism, Neumorphism, and more.",
+  "url": "https://design-roulette.vercel.app/",
+  "applicationCategory": "DesignApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --text: #111;
+  --text-muted: #666;
+  --bg: #fafafa;
+  --border: #e0e0e0;
+  --border-strong: #ccc;
+  --radius: 10px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* -- HEADER -- */
+header {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 0;
+}
+
+.site-title {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.site-description {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 620px;
+}
+
+/* -- TABS -- */
+nav[aria-label="Style selector"] {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: #fff;
+}
+
+.tab-btn[aria-selected="true"] {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+
+.tab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Dot colors per style */
+.tab-btn[data-style="aurora"] .tab-dot { background: linear-gradient(135deg, #A29BFE, #FD79A8); }
+.tab-btn[data-style="neu"] .tab-dot { background: linear-gradient(135deg, #C4654A, #7A9E7E); }
+.tab-btn[data-style="dopamine"] .tab-dot { background: linear-gradient(135deg, #FF2D87, #39FF14); }
+.tab-btn[data-style="glass"] .tab-dot { background: linear-gradient(135deg, #FF6B6B, #6BFFC2); }
+
+/* -- STYLE INFO -- */
+.style-meta {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.style-name {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.style-tagline {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* -- PREVIEW FRAME -- */
+.preview-wrapper {
+  max-width: 960px;
+  margin: 1rem auto 0;
+  padding: 0 1.5rem 3rem;
+}
+
+.preview-container {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+}
+
+.preview-container::before {
+  content: '';
+  display: block;
+  padding: 0.5rem 1rem;
+  background: #f5f5f5;
+  border-bottom: 1.5px solid var(--border);
+  font-size: 0;
+}
+
+/* Browser dots */
+.preview-container::after {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 16px 0 0 #ffbd2e, 32px 0 0 #28c840;
+}
+
+.preview-frame {
+  width: 100%;
+  height: 800px;
+  border: none;
+  display: block;
+  background: #fff;
+  transition: opacity 0.2s ease;
+}
+
+.preview-frame.loading {
+  opacity: 0.4;
+}
+
+/* -- FOOTER -- */
+footer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.5rem 2rem;
+  text-align: center;
+}
+
+footer p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* -- RESPONSIVE -- */
+@media (max-width: 600px) {
+  header { padding-top: 1.5rem; }
+  .preview-frame { height: 600px; }
+  .style-meta { flex-direction: column; gap: 0.3rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="site-title">Design Roulette</h1>
+  <p class="site-description">
+    What happens when you cross iconic design movements? We mix styles like Brutalism,
+    Glassmorphism, Neumorphism, and Dopamine Design into unexpected new aesthetics.
+    Pick a mashup below and explore.
+  </p>
+</header>
+
+<nav aria-label="Style selector" role="tablist">
+  <ul class="tabs">
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="true" data-style="aurora" data-src="styles/aurora-x-brutal.html" data-name="Aurora &times; Brutal" data-tagline="Mesh gradients meet hard edges &mdash; cosmic light with structural contrast.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Aurora &times; Brutal
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="neu" data-src="styles/neu-x-brutal.html" data-name="Neu &times; Brutal" data-tagline="Soft clay surfaces framed by sharp ink borders &mdash; tactile and grounded.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Neu &times; Brutal
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="dopamine" data-src="styles/dopamine-x-brutal.html" data-name="Dopamine &times; Brutal" data-tagline="Neon overload with blocky structure &mdash; loud, joyful, impossible to ignore.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Dopamine &times; Brutal
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="glass" data-src="styles/glass-x-brutal.html" data-name="Glass &times; Brutal" data-tagline="Frosted translucency pinned down by bold black frames &mdash; ethereal meets industrial.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Glass &times; Brutal
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<div class="style-meta" aria-live="polite">
+  <span class="style-name" id="current-style-name">Aurora &times; Brutal</span>
+  <span class="style-tagline" id="current-style-tagline">Mesh gradients meet hard edges &mdash; cosmic light with structural contrast.</span>
+</div>
+
+<main class="preview-wrapper">
+  <div class="preview-container">
+    <iframe
+      class="preview-frame"
+      id="preview"
+      src="styles/aurora-x-brutal.html"
+      title="Live preview of Aurora x Brutal design style"
+      loading="lazy"
+      sandbox="allow-same-origin"
+    ></iframe>
+  </div>
+</main>
+
+<footer>
+  <p>Design Roulette &mdash; Style mashups for curious designers.</p>
+</footer>
+
+<script>
+(function() {
+  const tabs = document.querySelectorAll('.tab-btn');
+  const frame = document.getElementById('preview');
+  const styleName = document.getElementById('current-style-name');
+  const styleTagline = document.getElementById('current-style-tagline');
+
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      // Update aria
+      tabs.forEach(function(t) { t.setAttribute('aria-selected', 'false'); });
+      tab.setAttribute('aria-selected', 'true');
+
+      // Update meta
+      styleName.innerHTML = tab.dataset.name;
+      styleTagline.innerHTML = tab.dataset.tagline;
+
+      // Update iframe
+      frame.classList.add('loading');
+      frame.title = 'Live preview of ' + tab.dataset.name.replace('&times;', 'x') + ' design style';
+      frame.src = tab.dataset.src;
+    });
+  });
+
+  frame.addEventListener('load', function() {
+    frame.classList.remove('loading');
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neu x Brutal - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg: #D8D2C8;
+  --bg-light: #E4DED4;
+  --bg-dark: #C4BEB4;
+  --brutal-border: 3px solid #2A2520;
+  --brutal-shadow: 7px 7px 0 #2A2520;
+  --brutal-shadow-lg: 10px 10px 0 #2A2520;
+  --ink: #2A2520;
+  --ink-soft: #5A5449;
+  --ink-muted: #8A8479;
+  --neu-shadow-out: 6px 6px 14px #B8B2A8, -6px -6px 14px #F0EAE0;
+  --neu-shadow-in: inset 4px 4px 10px #B8B2A8, inset -4px -4px 10px #F0EAE0;
+  --accent-terracotta: #C4654A;
+  --accent-sage: #7A9E7E;
+  --accent-sky: #6A9AB8;
+  --accent-sand: #D4A65A;
+  --accent-plum: #8A6A8E;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Space Mono',monospace;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+}
+
+.container{max-width:920px;margin:0 auto;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:2.2rem;
+  letter-spacing:-2px;color:var(--ink);
+  text-shadow:2px 2px 0 var(--bg-dark);
+}
+.logo span{color:var(--accent-terracotta);}
+
+.nav-pills{display:flex;gap:0.6rem;flex-wrap:wrap;}
+.nav-pill{
+  background:var(--bg);
+  border:none;border-radius:40px;
+  padding:0.55rem 1.2rem;
+  font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:1px;color:var(--ink-soft);
+  box-shadow:var(--neu-shadow-out);
+}
+.nav-pill:hover{
+  box-shadow:var(--neu-shadow-in);color:var(--ink);
+}
+.nav-pill.active{
+  box-shadow:var(--neu-shadow-in);
+  color:var(--accent-terracotta);font-weight:700;
+}
+
+.card{
+  background:var(--bg-light);
+  border:var(--brutal-border);
+  border-radius:18px;
+  box-shadow:var(--brutal-shadow-lg), var(--neu-shadow-out);
+  padding:1.8rem;
+  transition:transform 0.15s, box-shadow 0.15s;
+  position:relative;overflow:hidden;
+}
+.card:hover{
+  transform:translate(-4px,-4px);
+  box-shadow:14px 14px 0 var(--ink), var(--neu-shadow-out);
+}
+
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:5px;
+}
+.card-terra::before{background:var(--accent-terracotta);}
+.card-sage::before{background:var(--accent-sage);}
+.card-sky::before{background:var(--accent-sky);}
+.card-sand::before{background:var(--accent-sand);}
+.card-plum::before{background:var(--accent-plum);}
+
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+.card-title{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1.3rem;
+  margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:-0.5px;
+  color:var(--ink);
+}
+.card-subtitle{
+  font-size:0.7rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);
+}
+.card-body{
+  font-size:0.85rem;line-height:1.65;color:var(--ink-soft);
+}
+
+.neu-well{
+  background:var(--bg);
+  border-radius:12px;
+  box-shadow:var(--neu-shadow-in);
+  padding:1rem 1.2rem;
+  margin-top:1rem;
+}
+
+.neu-knob{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-out);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1rem;
+  color:var(--ink);
+  flex-shrink:0;
+}
+.neu-knob-sm{
+  width:40px;height:40px;font-size:0.8rem;
+}
+
+.neu-toggle{
+  width:52px;height:28px;border-radius:14px;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-in);
+  position:relative;cursor:pointer;
+  flex-shrink:0;
+}
+.neu-toggle::after{
+  content:'';position:absolute;
+  top:3px;left:3px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--bg-light);
+  box-shadow:2px 2px 6px #B8B2A8, -2px -2px 6px #F0EAE0;
+  transition:transform 0.2s;
+}
+.neu-toggle.on::after{
+  transform:translateX(24px);
+  background:var(--accent-sage);
+}
+
+.progress-track{
+  width:100%;height:14px;
+  border:2.5px solid var(--ink);border-radius:10px;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-in);
+  overflow:hidden;margin-top:0.7rem;
+}
+.progress-fill{
+  height:100%;border-radius:7px;
+  box-shadow:2px 0 6px rgba(0,0,0,0.1);
+}
+.pf-terra{background:var(--accent-terracotta);}
+.pf-sage{background:var(--accent-sage);}
+.pf-sky{background:var(--accent-sky);}
+.pf-sand{background:var(--accent-sand);}
+
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:var(--bg);border:2.5px solid var(--ink);
+  border-radius:8px;padding:0.3rem 0.65rem;
+  font-size:0.7rem;font-weight:700;
+  box-shadow:3px 3px 0 var(--ink);
+  color:var(--accent-sage);
+}
+
+.tag{
+  display:inline-block;
+  border:2px solid var(--ink);border-radius:20px;
+  padding:0.2rem 0.7rem;font-size:0.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;margin:0.15rem;
+  background:var(--bg-light);color:var(--ink-soft);
+}
+.tag-terra{background:var(--accent-terracotta);color:#fff;border-color:var(--ink);}
+.tag-sage{background:var(--accent-sage);color:#fff;border-color:var(--ink);}
+.tag-sky{background:var(--accent-sky);color:#fff;border-color:var(--ink);}
+.tag-sand{background:var(--accent-sand);color:var(--ink);border-color:var(--ink);}
+.tag-plum{background:var(--accent-plum);color:#fff;border-color:var(--ink);}
+
+.avatar-row{display:flex;gap:0.7rem;margin-bottom:1rem;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-out);
+  border:2.5px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.8rem;
+  color:var(--ink);
+}
+
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Space Mono',monospace;font-size:0.78rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:0.65rem 1.3rem;
+  border:var(--brutal-border);border-radius:10px;
+  cursor:pointer;transition:all 0.12s;
+  background:var(--bg);
+  box-shadow:var(--brutal-shadow), var(--neu-shadow-out);
+  color:var(--ink);
+}
+.btn:hover{
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink), var(--neu-shadow-out);
+}
+.btn-accent{
+  background:var(--accent-terracotta);color:#fff;
+}
+.btn-accent:hover{
+  background:var(--accent-sage);
+}
+
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.6rem 0;
+  border-bottom:2px dashed var(--bg-dark);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:24px;height:24px;border-radius:8px;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-in);
+  border:2px solid var(--ink);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:900;
+}
+.task-check.done{
+  background:var(--accent-sage);
+  box-shadow:var(--neu-shadow-in);color:#fff;
+}
+.task-text{font-size:0.85rem;color:var(--ink-soft);}
+.task-text.done{text-decoration:line-through;opacity:0.35;}
+
+.gauge-wrap{
+  width:100px;height:100px;border-radius:50%;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-out);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+}
+.gauge-inner{
+  width:76px;height:76px;border-radius:50%;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-in);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.gauge-val{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1.6rem;
+  color:var(--ink);line-height:1;
+}
+.gauge-lbl{font-size:0.55rem;text-transform:uppercase;letter-spacing:1px;color:var(--ink-muted);margin-top:2px;}
+
+.slider-row{display:flex;align-items:center;gap:0.8rem;margin-top:0.7rem;}
+.slider-label{font-size:0.7rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:1px;min-width:50px;}
+.slider-track{
+  flex:1;height:8px;border-radius:4px;
+  background:var(--bg);
+  box-shadow:var(--neu-shadow-in);
+  position:relative;
+}
+.slider-fill{
+  height:100%;border-radius:4px;position:absolute;top:0;left:0;
+}
+.slider-thumb{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--bg-light);
+  border:2.5px solid var(--ink);
+  box-shadow:2px 2px 0 var(--ink);
+  position:absolute;top:-6px;
+}
+
+@keyframes riseIn{
+  0%{opacity:0;transform:translateY(24px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.card,.header{animation:riseIn 0.5s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.35s}
+.grid-2 .card:nth-child(2){animation-delay:0.40s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Neu<span>&times;</span>Brutal</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Settings</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-terra">
+      <div class="card-subtitle">Weekly overview</div>
+      <div class="card-title" style="font-size:1.5rem;">Sprint momentum keeps building</div>
+      <div class="card-body">
+        Your team completed 38 tasks this cycle &mdash; 22% above baseline. Two milestones shipped early.
+      </div>
+      <div class="neu-well" style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-muted);">Velocity</div>
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.5rem;">38 pts</div>
+        </div>
+        <div>
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-muted);">Target</div>
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.5rem;">31 pts</div>
+        </div>
+        <div class="badge">&uarr; 22%</div>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-accent">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-sage">
+      <div class="card-subtitle">Completion</div>
+      <div class="gauge-wrap" style="margin:1rem auto;">
+        <div class="gauge-inner">
+          <div class="gauge-val">81%</div>
+          <div class="gauge-lbl">done</div>
+        </div>
+      </div>
+      <div class="progress-track" style="margin-top:1.2rem;">
+        <div class="progress-fill pf-sage" style="width:81%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 14% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-sky">
+      <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;">
+        <div class="neu-knob" style="color:var(--accent-sky);">7</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">Deploys</div>
+          <div style="font-size:0.75rem;color:var(--ink-muted);">this week</div>
+        </div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">API</div>
+        <div class="slider-track">
+          <div class="slider-fill" style="width:75%;background:var(--accent-sky);border-radius:4px;"></div>
+          <div class="slider-thumb" style="left:calc(75% - 10px);"></div>
+        </div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">Web</div>
+        <div class="slider-track">
+          <div class="slider-fill" style="width:55%;background:var(--accent-sage);border-radius:4px;"></div>
+          <div class="slider-thumb" style="left:calc(55% - 10px);"></div>
+        </div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">iOS</div>
+        <div class="slider-track">
+          <div class="slider-fill" style="width:90%;background:var(--accent-terracotta);border-radius:4px;"></div>
+          <div class="slider-thumb" style="left:calc(90% - 10px);"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-sand">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="color:var(--accent-terracotta);">P</div>
+        <div class="avatar" style="color:var(--accent-sage);">A</div>
+        <div class="avatar" style="color:var(--accent-sky);">M</div>
+        <div class="avatar" style="color:var(--accent-plum);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 1 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-terra">Design</span>
+        <span class="tag tag-sage">Frontend</span>
+        <span class="tag tag-sky">Backend</span>
+      </div>
+      <div style="margin-top:1rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:0.7rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:1px;">Notifications</span>
+          <div class="neu-toggle on"></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:0.7rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:1px;">Focus mode</span>
+          <div class="neu-toggle"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-plum">
+      <div class="card-subtitle">Health</div>
+      <div class="neu-well" style="text-align:center;margin-top:0.5rem;">
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-muted);margin-bottom:0.3rem;">Uptime</div>
+        <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:2rem;">99.8%</div>
+      </div>
+      <div class="neu-well" style="display:flex;justify-content:space-between;align-items:center;margin-top:0.8rem;">
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.1rem;">42ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:1px;">P50</div>
+        </div>
+        <div style="width:2px;height:30px;background:var(--bg-dark);border-radius:1px;"></div>
+        <div style="text-align:center;flex:1;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.1rem;">128ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:1px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track" style="margin-top:0.8rem;">
+        <div class="progress-fill" style="width:99.8%;background:var(--accent-plum);"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-terra">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-sage" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-terra" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-sky" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-sage" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-plum" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-sand" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card card-sage">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.5rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div class="neu-well" style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;">
+          <div class="neu-knob neu-knob-sm" style="color:var(--accent-sage);">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div>
+            <span class="tag tag-sage" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div class="neu-well" style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;">
+          <div class="neu-knob neu-knob-sm" style="color:var(--accent-sky);">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div>
+            <span class="tag tag-terra" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div class="neu-well" style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;">
+          <div class="neu-knob neu-knob-sm" style="color:var(--accent-plum);">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div>
+            <span class="tag tag-sand" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
