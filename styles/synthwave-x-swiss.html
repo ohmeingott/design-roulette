@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synthwave x Swiss - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cyan: #00FFFF;
+  --magenta: #FF00FF;
+  --hot-pink: #FF2D8A;
+  --purple: #8B5CF6;
+  --neon-blue: #3B82F6;
+  --grid-line: rgba(0,255,255,0.07);
+  --surface: rgba(255,255,255,0.04);
+  --surface-hover: rgba(255,255,255,0.07);
+  --text: #E2E8F0;
+  --text-muted: rgba(255,255,255,0.45);
+  --border: rgba(0,255,255,0.15);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:#0A0A1A;
+  color:var(--text);
+  overflow-x:hidden;
+  padding:3rem 1.5rem;
+  position:relative;
+}
+
+/* Grid background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%);
+  -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 100%);
+  pointer-events:none;
+}
+
+/* Horizon glow */
+body::after{
+  content:'';position:fixed;bottom:0;left:0;right:0;height:40%;z-index:0;
+  background:linear-gradient(0deg, #FF00FF15 0%, transparent 60%);
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* -- HEADER: strict Swiss alignment -- */
+.header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  margin-bottom:3rem;
+  padding-bottom:1.5rem;
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'Inter',sans-serif;font-weight:800;font-size:2.4rem;
+  letter-spacing:-1.5px;line-height:1;
+  color:#fff;
+}
+.logo span{
+  background:linear-gradient(90deg, var(--cyan), var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-row{display:flex;gap:2rem;}
+.nav-link{
+  font-size:0.75rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:2px;
+  color:var(--text-muted);
+  cursor:pointer;transition:color 0.2s;
+  text-decoration:none;
+  position:relative;
+}
+.nav-link:hover,.nav-link.active{color:var(--cyan);}
+.nav-link.active::after{
+  content:'';position:absolute;bottom:-1.55rem;left:0;right:0;
+  height:2px;background:var(--cyan);
+}
+
+/* -- CARDS: Swiss grid, synth glow -- */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:2px;
+  padding:2rem;
+  transition:all 0.2s;
+  position:relative;
+}
+.card:hover{
+  background:var(--surface-hover);
+  border-color:rgba(0,255,255,0.3);
+  box-shadow:0 0 30px rgba(0,255,255,0.06);
+}
+
+/* Neon top accent */
+.card-cyan::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--cyan);}
+.card-magenta::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--magenta);}
+.card-purple::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--purple);}
+.card-pink::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--hot-pink);}
+.card-blue::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--neon-blue);}
+
+/* -- GRIDS: strict Swiss columns -- */
+.grid-hero{
+  display:grid;gap:1px;
+  grid-template-columns:1.6fr 1fr;
+  margin-bottom:1px;
+  background:var(--border);
+}
+.grid-hero .card{margin:0;}
+.grid-3{
+  display:grid;gap:1px;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1px;
+  background:var(--border);
+}
+.grid-2{
+  display:grid;gap:1px;
+  grid-template-columns:1fr 1fr;
+  background:var(--border);
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* -- TYPOGRAPHY: Swiss precision -- */
+.card-title{
+  font-family:'Inter',sans-serif;font-weight:800;font-size:1.15rem;
+  letter-spacing:-0.5px;margin-bottom:0.5rem;color:#fff;
+}
+.card-subtitle{
+  font-size:0.65rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:3px;
+  color:var(--text-muted);margin-bottom:1.2rem;
+}
+.card-body{font-size:0.85rem;line-height:1.7;color:rgba(255,255,255,0.6);}
+
+/* -- STAT -- */
+.stat-value{
+  font-family:'Space Mono',monospace;font-weight:700;font-size:3rem;
+  line-height:1;color:#fff;
+  text-shadow:0 0 40px rgba(0,255,255,0.3);
+}
+.stat-label{
+  font-size:0.65rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:3px;color:var(--text-muted);margin-top:0.5rem;
+}
+
+/* -- PROGRESS: thin neon line -- */
+.progress-track{
+  width:100%;height:3px;
+  background:rgba(255,255,255,0.06);
+  margin-top:1rem;position:relative;
+}
+.progress-fill{height:100%;position:relative;}
+.pf-cyan{background:var(--cyan);box-shadow:0 0 12px var(--cyan);}
+.pf-magenta{background:var(--magenta);box-shadow:0 0 12px var(--magenta);}
+.pf-purple{background:var(--purple);box-shadow:0 0 12px var(--purple);}
+
+/* -- TAG -- */
+.tag{
+  display:inline-block;
+  border:1px solid var(--border);
+  padding:0.2rem 0.6rem;font-size:0.6rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:2px;margin:0.15rem;
+  color:var(--text-muted);
+}
+.tag-cyan{border-color:rgba(0,255,255,0.3);color:var(--cyan);}
+.tag-magenta{border-color:rgba(255,0,255,0.3);color:var(--magenta);}
+.tag-purple{border-color:rgba(139,92,246,0.3);color:var(--purple);}
+.tag-pink{border-color:rgba(255,45,138,0.3);color:var(--hot-pink);}
+
+/* -- BADGE -- */
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  border:1px solid rgba(0,255,255,0.3);
+  padding:0.25rem 0.6rem;
+  font-size:0.65rem;font-weight:600;
+  color:var(--cyan);
+  font-family:'Space Mono',monospace;
+}
+
+/* -- AVATAR -- */
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{
+  width:36px;height:36px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:0.75rem;
+  color:#fff;background:var(--surface);
+}
+
+/* -- BUTTON -- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:2px;
+  padding:0.7rem 1.5rem;
+  border:1px solid var(--border);
+  cursor:pointer;transition:all 0.15s;
+  background:transparent;color:var(--text);
+}
+.btn:hover{
+  border-color:var(--cyan);color:var(--cyan);
+  box-shadow:0 0 20px rgba(0,255,255,0.1);
+}
+.btn-neon{
+  border-color:var(--cyan);color:var(--cyan);
+  background:rgba(0,255,255,0.05);
+}
+.btn-neon:hover{
+  background:var(--cyan);color:#0A0A1A;
+  box-shadow:0 0 30px rgba(0,255,255,0.3);
+}
+
+/* -- TASK LIST -- */
+.task-item{
+  display:flex;align-items:center;gap:0.8rem;
+  padding:0.65rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:16px;height:16px;
+  border:1px solid var(--border);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;color:var(--cyan);
+}
+.task-check.done{
+  background:rgba(0,255,255,0.1);
+  border-color:var(--cyan);
+}
+.task-text{font-size:0.8rem;color:rgba(255,255,255,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+/* -- DIVIDER -- */
+.section-label{
+  font-size:0.6rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:4px;color:var(--text-muted);
+  padding:1.5rem 0 0.8rem;
+}
+
+/* -- BAR CHART -- */
+.bar-chart{display:flex;align-items:flex-end;gap:3px;height:70px;margin-top:1rem;}
+.bar{
+  flex:1;min-width:0;position:relative;
+}
+.bar-inner{
+  width:100%;border-radius:0;
+}
+.bar-label{
+  position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);
+  font-size:0.55rem;color:var(--text-muted);letter-spacing:1px;
+}
+
+/* -- ANIMATION -- */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.card{animation:fadeIn 0.4s ease both;}
+.grid-hero .card:nth-child(1){animation-delay:0.05s}
+.grid-hero .card:nth-child(2){animation-delay:0.1s}
+.grid-3 .card:nth-child(1){animation-delay:0.15s}
+.grid-3 .card:nth-child(2){animation-delay:0.2s}
+.grid-3 .card:nth-child(3){animation-delay:0.25s}
+.grid-2 .card:nth-child(1){animation-delay:0.3s}
+.grid-2 .card:nth-child(2){animation-delay:0.35s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Synth<span>&times;</span>Swiss</div>
+    <nav class="nav-row">
+      <a class="nav-link active">Dashboard</a>
+      <a class="nav-link">Analytics</a>
+      <a class="nav-link">Systems</a>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-cyan">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:2.5rem;margin-top:1.5rem;">
+        <div>
+          <div class="stat-value">42</div>
+          <div class="stat-label">Velocity</div>
+        </div>
+        <div>
+          <div class="stat-value" style="color:var(--text-muted);text-shadow:none;">34</div>
+          <div class="stat-label">Target</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <span class="badge">&uarr; 24%</span>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem;display:flex;gap:0.5rem;">
+        <button class="btn btn-neon">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-magenta">
+      <div class="card-subtitle">Completion</div>
+      <div style="margin:2rem 0 1rem;text-align:center;">
+        <div class="stat-value" style="font-size:3.5rem;text-shadow:0 0 40px rgba(255,0,255,0.3);">86%</div>
+        <div class="stat-label">Done</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-magenta" style="width:86%"></div>
+      </div>
+      <div style="margin-top:1rem;text-align:center;">
+        <span class="badge" style="border-color:rgba(255,0,255,0.3);color:var(--magenta);">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Metrics</div>
+
+  <div class="grid-3">
+    <div class="card card-purple">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.5rem;">
+        <div class="stat-value" style="font-size:2.5rem;text-shadow:0 0 30px rgba(139,92,246,0.3);">8</div>
+        <div class="stat-label" style="margin:0;">this week</div>
+      </div>
+      <div class="bar-chart" style="margin-bottom:1.2rem;">
+        <div class="bar" style="height:30%;">
+          <div class="bar-inner" style="height:100%;background:linear-gradient(180deg,var(--purple),transparent);"></div>
+          <div class="bar-label">M</div>
+        </div>
+        <div class="bar" style="height:55%;">
+          <div class="bar-inner" style="height:100%;background:linear-gradient(180deg,var(--magenta),transparent);"></div>
+          <div class="bar-label">T</div>
+        </div>
+        <div class="bar" style="height:80%;">
+          <div class="bar-inner" style="height:100%;background:linear-gradient(180deg,var(--cyan),transparent);"></div>
+          <div class="bar-label">W</div>
+        </div>
+        <div class="bar" style="height:45%;">
+          <div class="bar-inner" style="height:100%;background:linear-gradient(180deg,var(--neon-blue),transparent);"></div>
+          <div class="bar-label">T</div>
+        </div>
+        <div class="bar" style="height:100%;">
+          <div class="bar-inner" style="height:100%;background:linear-gradient(180deg,var(--cyan),transparent);"></div>
+          <div class="bar-label">F</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="border-color:var(--cyan);">P</div>
+        <div class="avatar" style="border-color:var(--magenta);">A</div>
+        <div class="avatar" style="border-color:var(--purple);">M</div>
+        <div class="avatar" style="border-color:var(--hot-pink);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-magenta">Design</span>
+        <span class="tag tag-cyan">Frontend</span>
+        <span class="tag tag-purple">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1.5rem;">
+        <div class="progress-fill pf-cyan" style="width:72%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:0.4rem;">
+        <span style="font-size:0.6rem;color:var(--text-muted);letter-spacing:1px;">CAPACITY</span>
+        <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--cyan);">72%</span>
+      </div>
+    </div>
+
+    <div class="card card-blue">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-between;margin:1rem 0;">
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:#fff;">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);">P50</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:#fff;">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-cyan" style="width:96%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:0.4rem;">
+        <span style="font-size:0.6rem;color:var(--text-muted);letter-spacing:1px;">UPTIME</span>
+        <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--cyan);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Operations</div>
+
+  <div class="grid-2">
+    <div class="card card-cyan">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-cyan">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-magenta" style="margin-left:auto;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-purple" style="margin-left:auto;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-cyan" style="margin-left:auto;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-pink" style="margin-left:auto;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag" style="margin-left:auto;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card card-magenta">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.8rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem;background:rgba(0,255,255,0.03);border-left:2px solid var(--cyan);">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.65rem;border-color:var(--cyan);">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--text-muted);">merged</span></div>
+            <span class="tag tag-cyan" style="font-size:0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--text-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem;background:rgba(255,0,255,0.03);border-left:2px solid var(--magenta);">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.65rem;border-color:var(--magenta);">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--text-muted);">opened</span></div>
+            <span class="tag tag-magenta" style="font-size:0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--text-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem;background:rgba(139,92,246,0.03);border-left:2px solid var(--purple);">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.65rem;border-color:var(--purple);">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--text-muted);">deployed</span></div>
+            <span class="tag tag-purple" style="font-size:0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--text-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

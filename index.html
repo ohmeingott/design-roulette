@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Design Roulette &mdash; Mix Famous Design Styles Into Fresh UI Inspiration</title>
 <meta name="description" content="Design Roulette mixes iconic design movements like Brutalism, Glassmorphism, Neumorphism, and Dopamine Design into unexpected new aesthetics. Browse interactive demos and find your next UI inspiration.">
-<meta name="keywords" content="design inspiration, UI design, brutalism, glassmorphism, neumorphism, dopamine design, aurora design, design trends, web design, CSS, design system, style mashup">
+<meta name="keywords" content="design inspiration, UI design, brutalism, glassmorphism, neumorphism, dopamine design, aurora design, synthwave, vaporwave, claymorphism, art deco, memphis design, swiss design, design trends, web design, CSS, design system, style mashup">
 <meta name="author" content="Design Roulette">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://design-roulette.vercel.app/">
@@ -67,7 +67,7 @@ body {
 header {
   max-width: 960px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem 0;
+  padding: 3.5rem 1.5rem 1rem;
 }
 
 .site-title {
@@ -141,6 +141,9 @@ nav[aria-label="Style selector"] {
 .tab-btn[data-style="neu"] .tab-dot { background: linear-gradient(135deg, #C4654A, #7A9E7E); }
 .tab-btn[data-style="dopamine"] .tab-dot { background: linear-gradient(135deg, #FF2D87, #39FF14); }
 .tab-btn[data-style="glass"] .tab-dot { background: linear-gradient(135deg, #FF6B6B, #6BFFC2); }
+.tab-btn[data-style="synthwave"] .tab-dot { background: linear-gradient(135deg, #00FFFF, #FF00FF); }
+.tab-btn[data-style="vapor"] .tab-dot { background: linear-gradient(135deg, #B967FF, #01CDFE); }
+.tab-btn[data-style="deco"] .tab-dot { background: linear-gradient(135deg, #D4A853, #FF6B9D); }
 
 /* -- STYLE INFO -- */
 .style-meta {
@@ -167,48 +170,23 @@ nav[aria-label="Style selector"] {
 
 /* -- PREVIEW FRAME -- */
 .preview-wrapper {
-  max-width: 960px;
-  margin: 1rem auto 0;
-  padding: 0 1.5rem 3rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
 }
 
 .preview-container {
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
   overflow: hidden;
   background: #fff;
-  position: relative;
-}
-
-.preview-container::before {
-  content: '';
-  display: block;
-  padding: 0.5rem 1rem;
-  background: #f5f5f5;
-  border-bottom: 1.5px solid var(--border);
-  font-size: 0;
-}
-
-/* Browser dots */
-.preview-container::after {
-  content: '';
-  position: absolute;
-  top: 7px;
-  left: 12px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ff5f57;
-  box-shadow: 16px 0 0 #ffbd2e, 32px 0 0 #28c840;
+  border-top: 1.5px solid var(--border);
 }
 
 .preview-frame {
   width: 100%;
-  height: 800px;
   border: none;
   display: block;
   background: #fff;
   transition: opacity 0.2s ease;
+  overflow: hidden;
 }
 
 .preview-frame.loading {
@@ -230,8 +208,7 @@ footer p {
 
 /* -- RESPONSIVE -- */
 @media (max-width: 600px) {
-  header { padding-top: 1.5rem; }
-  .preview-frame { height: 600px; }
+  header { padding-top: 2rem; }
   .style-meta { flex-direction: column; gap: 0.3rem; }
 }
 </style>
@@ -271,6 +248,24 @@ footer p {
       <button class="tab-btn" role="tab" aria-selected="false" data-style="glass" data-src="styles/glass-x-brutal.html" data-name="Glass &times; Brutal" data-tagline="Frosted translucency pinned down by bold black frames &mdash; ethereal meets industrial.">
         <span class="tab-dot" aria-hidden="true"></span>
         Glass &times; Brutal
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="synthwave" data-src="styles/synthwave-x-swiss.html" data-name="Synthwave &times; Swiss" data-tagline="Neon retro-future grids meet precise Swiss typography &mdash; structured glow.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Synthwave &times; Swiss
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="vapor" data-src="styles/vapor-x-clay.html" data-name="Vapor &times; Clay" data-tagline="Pastel vaporwave aesthetics with soft, puffy claymorphism surfaces &mdash; dreamy and tactile.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Vapor &times; Clay
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="deco" data-src="styles/deco-x-memphis.html" data-name="Deco &times; Memphis" data-tagline="Art Deco gold geometry collides with 80s Memphis pop patterns &mdash; opulent and playful.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Deco &times; Memphis
       </button>
     </li>
   </ul>
@@ -322,8 +317,16 @@ footer p {
     });
   });
 
+  function resizeFrame() {
+    try {
+      var doc = frame.contentDocument || frame.contentWindow.document;
+      frame.style.height = doc.documentElement.scrollHeight + 'px';
+    } catch(e) {}
+  }
+
   frame.addEventListener('load', function() {
     frame.classList.remove('loading');
+    resizeFrame();
   });
 })();
 </script>

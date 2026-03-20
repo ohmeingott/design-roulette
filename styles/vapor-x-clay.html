@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vapor x Clay - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #F0E6F6;
+  --bg-card: #F7F0FC;
+  --ink: #2D1B4E;
+  --ink-soft: #5A4478;
+  --ink-muted: #8B7AA8;
+  --vapor-pink: #FF71CE;
+  --vapor-blue: #01CDFE;
+  --vapor-purple: #B967FF;
+  --vapor-mint: #05FFA1;
+  --vapor-peach: #FFFB96;
+  --clay-shadow-out: 8px 8px 20px rgba(180,160,210,0.45), -6px -6px 16px rgba(255,255,255,0.8);
+  --clay-shadow-in: inset 4px 4px 12px rgba(180,160,210,0.35), inset -4px -4px 12px rgba(255,255,255,0.7);
+  --clay-shadow-btn: 5px 5px 14px rgba(180,160,210,0.4), -4px -4px 12px rgba(255,255,255,0.7);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Space Mono',monospace;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Vaporwave gradient wash */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(185,103,255,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(255,113,206,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(1,205,254,0.1) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* -- HEADER -- */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:2.2rem;
+  letter-spacing:-2px;
+  background:linear-gradient(135deg, var(--vapor-purple), var(--vapor-pink), var(--vapor-blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(2px 2px 0 rgba(185,103,255,0.3));
+}
+
+.nav-pills{display:flex;gap:0.6rem;flex-wrap:wrap;}
+.nav-pill{
+  background:var(--bg-card);
+  border:none;border-radius:50px;
+  padding:0.6rem 1.3rem;
+  font-family:'Space Mono',monospace;font-size:0.75rem;font-weight:700;
+  cursor:pointer;transition:all 0.2s;
+  text-transform:uppercase;letter-spacing:1px;
+  color:var(--ink-muted);
+  box-shadow:var(--clay-shadow-out);
+}
+.nav-pill:hover{
+  box-shadow:var(--clay-shadow-in);color:var(--ink);
+}
+.nav-pill.active{
+  box-shadow:var(--clay-shadow-in);
+  color:var(--vapor-purple);
+  background:linear-gradient(135deg, rgba(185,103,255,0.1), rgba(255,113,206,0.1));
+}
+
+/* -- CLAY CARDS with vapor gradients -- */
+.card{
+  background:var(--bg-card);
+  border:none;
+  border-radius:24px;
+  box-shadow:var(--clay-shadow-out);
+  padding:1.8rem;
+  transition:all 0.2s;
+  position:relative;overflow:hidden;
+}
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:10px 10px 24px rgba(180,160,210,0.5), -8px -8px 20px rgba(255,255,255,0.85);
+}
+
+/* Vapor gradient overlays on cards */
+.card-vapor-pink{
+  background:linear-gradient(135deg, #FFE0F0, #F7F0FC, #E8D5F5);
+}
+.card-vapor-blue{
+  background:linear-gradient(135deg, #D5F0FF, #E8F0FC, #F0E6F6);
+}
+.card-vapor-purple{
+  background:linear-gradient(135deg, #E8D5FF, #F0E6F6, #FFE0F0);
+}
+.card-vapor-mint{
+  background:linear-gradient(135deg, #D5FFE8, #E8FCF0, #D5F0FF);
+}
+.card-vapor-sunset{
+  background:linear-gradient(135deg, #FFE0D5, #FFE0F0, #E8D5FF);
+}
+.card-vapor-warm{
+  background:linear-gradient(135deg, #FFF5D5, #FFE0F0, #F7F0FC);
+}
+
+/* -- GRIDS -- */
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* -- TYPOGRAPHY -- */
+.card-title{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1.3rem;
+  margin-bottom:0.5rem;text-transform:uppercase;letter-spacing:-0.5px;
+  color:var(--ink);
+}
+.card-subtitle{
+  font-size:0.7rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);
+}
+.card-body{font-size:0.85rem;line-height:1.65;color:var(--ink-soft);}
+
+/* -- CLAY BUBBLE (puffy stat indicator) -- */
+.clay-bubble{
+  width:100px;height:100px;border-radius:50%;
+  background:linear-gradient(145deg, #F7F0FC, #E8D5F5);
+  box-shadow:var(--clay-shadow-out);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto;
+}
+.clay-bubble-val{
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;
+  color:var(--ink);line-height:1;
+}
+.clay-bubble-lbl{
+  font-size:0.5rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--ink-muted);margin-top:2px;
+}
+
+/* -- PROGRESS (puffy clay track) -- */
+.progress-track{
+  width:100%;height:14px;
+  border-radius:10px;
+  background:var(--bg);
+  box-shadow:var(--clay-shadow-in);
+  overflow:hidden;margin-top:0.7rem;
+}
+.progress-fill{height:100%;border-radius:10px;}
+.pf-vapor-pink{background:linear-gradient(90deg, var(--vapor-purple), var(--vapor-pink));}
+.pf-vapor-blue{background:linear-gradient(90deg, var(--vapor-blue), var(--vapor-mint));}
+.pf-vapor-warm{background:linear-gradient(90deg, var(--vapor-peach), var(--vapor-pink));}
+.pf-vapor-purple{background:linear-gradient(90deg, var(--vapor-purple), var(--vapor-blue));}
+
+/* -- BADGE -- */
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:linear-gradient(135deg, rgba(185,103,255,0.15), rgba(255,113,206,0.15));
+  border-radius:50px;padding:0.35rem 0.75rem;
+  font-size:0.7rem;font-weight:700;
+  box-shadow:var(--clay-shadow-btn);
+  color:var(--vapor-purple);
+}
+
+/* -- TAG (puffy pill) -- */
+.tag{
+  display:inline-block;
+  border-radius:50px;
+  padding:0.25rem 0.75rem;font-size:0.65rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;margin:0.15rem;
+  box-shadow:2px 2px 6px rgba(180,160,210,0.3), -2px -2px 6px rgba(255,255,255,0.6);
+  border:none;
+}
+.tag-pink{background:rgba(255,113,206,0.2);color:#D64FA0;}
+.tag-blue{background:rgba(1,205,254,0.2);color:#00A0C8;}
+.tag-purple{background:rgba(185,103,255,0.2);color:#8A40D0;}
+.tag-mint{background:rgba(5,255,161,0.2);color:#00B070;}
+.tag-peach{background:rgba(255,200,100,0.25);color:#B88A20;}
+
+/* -- AVATAR (clay spheres) -- */
+.avatar-row{display:flex;gap:0.6rem;margin-bottom:1rem;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  box-shadow:var(--clay-shadow-out);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.8rem;
+  color:#fff;border:none;
+}
+
+/* -- BUTTON -- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Space Mono',monospace;font-size:0.78rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:0.7rem 1.4rem;
+  border:none;border-radius:50px;
+  cursor:pointer;transition:all 0.15s;
+  background:var(--bg-card);
+  box-shadow:var(--clay-shadow-btn);
+  color:var(--ink);
+}
+.btn:hover{
+  box-shadow:var(--clay-shadow-in);
+}
+.btn-vapor{
+  background:linear-gradient(135deg, var(--vapor-purple), var(--vapor-pink));
+  color:#fff;
+  box-shadow:var(--clay-shadow-btn);
+}
+.btn-vapor:hover{
+  background:linear-gradient(135deg, var(--vapor-blue), var(--vapor-mint));
+  color:var(--ink);
+}
+
+/* -- TASK LIST -- */
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.65rem 0;
+  border-bottom:1.5px dashed rgba(45,27,78,0.08);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--bg);
+  box-shadow:var(--clay-shadow-in);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:900;color:var(--ink);
+  border:none;
+}
+.task-check.done{
+  background:linear-gradient(135deg, var(--vapor-mint), var(--vapor-blue));
+  box-shadow:var(--clay-shadow-out);
+  color:#fff;
+}
+.task-text{font-size:0.85rem;color:var(--ink-soft);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+/* -- CLAY KNOB -- */
+.clay-knob{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--bg-card);
+  box-shadow:var(--clay-shadow-out);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anybody',sans-serif;font-weight:900;font-size:0.9rem;
+  color:var(--ink);flex-shrink:0;
+}
+
+/* -- ANIMATION -- */
+@keyframes puffIn{
+  0%{opacity:0;transform:scale(0.9) translateY(16px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+.card,.header{animation:puffIn 0.55s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* -- DIVIDER -- */
+.vapor-divider{
+  height:2px;margin:0.5rem 2rem 1.5rem;
+  background:linear-gradient(90deg, transparent, rgba(185,103,255,0.25), rgba(255,113,206,0.25), rgba(1,205,254,0.25), transparent);
+  border-radius:1px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Vapor&times;Clay</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Vibes</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-vapor-pink">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title" style="font-size:1.5rem;">Momentum is accelerating</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.2rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-muted);">Velocity</div>
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;">42 pts</div>
+        </div>
+        <div>
+          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-muted);">Target</div>
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-vapor">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-vapor-blue">
+      <div class="card-subtitle">Completion</div>
+      <div class="clay-bubble" style="margin:1.2rem auto;">
+        <div class="clay-bubble-val">86%</div>
+        <div class="clay-bubble-lbl">Done</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-vapor-blue" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vapor-divider"></div>
+
+  <div class="grid-3">
+    <div class="card card-vapor-sunset">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div class="clay-knob" style="color:var(--vapor-pink);">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">Deploys</div>
+          <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:70px;margin:1rem 0 1.4rem;">
+        <div style="flex:1;height:30%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--vapor-pink),rgba(255,113,206,0.3));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Mon</span>
+        </div>
+        <div style="flex:1;height:55%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--vapor-purple),rgba(185,103,255,0.3));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Tue</span>
+        </div>
+        <div style="flex:1;height:80%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--vapor-blue),rgba(1,205,254,0.3));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Wed</span>
+        </div>
+        <div style="flex:1;height:45%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--vapor-mint),rgba(5,255,161,0.3));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Thu</span>
+        </div>
+        <div style="flex:1;height:100%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--vapor-purple),var(--vapor-pink));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Fri</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-vapor-purple">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:linear-gradient(135deg,var(--vapor-purple),#D4A0FF);">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--vapor-blue),var(--vapor-mint));">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--vapor-pink),#FF9ED8);">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--vapor-peach),var(--vapor-pink));">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Design</span>
+        <span class="tag tag-blue">Frontend</span>
+        <span class="tag tag-purple">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;">
+        <div class="progress-fill pf-vapor-purple" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div class="card card-vapor-mint">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:1.5px;">P50</div>
+        </div>
+        <div style="width:2px;background:rgba(45,27,78,0.08);border-radius:1px;"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Anybody',sans-serif;font-weight:900;font-size:1.8rem;">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:1.5px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-vapor-blue" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:var(--ink-muted);">Uptime</span>
+        <span style="font-size:0.65rem;font-weight:700;color:#00A0C8;">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vapor-divider"></div>
+
+  <div class="grid-2">
+    <div class="card card-vapor-mint">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-mint" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-purple" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-blue" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-peach" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-purple" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card card-vapor-warm">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:rgba(185,103,255,0.06);border-radius:16px;box-shadow:var(--clay-shadow-in);">
+          <div class="clay-knob" style="width:34px;height:34px;font-size:0.7rem;color:var(--vapor-purple);">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div>
+            <span class="tag tag-blue" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:rgba(255,113,206,0.06);border-radius:16px;box-shadow:var(--clay-shadow-in);">
+          <div class="clay-knob" style="width:34px;height:34px;font-size:0.7rem;color:var(--vapor-pink);">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div>
+            <span class="tag tag-pink" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:rgba(1,205,254,0.06);border-radius:16px;box-shadow:var(--clay-shadow-in);">
+          <div class="clay-knob" style="width:34px;height:34px;font-size:0.7rem;color:var(--vapor-blue);">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div>
+            <span class="tag tag-mint" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
