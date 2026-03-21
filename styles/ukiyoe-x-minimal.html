@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ukiyo-e x Minimal - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #FAF7F2;
+  --bg-card: #FFFFFF;
+  --ukiyo-indigo: #264653;
+  --ukiyo-red: #C1272D;
+  --ukiyo-gold: #C49A2A;
+  --ukiyo-blue: #2A6B8A;
+  --ukiyo-green: #4A7C59;
+  --ukiyo-ink: #1A1A2E;
+  --min-gray: #888;
+  --min-light: #DDD;
+  --ink: #1A1A2E;
+  --ink-muted: rgba(26,26,46,0.4);
+  --border: rgba(26,26,46,0.08);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:3rem 1.5rem;
+}
+
+.container{max-width:920px;margin:0 auto;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:3rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--min-light);
+}
+.logo{
+  font-family:'Noto Serif JP',serif;font-weight:900;font-size:2rem;
+  letter-spacing:-1px;line-height:1;
+  color:var(--ukiyo-indigo);
+}
+.logo span{
+  font-family:'Inter',sans-serif;font-weight:300;font-size:1.4rem;
+  color:var(--min-gray);
+}
+
+.nav-pills{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;border:none;
+  font-size:0.75rem;font-weight:600;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:2px;
+  color:var(--ink-muted);
+  padding:0.3rem 0;border-bottom:1.5px solid transparent;
+}
+.nav-pill:hover{color:var(--ink);}
+.nav-pill.active{color:var(--ukiyo-red);border-bottom-color:var(--ukiyo-red);}
+
+.card{
+  background:var(--bg-card);
+  border:none;
+  padding:2rem;
+  transition:all 0.2s;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+}
+.card:hover{box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+
+.card-indigo{border-left:3px solid var(--ukiyo-indigo);}
+.card-red{border-left:3px solid var(--ukiyo-red);}
+.card-gold{border-left:3px solid var(--ukiyo-gold);}
+.card-blue{border-left:3px solid var(--ukiyo-blue);}
+.card-green{border-left:3px solid var(--ukiyo-green);}
+.card-plain{border-left:3px solid var(--min-light);}
+
+.grid-hero{display:grid;gap:1.5rem;grid-template-columns:1.5fr 1fr;margin-bottom:1.5rem;}
+.grid-3{display:grid;gap:1.5rem;grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;}
+.grid-2{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr;}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{font-family:'Noto Serif JP',serif;font-weight:700;font-size:1.2rem;margin-bottom:0.5rem;color:var(--ukiyo-indigo);}
+.card-subtitle{font-size:0.65rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);}
+.card-body{font-size:0.85rem;line-height:1.7;color:rgba(26,26,46,0.55);}
+
+.stat-value{font-family:'Space Mono',monospace;font-weight:700;font-size:2.8rem;line-height:1;color:var(--ukiyo-indigo);}
+.stat-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:3px;margin-top:0.4rem;color:var(--ink-muted);}
+
+/* Ukiyo-e wave circle */
+.wave-circle{
+  width:85px;height:85px;border-radius:50%;
+  border:2px solid var(--ukiyo-indigo);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+}
+.wave-circle::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:40%;
+  background:var(--ukiyo-blue);opacity:0.15;
+  border-radius:50% 50% 0 0;
+}
+
+.progress-track{width:100%;height:2px;background:var(--min-light);margin-top:1rem;border-radius:1px;}
+.progress-fill{height:100%;border-radius:1px;}
+.pf-indigo{background:var(--ukiyo-indigo);}
+.pf-red{background:var(--ukiyo-red);}
+.pf-blue{background:var(--ukiyo-blue);}
+
+.badge{display:inline-flex;align-items:center;gap:0.3rem;border:1px solid var(--ukiyo-indigo);padding:0.2rem 0.6rem;font-size:0.65rem;font-weight:600;color:var(--ukiyo-indigo);border-radius:2px;}
+
+.tag{display:inline-block;padding:0.15rem 0.6rem;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin:0.15rem;border-radius:2px;}
+.tag-indigo{background:rgba(38,70,83,0.08);color:var(--ukiyo-indigo);}
+.tag-red{background:rgba(193,39,45,0.08);color:var(--ukiyo-red);}
+.tag-blue{background:rgba(42,107,138,0.08);color:var(--ukiyo-blue);}
+.tag-gold{background:rgba(196,154,42,0.08);color:var(--ukiyo-gold);}
+.tag-green{background:rgba(74,124,89,0.08);color:var(--ukiyo-green);}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif JP',serif;font-weight:700;font-size:0.75rem;color:#fff;}
+
+.btn{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;font-weight:600;padding:0.6rem 1.2rem;border:1px solid var(--ukiyo-indigo);cursor:pointer;transition:all 0.15s;background:transparent;color:var(--ukiyo-indigo);border-radius:2px;}
+.btn:hover{background:var(--ukiyo-indigo);color:#fff;}
+.btn-outline{border-color:var(--min-light);color:var(--ink-muted);}
+.btn-outline:hover{border-color:var(--ink);color:var(--ink);background:transparent;}
+
+.task-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid var(--border);}
+.task-item:last-child{border-bottom:none;}
+.task-check{width:16px;height:16px;border:1.5px solid var(--min-light);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:var(--ukiyo-green);}
+.task-check.done{background:var(--ukiyo-green);border-color:var(--ukiyo-green);color:#fff;}
+.task-text{font-size:0.85rem;color:rgba(26,26,46,0.55);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+@keyframes ukIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+.card,.header{animation:ukIn 0.5s ease both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">浮世絵<span>&times;Minimal</span></div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Gallery</div>
+      <div class="nav-pill">Archive</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-indigo">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.</div>
+      <div style="display:flex;gap:2rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;color:var(--min-gray);">34</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn">View report &rarr;</button>
+        <button class="btn btn-outline">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-red">
+      <div class="card-subtitle">Completion</div>
+      <div class="wave-circle" style="margin:1.5rem auto;">
+        <div style="text-align:center;position:relative;z-index:1;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.5rem;color:var(--ukiyo-indigo);">86%</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-red" style="width:86%"></div></div>
+      <div style="margin-top:0.8rem;text-align:center;"><span class="badge" style="border-color:var(--ukiyo-red);color:var(--ukiyo-red);">&uarr; 18% vs last</span></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-blue">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--ukiyo-blue);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;color:#fff;">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--ukiyo-red);border-radius:1px 1px 0 0;"></div>
+        <div style="flex:1;height:55%;background:var(--ukiyo-blue);border-radius:1px 1px 0 0;"></div>
+        <div style="flex:1;height:80%;background:var(--ukiyo-indigo);border-radius:1px 1px 0 0;"></div>
+        <div style="flex:1;height:45%;background:var(--ukiyo-gold);border-radius:1px 1px 0 0;"></div>
+        <div style="flex:1;height:100%;background:var(--ukiyo-green);border-radius:1px 1px 0 0;"></div>
+      </div>
+    </div>
+
+    <div class="card card-green">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:var(--ukiyo-indigo);">P</div>
+        <div class="avatar" style="background:var(--ukiyo-red);">A</div>
+        <div class="avatar" style="background:var(--ukiyo-blue);">M</div>
+        <div class="avatar" style="background:var(--ukiyo-green);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-red">Design</span>
+        <span class="tag tag-blue">Frontend</span>
+        <span class="tag tag-green">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;"><div class="progress-fill pf-blue" style="width:72%"></div></div>
+    </div>
+
+    <div class="card card-gold">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--ukiyo-indigo);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:1px;background:var(--min-light);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--ukiyo-indigo);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-indigo" style="width:96%"></div></div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--ukiyo-green);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-plain">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">Tasks <span class="tag tag-red" style="font-size:0.55rem;">3 open</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">Design system audit</span><span class="tag tag-red" style="margin-left:auto;">Design</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">API rate-limit fix</span><span class="tag tag-indigo" style="margin-left:auto;">Backend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Dashboard chart refactor</span><span class="tag tag-blue" style="margin-left:auto;">Frontend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Onboarding flow v2</span><span class="tag tag-gold" style="margin-left:auto;">UX</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Write release notes</span><span class="tag tag-green" style="margin-left:auto;">Docs</span></div>
+    </div>
+
+    <div class="card card-indigo">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:2px solid var(--ukiyo-green);">
+          <div class="avatar" style="background:var(--ukiyo-indigo);width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div><span class="tag tag-blue" style="font-size:0.5rem;">PR #421</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:2px solid var(--ukiyo-red);">
+          <div class="avatar" style="background:var(--ukiyo-red);width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div><span class="tag tag-red" style="font-size:0.5rem;">Bug #89</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:2px solid var(--ukiyo-gold);">
+          <div class="avatar" style="background:var(--ukiyo-blue);width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div><span class="tag tag-gold" style="font-size:0.5rem;">v2.4.1</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

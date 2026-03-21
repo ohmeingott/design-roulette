@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organic x Industrial - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #1C1E1A;
+  --bg-card: #242620;
+  --org-green: #4CAF50;
+  --org-sage: #8BC34A;
+  --org-moss: #2E7D32;
+  --org-earth: #795548;
+  --org-sand: #D7CCC8;
+  --ind-steel: #78909C;
+  --ind-iron: #455A64;
+  --ind-rust: #BF360C;
+  --ind-yellow: #FFC107;
+  --ind-concrete: #9E9E9E;
+  --ink: #D8D8D0;
+  --ink-muted: rgba(216,216,208,0.4);
+  --border: rgba(216,216,208,0.08);
+}
+
+body{
+  min-height:100vh;
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Industrial grid + organic wave bg */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.04;
+  background:
+    linear-gradient(rgba(120,144,156,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,144,156,0.3) 1px, transparent 1px);
+  background-size:80px 80px;
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1.5rem;
+  border-bottom:2px solid var(--ind-iron);
+}
+.logo{
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:2.2rem;
+  letter-spacing:-1px;line-height:1;
+  color:var(--org-green);
+}
+.logo span{
+  color:var(--ind-steel);
+  font-weight:400;
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;
+  border:1.5px solid var(--ind-iron);
+  border-radius:20px;
+  padding:0.5rem 1.2rem;
+  font-size:0.7rem;font-weight:500;
+  cursor:pointer;transition:all 0.15s;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--ind-steel);
+}
+.nav-pill:hover{border-color:var(--org-green);color:var(--org-green);}
+.nav-pill.active{background:var(--org-green);color:#fff;border-color:var(--org-green);}
+
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.8rem;
+  transition:all 0.2s;
+  position:relative;
+}
+.card:hover{border-color:rgba(76,175,80,0.2);box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+
+.card-green{border-top:3px solid var(--org-green);}
+.card-sage{border-top:3px solid var(--org-sage);}
+.card-earth{border-top:3px solid var(--org-earth);}
+.card-steel{border-top:3px solid var(--ind-steel);}
+.card-rust{border-top:3px solid var(--ind-rust);}
+.card-yellow{border-top:3px solid var(--ind-yellow);}
+
+.grid-hero{display:grid;gap:1.5rem;grid-template-columns:1.5fr 1fr;margin-bottom:1.5rem;}
+.grid-3{display:grid;gap:1.5rem;grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem;}
+.grid-2{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr;}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:0.5rem;color:var(--ink);}
+.card-subtitle{font-size:0.65rem;margin-bottom:1rem;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);font-family:'Space Mono',monospace;}
+.card-body{font-size:0.85rem;line-height:1.65;color:rgba(216,216,208,0.6);}
+
+.stat-value{font-family:'Space Mono',monospace;font-weight:700;font-size:3rem;line-height:1;color:var(--org-green);}
+.stat-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:3px;margin-top:0.4rem;color:var(--ink-muted);}
+
+/* Organic ring */
+.org-ring{
+  width:90px;height:90px;border-radius:50%;
+  border:3px solid var(--org-green);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+  background:rgba(76,175,80,0.05);
+}
+
+.progress-track{width:100%;height:5px;background:rgba(216,216,208,0.06);margin-top:0.8rem;border-radius:3px;}
+.progress-fill{height:100%;border-radius:3px;}
+.pf-green{background:linear-gradient(90deg, var(--org-moss), var(--org-green), var(--org-sage));}
+.pf-steel{background:linear-gradient(90deg, var(--ind-iron), var(--ind-steel));}
+.pf-rust{background:var(--ind-rust);}
+
+.badge{display:inline-flex;align-items:center;gap:0.3rem;border:1px solid var(--org-green);border-radius:12px;padding:0.25rem 0.65rem;font-size:0.65rem;font-weight:700;color:var(--org-green);}
+
+.tag{display:inline-block;padding:0.2rem 0.7rem;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin:0.15rem;border-radius:10px;}
+.tag-green{background:rgba(76,175,80,0.12);color:var(--org-green);}
+.tag-sage{background:rgba(139,195,74,0.12);color:var(--org-sage);}
+.tag-earth{background:rgba(121,85,72,0.12);color:var(--org-earth);}
+.tag-steel{background:rgba(120,144,156,0.12);color:var(--ind-steel);}
+.tag-rust{background:rgba(191,54,12,0.12);color:var(--ind-rust);}
+.tag-yellow{background:rgba(255,193,7,0.12);color:var(--ind-yellow);}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:#fff;}
+
+.btn{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:0.7rem 1.4rem;border:1.5px solid var(--org-green);border-radius:12px;cursor:pointer;transition:all 0.15s;background:transparent;color:var(--org-green);}
+.btn:hover{background:var(--org-green);color:#fff;}
+.btn-ind{border-color:var(--ind-steel);color:var(--ind-steel);border-radius:4px;}
+.btn-ind:hover{background:var(--ind-steel);color:#fff;}
+
+.task-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid var(--border);}
+.task-item:last-child{border-bottom:none;}
+.task-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--ind-steel);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-weight:900;color:var(--org-green);}
+.task-check.done{background:var(--org-green);border-color:var(--org-green);color:#fff;}
+.task-text{font-size:0.85rem;color:rgba(216,216,208,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+@keyframes orgIn{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+.card,.header{animation:orgIn 0.5s ease both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Organic<span>&times;Industrial</span></div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Ecosystem</div>
+      <div class="nav-pill">Factory</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-green">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.</div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label">Velocity</div>
+          <div class="stat-value" style="font-size:2rem;">42 pts</div>
+        </div>
+        <div>
+          <div class="stat-label">Target</div>
+          <div class="stat-value" style="font-size:2rem;color:var(--ind-steel);">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn">View report &rarr;</button>
+        <button class="btn btn-ind">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-steel">
+      <div class="card-subtitle">Completion</div>
+      <div class="org-ring" style="margin:1.2rem auto;">
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--org-green);">86%</div>
+          <div style="font-size:0.5rem;text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);">Done</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-green" style="width:86%"></div></div>
+      <div style="margin-top:0.8rem;text-align:center;"><span class="badge">&uarr; 18% vs last</span></div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-rust">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--ind-rust),var(--ind-yellow));display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:1.1rem;color:#fff;">8</div>
+        <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:70px;margin:1rem 0 1.2rem;">
+        <div style="flex:1;height:30%;background:var(--org-green);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:55%;background:var(--ind-steel);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:80%;background:var(--org-sage);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:45%;background:var(--ind-rust);border-radius:3px 3px 0 0;"></div>
+        <div style="flex:1;height:100%;background:var(--ind-yellow);border-radius:3px 3px 0 0;"></div>
+      </div>
+    </div>
+
+    <div class="card card-sage">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:var(--org-green);">P</div>
+        <div class="avatar" style="background:var(--ind-steel);">A</div>
+        <div class="avatar" style="background:var(--org-earth);">M</div>
+        <div class="avatar" style="background:var(--ind-rust);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-green">Design</span>
+        <span class="tag tag-steel">Frontend</span>
+        <span class="tag tag-earth">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;"><div class="progress-fill pf-steel" style="width:72%"></div></div>
+    </div>
+
+    <div class="card card-yellow">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.7rem;color:var(--org-green);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P50</div>
+        </div>
+        <div style="width:1px;background:rgba(216,216,208,0.1);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.7rem;color:var(--org-green);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ink-muted);letter-spacing:2px;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-green" style="width:96%"></div></div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1.5px;">UPTIME</span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.65rem;font-weight:700;color:var(--org-green);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-earth">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">Tasks <span class="tag tag-green" style="font-size:0.55rem;">3 open</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">Design system audit</span><span class="tag tag-sage" style="margin-left:auto;">Design</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">API rate-limit fix</span><span class="tag tag-steel" style="margin-left:auto;">Backend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Dashboard chart refactor</span><span class="tag tag-green" style="margin-left:auto;">Frontend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Onboarding flow v2</span><span class="tag tag-earth" style="margin-left:auto;">UX</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Write release notes</span><span class="tag tag-yellow" style="margin-left:auto;">Docs</span></div>
+    </div>
+
+    <div class="card card-green">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--org-green);background:rgba(76,175,80,0.04);border-radius:0 8px 8px 0;">
+          <div class="avatar" style="background:var(--org-green);width:32px;height:32px;font-size:0.7rem;">P</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div><span class="tag tag-green" style="font-size:0.5rem;">PR #421</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--ind-rust);background:rgba(191,54,12,0.04);border-radius:0 8px 8px 0;">
+          <div class="avatar" style="background:var(--ind-steel);width:32px;height:32px;font-size:0.7rem;">A</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div><span class="tag tag-rust" style="font-size:0.5rem;">Bug #89</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem 0.8rem;border-left:3px solid var(--ind-yellow);background:rgba(255,193,7,0.04);border-radius:0 8px 8px 0;">
+          <div class="avatar" style="background:var(--org-earth);width:32px;height:32px;font-size:0.7rem;">K</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div><span class="tag tag-yellow" style="font-size:0.5rem;">v2.4.1</span></div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

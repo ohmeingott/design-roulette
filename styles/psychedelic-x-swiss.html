@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychedelic x Swiss - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #1A0A2E;
+  --bg-card: rgba(255,255,255,0.04);
+  --acid-green: #ADFF2F;
+  --acid-orange: #FF6600;
+  --acid-pink: #FF1493;
+  --acid-violet: #8A2BE2;
+  --acid-yellow: #FFFF00;
+  --acid-cyan: #00CED1;
+  --swiss-white: #F0F0F0;
+  --swiss-black: #111;
+  --ink: #E8E0F0;
+  --ink-muted: rgba(232,224,240,0.4);
+  --border: rgba(173,255,47,0.12);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:3rem 1.5rem;
+  position:relative;
+}
+
+/* Psychedelic swirl background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;opacity:0.06;
+  background:
+    radial-gradient(ellipse at 20% 50%, var(--acid-pink) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, var(--acid-violet) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, var(--acid-green) 0%, transparent 50%);
+  pointer-events:none;
+  animation:psychBg 15s ease-in-out infinite alternate;
+}
+@keyframes psychBg{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(60deg)}
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Swiss header with psychedelic accents */
+.header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  margin-bottom:3rem;
+  padding-bottom:1.5rem;
+  border-bottom:2px solid var(--acid-green);
+}
+.logo{
+  font-family:'Inter',sans-serif;font-weight:800;font-size:2.4rem;
+  letter-spacing:-1.5px;line-height:1;
+  color:var(--swiss-white);
+}
+.logo span{
+  background:linear-gradient(90deg, var(--acid-green), var(--acid-yellow), var(--acid-orange), var(--acid-pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.nav-row{display:flex;gap:2rem;}
+.nav-link{
+  font-size:0.75rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:2px;
+  color:var(--ink-muted);cursor:pointer;transition:color 0.2s;
+  position:relative;
+}
+.nav-link:hover,.nav-link.active{color:var(--acid-green);}
+.nav-link.active::after{
+  content:'';position:absolute;bottom:-1.55rem;left:0;right:0;
+  height:2px;background:linear-gradient(90deg, var(--acid-green), var(--acid-pink));
+}
+
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:0;
+  padding:2rem;
+  transition:all 0.2s;
+  position:relative;
+}
+.card:hover{
+  background:rgba(255,255,255,0.06);
+  border-color:rgba(173,255,47,0.25);
+}
+
+.card-green::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, var(--acid-green), var(--acid-yellow));}
+.card-pink::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, var(--acid-pink), var(--acid-violet));}
+.card-orange::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, var(--acid-orange), var(--acid-yellow));}
+.card-violet::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acid-violet);}
+.card-cyan::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--acid-cyan);}
+
+/* Swiss grids with 1px gaps */
+.grid-hero{display:grid;gap:1px;grid-template-columns:1.6fr 1fr;margin-bottom:1px;background:var(--border);}
+.grid-hero .card{margin:0;}
+.grid-3{display:grid;gap:1px;grid-template-columns:repeat(3,1fr);margin-bottom:1px;background:var(--border);}
+.grid-2{display:grid;gap:1px;grid-template-columns:1fr 1fr;background:var(--border);}
+@media(max-width:700px){.grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}}
+
+.card-title{font-family:'Inter',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-0.5px;margin-bottom:0.5rem;color:var(--swiss-white);}
+.card-subtitle{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);margin-bottom:1.2rem;}
+.card-body{font-size:0.85rem;line-height:1.7;color:rgba(232,224,240,0.6);}
+
+.stat-value{
+  font-family:'Space Mono',monospace;font-weight:700;font-size:3rem;
+  line-height:1;
+  background:linear-gradient(180deg, var(--acid-green), var(--acid-yellow));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--ink-muted);margin-top:0.5rem;}
+
+.progress-track{width:100%;height:3px;background:rgba(255,255,255,0.06);margin-top:1rem;}
+.progress-fill{height:100%;}
+.pf-acid{background:linear-gradient(90deg, var(--acid-green), var(--acid-yellow));box-shadow:0 0 8px var(--acid-green);}
+.pf-pink{background:linear-gradient(90deg, var(--acid-pink), var(--acid-violet));box-shadow:0 0 8px var(--acid-pink);}
+.pf-orange{background:linear-gradient(90deg, var(--acid-orange), var(--acid-yellow));}
+
+.tag{display:inline-block;border:1px solid var(--border);padding:0.2rem 0.6rem;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;margin:0.15rem;color:var(--ink-muted);}
+.tag-green{border-color:rgba(173,255,47,0.4);color:var(--acid-green);}
+.tag-pink{border-color:rgba(255,20,147,0.4);color:var(--acid-pink);}
+.tag-orange{border-color:rgba(255,102,0,0.4);color:var(--acid-orange);}
+.tag-violet{border-color:rgba(138,43,226,0.4);color:var(--acid-violet);}
+
+.badge{display:inline-flex;align-items:center;gap:0.3rem;border:1px solid var(--acid-green);padding:0.25rem 0.6rem;font-size:0.65rem;font-weight:600;color:var(--acid-green);font-family:'Space Mono',monospace;}
+
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-weight:700;font-size:0.75rem;color:#fff;background:var(--bg-card);}
+
+.btn{display:inline-flex;align-items:center;gap:0.5rem;font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;padding:0.7rem 1.5rem;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:transparent;color:var(--ink);}
+.btn:hover{border-color:var(--acid-green);color:var(--acid-green);}
+.btn-acid{border-color:var(--acid-green);color:var(--acid-green);background:rgba(173,255,47,0.05);}
+.btn-acid:hover{background:var(--acid-green);color:var(--bg);box-shadow:0 0 20px rgba(173,255,47,0.3);}
+
+.task-item{display:flex;align-items:center;gap:0.8rem;padding:0.65rem 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.task-item:last-child{border-bottom:none;}
+.task-check{width:16px;height:16px;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--acid-green);}
+.task-check.done{background:rgba(173,255,47,0.15);border-color:var(--acid-green);}
+.task-text{font-size:0.8rem;color:rgba(232,224,240,0.6);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+.section-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:4px;color:var(--ink-muted);padding:1.5rem 0 0.8rem;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeIn 0.4s ease both;}
+.grid-hero .card:nth-child(1){animation-delay:0.05s}
+.grid-hero .card:nth-child(2){animation-delay:0.1s}
+.grid-3 .card:nth-child(1){animation-delay:0.15s}
+.grid-3 .card:nth-child(2){animation-delay:0.2s}
+.grid-3 .card:nth-child(3){animation-delay:0.25s}
+.grid-2 .card:nth-child(1){animation-delay:0.3s}
+.grid-2 .card:nth-child(2){animation-delay:0.35s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Psych<span>&times;</span>Swiss</div>
+    <nav class="nav-row">
+      <a class="nav-link active">Dashboard</a>
+      <a class="nav-link">Trips</a>
+      <a class="nav-link">Patterns</a>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-green">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title">Momentum is accelerating</div>
+      <div class="card-body">42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.</div>
+      <div style="display:flex;gap:2.5rem;margin-top:1.5rem;">
+        <div>
+          <div class="stat-value">42</div>
+          <div class="stat-label">Velocity</div>
+        </div>
+        <div>
+          <div class="stat-value" style="opacity:0.3;">34</div>
+          <div class="stat-label">Target</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;"><span class="badge">&uarr; 24%</span></div>
+      </div>
+      <div style="margin-top:1.5rem;display:flex;gap:0.5rem;">
+        <button class="btn btn-acid">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-subtitle">Completion</div>
+      <div style="margin:2rem 0 1rem;text-align:center;">
+        <div class="stat-value" style="font-size:3.5rem;background:linear-gradient(180deg, var(--acid-pink), var(--acid-violet));-webkit-background-clip:text;background-clip:text;">86%</div>
+        <div class="stat-label">Done</div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-pink" style="width:86%"></div></div>
+      <div style="margin-top:1rem;text-align:center;"><span class="badge" style="border-color:var(--acid-pink);color:var(--acid-pink);">&uarr; 18% vs last</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Metrics</div>
+
+  <div class="grid-3">
+    <div class="card card-orange">
+      <div class="card-subtitle">Deploys</div>
+      <div style="display:flex;align-items:baseline;gap:0.5rem;margin-bottom:0.5rem;">
+        <div class="stat-value" style="font-size:2.5rem;background:linear-gradient(180deg,var(--acid-orange),var(--acid-yellow));-webkit-background-clip:text;background-clip:text;">8</div>
+        <div class="stat-label" style="margin:0;">this week</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:70px;margin-bottom:1.2rem;">
+        <div style="flex:1;height:30%;background:linear-gradient(180deg,var(--acid-green),transparent);"></div>
+        <div style="flex:1;height:55%;background:linear-gradient(180deg,var(--acid-pink),transparent);"></div>
+        <div style="flex:1;height:80%;background:linear-gradient(180deg,var(--acid-orange),transparent);"></div>
+        <div style="flex:1;height:45%;background:linear-gradient(180deg,var(--acid-violet),transparent);"></div>
+        <div style="flex:1;height:100%;background:linear-gradient(180deg,var(--acid-yellow),transparent);"></div>
+      </div>
+    </div>
+
+    <div class="card card-violet">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="border-color:var(--acid-green);">P</div>
+        <div class="avatar" style="border-color:var(--acid-pink);">A</div>
+        <div class="avatar" style="border-color:var(--acid-orange);">M</div>
+        <div class="avatar" style="border-color:var(--acid-violet);">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Design</span>
+        <span class="tag tag-green">Frontend</span>
+        <span class="tag tag-violet">Backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1.5rem;"><div class="progress-fill pf-acid" style="width:72%"></div></div>
+    </div>
+
+    <div class="card card-cyan">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-between;margin:1rem 0;">
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--acid-cyan);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);">P50</div>
+        </div>
+        <div style="width:1px;background:var(--border);"></div>
+        <div>
+          <div style="font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--acid-cyan);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);">P99</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill pf-acid" style="width:96%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:0.4rem;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);letter-spacing:1px;">UPTIME</span>
+        <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--acid-green);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Operations</div>
+
+  <div class="grid-2">
+    <div class="card card-green">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">Tasks <span class="tag tag-green">3 open</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">Design system audit</span><span class="tag tag-pink" style="margin-left:auto;">Design</span></div>
+      <div class="task-item"><div class="task-check done">&check;</div><span class="task-text done">API rate-limit fix</span><span class="tag tag-violet" style="margin-left:auto;">Backend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Dashboard chart refactor</span><span class="tag tag-green" style="margin-left:auto;">Frontend</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Onboarding flow v2</span><span class="tag tag-orange" style="margin-left:auto;">UX</span></div>
+      <div class="task-item"><div class="task-check"></div><span class="task-text">Write release notes</span><span class="tag" style="margin-left:auto;">Docs</span></div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.8rem;display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem;background:rgba(173,255,47,0.03);border-left:2px solid var(--acid-green);">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.65rem;border-color:var(--acid-green);">P</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div><span class="tag tag-green" style="font-size:0.5rem;">PR #421</span></div>
+          <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem;background:rgba(255,20,147,0.03);border-left:2px solid var(--acid-pink);">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.65rem;border-color:var(--acid-pink);">A</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div><span class="tag tag-pink" style="font-size:0.5rem;">Bug #89</span></div>
+          <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.6rem;background:rgba(138,43,226,0.03);border-left:2px solid var(--acid-violet);">
+          <div class="avatar" style="width:28px;height:28px;font-size:0.65rem;border-color:var(--acid-violet);">K</div>
+          <div style="flex:1;"><div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div><span class="tag tag-violet" style="font-size:0.5rem;">v2.4.1</span></div>
+          <span style="font-size:0.6rem;font-family:'Space Mono',monospace;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
