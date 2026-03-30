@@ -155,6 +155,70 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* --- Risograph x Zen: Extra Animations --- */
+
+@keyframes grainCrawl{
+  0%{background-position:0 0}
+  100%{background-position:200px 200px}
+}
+body::before{animation:grainCrawl 8s linear infinite;}
+
+@keyframes inkSpread{
+  0%{box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+  100%{box-shadow:0 2px 12px rgba(229,89,52,0.12), inset 0 0 20px rgba(229,89,52,0.03)}
+}
+.card:hover{animation:inkSpread 0.4s ease forwards;}
+
+@keyframes ensoDraw{
+  0%{stroke-dashoffset:283}
+  100%{stroke-dashoffset:20}
+}
+.zen-circle{
+  position:relative;
+  border:none;
+  background:transparent;
+}
+.zen-circle::before{
+  content:'';position:absolute;inset:-3px;
+  border-radius:50%;
+  border:3px solid var(--ink);
+  clip-path:polygon(0 0, 100% 0, 100% 100%, 5% 95%);
+  animation:ensoReveal 2s ease both;
+  animation-delay:0.5s;
+}
+@keyframes ensoReveal{
+  0%{clip-path:polygon(50% 0, 50% 0, 50% 0, 50% 0)}
+  100%{clip-path:polygon(0 0, 100% 0, 100% 100%, 5% 95%)}
+}
+
+@keyframes paperFoldReveal{
+  0%{transform:perspective(600px) rotateX(-15deg);opacity:0}
+  100%{transform:perspective(600px) rotateX(0deg);opacity:1}
+}
+.grid-2 .card{animation:zenIn 0.5s ease both, paperFoldReveal 0.8s ease both;}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+@keyframes breatheScale{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.008)}
+}
+.card{animation:zenIn 0.5s ease both, breatheScale 6s ease-in-out infinite;}
+
+@keyframes waterRipple{
+  0%{box-shadow:0 0 0 0 rgba(229,89,52,0.15)}
+  100%{box-shadow:0 0 0 15px rgba(229,89,52,0)}
+}
+.zen-circle::after{
+  animation:waterRipple 2.5s ease-in-out infinite;
+}
+
+@keyframes subtleFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-3px)}
+}
+.badge{animation:subtleFloat 3s ease-in-out infinite;}
 </style>
 </head>
 <body>
@@ -291,5 +355,128 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();}
+    if(ctx.state==='suspended') ctx.resume();
+    return ctx;
+  }
+
+  // Soft paper rustle on card hover
+  function playCardHover(){
+    const c=getCtx(), t=c.currentTime;
+    const buf=c.createBuffer(1,c.sampleRate*0.1,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    const n=c.createBufferSource(), g=c.createGain(), f=c.createBiquadFilter();
+    n.buffer=buf;
+    f.type='bandpass'; f.frequency.value=3000; f.Q.value=0.5;
+    g.gain.setValueAtTime(0.03,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.1);
+    n.connect(f); f.connect(g); g.connect(c.destination);
+    n.start(t); n.stop(t+0.1);
+  }
+
+  // Ink stamp press on card click
+  function playCardClick(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(200,t);
+    o.frequency.exponentialRampToValueAtTime(60,t+0.12);
+    g.gain.setValueAtTime(0.1,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.15);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.15);
+    // thud noise
+    const buf=c.createBuffer(1,c.sampleRate*0.06,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.5;
+    const n=c.createBufferSource(), ng=c.createGain(), f=c.createBiquadFilter();
+    n.buffer=buf; f.type='lowpass'; f.frequency.value=500;
+    ng.gain.setValueAtTime(0.06,t);
+    ng.gain.exponentialRampToValueAtTime(0.001,t+0.06);
+    n.connect(f); f.connect(ng); ng.connect(c.destination);
+    n.start(t); n.stop(t+0.06);
+  }
+
+  // Stone on stone nav click
+  function playNavClick(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(800,t);
+    o.frequency.exponentialRampToValueAtTime(400,t+0.08);
+    g.gain.setValueAtTime(0.08,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.12);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.12);
+  }
+
+  // Gentle wind through bamboo on button
+  function playBtnClick(){
+    const c=getCtx(), t=c.currentTime;
+    const buf=c.createBuffer(1,c.sampleRate*0.25,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    const n=c.createBufferSource(), g=c.createGain(), f=c.createBiquadFilter();
+    n.buffer=buf;
+    f.type='bandpass'; f.frequency.value=1200; f.Q.value=2;
+    f.frequency.setValueAtTime(800,t);
+    f.frequency.linearRampToValueAtTime(2000,t+0.12);
+    f.frequency.linearRampToValueAtTime(600,t+0.25);
+    g.gain.setValueAtTime(0.05,t);
+    g.gain.setValueAtTime(0.05,t+0.1);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.25);
+    n.connect(f); f.connect(g); g.connect(c.destination);
+    n.start(t); n.stop(t+0.25);
+  }
+
+  // Meditation singing bowl intro
+  function playIntro(){
+    if(introPlayed) return; introPlayed=true;
+    const c=getCtx(), t=c.currentTime;
+    // Fundamental
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.value=528;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.08,t+0.1);
+    g.gain.setValueAtTime(0.08,t+0.3);
+    g.gain.exponentialRampToValueAtTime(0.001,t+1.0);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+1.0);
+    // Harmonic overtone
+    const o2=c.createOscillator(), g2=c.createGain();
+    o2.type='sine'; o2.frequency.value=528*2.76;
+    g2.gain.setValueAtTime(0,t);
+    g2.gain.linearRampToValueAtTime(0.03,t+0.1);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+0.8);
+    o2.connect(g2); g2.connect(c.destination);
+    o2.start(t); o2.stop(t+0.8);
+    // Third partial
+    const o3=c.createOscillator(), g3=c.createGain();
+    o3.type='sine'; o3.frequency.value=528*4.8;
+    g3.gain.setValueAtTime(0,t);
+    g3.gain.linearRampToValueAtTime(0.015,t+0.05);
+    g3.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+    o3.connect(g3); g3.connect(c.destination);
+    o3.start(t); o3.stop(t+0.5);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter',playCardHover);
+    el.addEventListener('click',playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click',playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click',playBtnClick);
+  });
+  document.addEventListener('click',playIntro,{once:true});
+})();
+</script>
 </body>
 </html>

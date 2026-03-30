@@ -253,6 +253,65 @@ body{
   grid-template-columns:1fr 1fr;
 }
 @media(max-width:600px){.bottom-row{grid-template-columns:1fr;}}
+
+/* --- NEW ANIMATIONS --- */
+
+/* Frost crystal formation on card borders */
+@keyframes frostFormation{
+  0%{border-color:rgba(255,255,255,0.1);box-shadow:var(--brutal-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2)}
+  50%{border-color:rgba(180,220,255,0.4);box-shadow:var(--brutal-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 15px rgba(107,181,255,0.15)}
+  100%{border-color:rgba(255,255,255,0.1);box-shadow:var(--brutal-shadow-lg), inset 0 1px 0 rgba(255,255,255,0.2)}
+}
+.card{animation:slideUp 0.6s cubic-bezier(0.22,1,0.36,1) both, frostFormation 5s ease-in-out 1.5s infinite;}
+
+/* Refraction light sweep */
+@keyframes refractionSweep{
+  0%{left:-120%}
+  100%{left:220%}
+}
+.card::after{
+  content:'';position:absolute;top:0;bottom:0;
+  width:40%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), rgba(255,255,255,0.03), transparent);
+  pointer-events:none;border-radius:16px;z-index:3;
+  animation:refractionSweep 7s ease-in-out infinite;
+}
+
+/* Glass condensation droplets (subtle shimmer dots) */
+@keyframes condensation{
+  0%,100%{opacity:0.02}
+  50%{opacity:0.08}
+}
+.card::before{
+  z-index:2;
+  animation:condensation 3s ease-in-out infinite;
+}
+
+/* Prismatic light split on blobs */
+@keyframes prismaticShift{
+  0%{filter:blur(90px) hue-rotate(0deg)}
+  50%{filter:blur(95px) hue-rotate(30deg)}
+  100%{filter:blur(90px) hue-rotate(0deg)}
+}
+.blob{animation:prismaticShift 8s ease-in-out infinite;}
+.blob-2{animation-delay:1.5s}
+.blob-3{animation-delay:3s}
+.blob-4{animation-delay:4.5s}
+
+/* Blur depth pulse on hover */
+@keyframes blurPulse{
+  0%{backdrop-filter:blur(24px)}
+  50%{backdrop-filter:blur(30px)}
+  100%{backdrop-filter:blur(24px)}
+}
+.card:hover{animation:blurPulse 1.5s ease-in-out infinite;}
+
+/* Glass divider glow */
+@keyframes dividerGlow{
+  0%,100%{opacity:0.6}
+  50%{opacity:1}
+}
+.glass-divider{animation:dividerGlow 4s ease-in-out infinite;}
 </style>
 </head>
 <body>
@@ -377,5 +436,105 @@ body{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  function playTone(freq, dur, type, vol, detune){
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    if(detune) o.detune.setValueAtTime(detune, c.currentTime);
+    g.gain.setValueAtTime(vol || 0.06, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    o.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur);
+  }
+
+  function playNoise(dur, vol, filterFreq, filterType){
+    const c = getCtx();
+    const bufSize = c.sampleRate * dur;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) data[i] = Math.random()*2-1;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const f = c.createBiquadFilter();
+    f.type = filterType || 'highpass';
+    f.frequency.setValueAtTime(filterFreq || 3000, c.currentTime);
+    const g = c.createGain();
+    g.gain.setValueAtTime(vol || 0.03, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    src.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    src.start();
+    src.stop(c.currentTime + dur);
+  }
+
+  // Ice crackle + wind ambient intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    // wind through glass
+    playNoise(0.8, 0.04, 1500, 'bandpass');
+    // ice crackle
+    for(let i=0;i<5;i++){
+      setTimeout(function(){
+        playNoise(0.04, 0.03, 4000+Math.random()*3000, 'highpass');
+      }, i*120);
+    }
+    // subtle glass hum
+    playTone(880, 0.6, 'sine', 0.03);
+  }
+
+  // Card hover: crystal chime
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){
+      playIntro();
+      playTone(1200, 0.2, 'sine', 0.04);
+      playTone(1800, 0.15, 'sine', 0.025, 5);
+      setTimeout(function(){ playTone(2400, 0.1, 'sine', 0.02); }, 60);
+    });
+    // Card click: sharp glass crack impact
+    el.addEventListener('click', function(){
+      playNoise(0.1, 0.08, 2000, 'highpass');
+      playTone(300, 0.08, 'sawtooth', 0.06);
+      playTone(150, 0.06, 'triangle', 0.05);
+    });
+  });
+
+  // Nav pill: glass tap/clink
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playTone(2000, 0.08, 'sine', 0.05);
+      playTone(3000, 0.06, 'sine', 0.03);
+      playNoise(0.03, 0.02, 5000, 'highpass');
+    });
+  });
+
+  // Button click: confirmation glass ring
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playTone(660, 0.15, 'sine', 0.06);
+      playTone(990, 0.12, 'sine', 0.04);
+      setTimeout(function(){ playTone(1320, 0.1, 'sine', 0.03); }, 70);
+    });
+  });
+})();
+</script>
 </body>
 </html>

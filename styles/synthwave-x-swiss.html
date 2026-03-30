@@ -274,6 +274,67 @@ body::after{
 .grid-3 .card:nth-child(3){animation-delay:0.25s}
 .grid-2 .card:nth-child(1){animation-delay:0.3s}
 .grid-2 .card:nth-child(2){animation-delay:0.35s}
+
+/* === NEW ANIMATIONS === */
+
+/* Horizon glow pulse */
+@keyframes horizonPulse{
+  0%,100%{opacity:0.08;height:40%;}
+  50%{opacity:0.15;height:45%;}
+}
+body::after{
+  animation:horizonPulse 5s ease-in-out infinite;
+}
+
+/* Grid line movement - scrolling upward */
+@keyframes gridScroll{
+  0%{background-position:0 0;}
+  100%{background-position:0 -60px;}
+}
+body::before{
+  animation:gridScroll 4s linear infinite;
+}
+
+/* Neon bar pulse on card accents */
+@keyframes neonBarPulse{
+  0%,100%{box-shadow:0 0 5px var(--cyan);opacity:0.8;}
+  50%{box-shadow:0 0 15px var(--cyan), 0 0 30px rgba(0,255,255,0.3);opacity:1;}
+}
+.card-cyan::before{animation:neonBarPulse 3s ease-in-out infinite;}
+.card-magenta::before{animation:neonBarPulse 3s ease-in-out 0.5s infinite; --cyan:var(--magenta);}
+.card-purple::before{animation:neonBarPulse 3s ease-in-out 1s infinite; --cyan:var(--purple);}
+
+/* Retro scan line */
+.card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:rgba(0,255,255,0.15);
+  animation:retroScan 4s linear infinite;
+  pointer-events:none;
+}
+@keyframes retroScan{
+  0%{top:0;opacity:0;}
+  10%{opacity:0.4;}
+  90%{opacity:0.4;}
+  100%{top:100%;opacity:0;}
+}
+
+/* CRT screen curvature flicker */
+@keyframes crtFlicker{
+  0%,100%{opacity:1;}
+  92%{opacity:1;}
+  93%{opacity:0.95;}
+  94%{opacity:1;}
+  97%{opacity:0.97;}
+  98%{opacity:1;}
+}
+.container{animation:crtFlicker 5s infinite;}
+
+/* Stat value glow throb */
+@keyframes glowThrob{
+  0%,100%{text-shadow:0 0 40px rgba(0,255,255,0.3);}
+  50%{text-shadow:0 0 60px rgba(0,255,255,0.5), 0 0 80px rgba(0,255,255,0.2);}
+}
+.stat-value{animation:glowThrob 3s ease-in-out infinite;}
 </style>
 </head>
 <body>
@@ -476,5 +537,151 @@ body::after{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if(ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  // 80s synth pad tone for card hover
+  function playHoverPad(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    const filter = c.createBiquadFilter();
+    osc.type = 'sawtooth';
+    osc2.type = 'sawtooth';
+    osc.frequency.setValueAtTime(220 + Math.random()*110, c.currentTime);
+    osc2.frequency.setValueAtTime(223 + Math.random()*110, c.currentTime);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(800, c.currentTime);
+    filter.Q.setValueAtTime(5, c.currentTime);
+    gain.gain.setValueAtTime(0.03, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.25);
+    osc.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.25);
+    osc2.stop(c.currentTime + 0.25);
+  }
+
+  // Warm bass pluck for card click
+  function playBassPluck(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    const filter = c.createBiquadFilter();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(110, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(55, c.currentTime + 0.2);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(1500, c.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.15, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+  }
+
+  // Retro arcade beep for nav
+  function playArcadeBeep(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, c.currentTime);
+    osc.frequency.setValueAtTime(1100, c.currentTime + 0.04);
+    osc.frequency.setValueAtTime(1320, c.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.12);
+  }
+
+  // Button confirm tone
+  function playBtnConfirm(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523, c.currentTime);
+    osc.frequency.setValueAtTime(659, c.currentTime + 0.06);
+    osc.frequency.setValueAtTime(784, c.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.18);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.18);
+  }
+
+  // Grid hum ambient intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const lfo = c.createOscillator();
+    const lfoGain = c.createGain();
+    const gain = c.createGain();
+    const filter = c.createBiquadFilter();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(65, c.currentTime);
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(65.5, c.currentTime);
+    lfo.type = 'sine';
+    lfo.frequency.setValueAtTime(4, c.currentTime);
+    lfoGain.gain.setValueAtTime(200, c.currentTime);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(200, c.currentTime);
+    filter.frequency.linearRampToValueAtTime(1200, c.currentTime + 0.4);
+    filter.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.9);
+    filter.Q.setValueAtTime(8, c.currentTime);
+    gain.gain.setValueAtTime(0.001, c.currentTime);
+    gain.gain.linearRampToValueAtTime(0.06, c.currentTime + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.0);
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.frequency);
+    osc.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    lfo.start(c.currentTime);
+    osc.stop(c.currentTime + 1.0);
+    osc2.stop(c.currentTime + 1.0);
+    lfo.stop(c.currentTime + 1.0);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHoverPad);
+    el.addEventListener('click', playBassPluck);
+  });
+  document.querySelectorAll('.nav-link').forEach(function(el){
+    el.addEventListener('click', function(){ playArcadeBeep(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playBtnConfirm(); playIntro(); });
+  });
+  document.addEventListener('click', playIntro, {once:true});
+})();
+</script>
 </body>
 </html>

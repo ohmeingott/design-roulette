@@ -299,6 +299,83 @@ body::before{
   line-height:1.1;text-align:center;
   width:60px;height:60px;
 }
+
+/* --- Dopamine x Brutal: Extra Animations --- */
+
+@keyframes neonFlicker{
+  0%,100%{opacity:1;text-shadow:0 0 8px var(--neon-pink),0 0 20px var(--neon-pink)}
+  4%{opacity:0.7;text-shadow:none}
+  6%{opacity:1;text-shadow:0 0 8px var(--neon-pink),0 0 20px var(--neon-pink)}
+  42%{opacity:1}
+  43%{opacity:0.5;text-shadow:none}
+  44%{opacity:1;text-shadow:0 0 8px var(--neon-pink),0 0 20px var(--neon-pink)}
+  80%{opacity:1}
+  82%{opacity:0.6;text-shadow:none}
+  83%{opacity:1;text-shadow:0 0 12px var(--neon-blue),0 0 30px var(--neon-blue)}
+}
+.logo{animation:neonFlicker 3s infinite;}
+
+@keyframes rainbowWave{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+.ticker-inner{
+  background:linear-gradient(90deg,var(--neon-pink),var(--neon-yellow),var(--neon-green),var(--neon-blue),var(--neon-violet),var(--neon-pink));
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:scroll 18s linear infinite, rainbowWave 4s linear infinite;
+}
+
+@keyframes bounceEmoji{
+  0%,100%{transform:translateY(0) rotate(-12deg)}
+  50%{transform:translateY(-12px) rotate(8deg)}
+}
+.sticker{animation:bounceEmoji 1.5s ease-in-out infinite;}
+
+@keyframes tickerSpeedUp{
+  0%{animation-duration:18s}
+  100%{animation-duration:18s}
+}
+.ticker:hover .ticker-inner{
+  animation-duration:6s !important;
+}
+
+@keyframes colorBurst{
+  0%{box-shadow:14px 14px 0 #111}
+  25%{box-shadow:14px 14px 0 var(--neon-pink), 0 0 30px var(--neon-pink)}
+  50%{box-shadow:14px 14px 0 var(--neon-green), 0 0 30px var(--neon-green)}
+  75%{box-shadow:14px 14px 0 var(--neon-blue), 0 0 30px var(--neon-blue)}
+  100%{box-shadow:14px 14px 0 #111}
+}
+.card:active{
+  animation:colorBurst 0.4s ease-out;
+}
+
+@keyframes confettiShake{
+  0%,100%{transform:translate(-4px,-4px) rotate(0deg)}
+  25%{transform:translate(-6px,-6px) rotate(-1deg)}
+  75%{transform:translate(-2px,-2px) rotate(1deg)}
+}
+.card:hover{animation:confettiShake 0.3s ease-in-out;}
+
+@keyframes sparkleGlow{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(1.6)}
+}
+.sparkle{animation:sparkleGlow 1.8s ease-in-out infinite;}
+
+@keyframes barGrow{
+  0%{transform:scaleY(0)}
+  100%{transform:scaleY(1)}
+}
+.bar{transform-origin:bottom;animation:barGrow 0.8s cubic-bezier(0.22,1,0.36,1) both;}
+.bar:nth-child(1){animation-delay:0.1s}
+.bar:nth-child(2){animation-delay:0.2s}
+.bar:nth-child(3){animation-delay:0.3s}
+.bar:nth-child(4){animation-delay:0.4s}
+.bar:nth-child(5){animation-delay:0.5s}
 </style>
 </head>
 <body>
@@ -472,5 +549,115 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();}
+    if(ctx.state==='suspended') ctx.resume();
+    return ctx;
+  }
+
+  // Neon zap / electric spark on card hover
+  function playCardHover(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain(), f=c.createBiquadFilter();
+    o.type='sawtooth'; o.frequency.setValueAtTime(2400,t);
+    o.frequency.exponentialRampToValueAtTime(800,t+0.08);
+    f.type='bandpass'; f.frequency.value=2000; f.Q.value=5;
+    g.gain.setValueAtTime(0.06,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.08);
+    o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.08);
+  }
+
+  // Loud pop/snap on card click
+  function playCardClick(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='square'; o.frequency.setValueAtTime(600,t);
+    o.frequency.exponentialRampToValueAtTime(80,t+0.1);
+    g.gain.setValueAtTime(0.15,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.12);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.12);
+    // noise burst
+    const buf=c.createBuffer(1,c.sampleRate*0.05,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.3;
+    const n=c.createBufferSource(), ng=c.createGain();
+    n.buffer=buf; ng.gain.setValueAtTime(0.12,t);
+    ng.gain.exponentialRampToValueAtTime(0.001,t+0.05);
+    n.connect(ng); ng.connect(c.destination);
+    n.start(t); n.stop(t+0.05);
+  }
+
+  // Pinball ding on nav pill click
+  function playNavClick(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(1800,t);
+    o.frequency.exponentialRampToValueAtTime(2400,t+0.05);
+    o.frequency.exponentialRampToValueAtTime(1800,t+0.15);
+    g.gain.setValueAtTime(0.12,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.2);
+  }
+
+  // Arcade reward jingle on button click
+  function playBtnClick(){
+    const c=getCtx(), t=c.currentTime;
+    [880,1100,1320,1760].forEach(function(freq,i){
+      const o=c.createOscillator(), g=c.createGain();
+      o.type='square';
+      o.frequency.setValueAtTime(freq,t+i*0.06);
+      g.gain.setValueAtTime(0.08,t+i*0.06);
+      g.gain.exponentialRampToValueAtTime(0.001,t+i*0.06+0.12);
+      o.connect(g); g.connect(c.destination);
+      o.start(t+i*0.06); o.stop(t+i*0.06+0.12);
+    });
+  }
+
+  // Electric spark intro on first interaction
+  function playIntro(){
+    if(introPlayed) return; introPlayed=true;
+    const c=getCtx(), t=c.currentTime;
+    // Rising buzz
+    const o=c.createOscillator(), g=c.createGain(), f=c.createBiquadFilter();
+    o.type='sawtooth'; o.frequency.setValueAtTime(100,t);
+    o.frequency.exponentialRampToValueAtTime(800,t+0.5);
+    f.type='lowpass'; f.frequency.setValueAtTime(400,t);
+    f.frequency.exponentialRampToValueAtTime(4000,t+0.5);
+    g.gain.setValueAtTime(0.08,t);
+    g.gain.setValueAtTime(0.08,t+0.35);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.7);
+    o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.7);
+    // Sparkle ding at end
+    const o2=c.createOscillator(), g2=c.createGain();
+    o2.type='sine'; o2.frequency.value=2600;
+    g2.gain.setValueAtTime(0,t+0.4);
+    g2.gain.linearRampToValueAtTime(0.1,t+0.5);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+0.9);
+    o2.connect(g2); g2.connect(c.destination);
+    o2.start(t+0.4); o2.stop(t+0.9);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter',playCardHover);
+    el.addEventListener('click',playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click',playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click',playBtnClick);
+  });
+  document.addEventListener('click',playIntro,{once:true});
+})();
+</script>
 </body>
 </html>

@@ -314,6 +314,87 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* -- GOLD SHIMMER SWEEP on headings -- */
+@keyframes goldShimmer{
+  0%{background-position:-200% center}
+  100%{background-position:200% center}
+}
+.card-title{
+  background:linear-gradient(90deg, var(--cream) 0%, var(--gold-light) 40%, var(--gold) 50%, var(--gold-light) 60%, var(--cream) 100%);
+  background-size:200% 100%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:goldShimmer 4s ease-in-out infinite;
+}
+
+/* -- FLOATING GEOMETRIC SHAPES -- */
+@keyframes floatTriangle{
+  0%,100%{transform:translate(0,0) rotate(0deg);opacity:0.06}
+  25%{transform:translate(20px,-30px) rotate(90deg);opacity:0.1}
+  50%{transform:translate(-10px,-50px) rotate(180deg);opacity:0.06}
+  75%{transform:translate(15px,-20px) rotate(270deg);opacity:0.1}
+}
+@keyframes floatCircle{
+  0%,100%{transform:translate(0,0) scale(1);opacity:0.05}
+  50%{transform:translate(-25px,-40px) scale(1.3);opacity:0.09}
+}
+body::after{
+  content:'';position:fixed;top:20%;left:10%;z-index:0;
+  width:25px;height:25px;
+  background:var(--mem-pink);
+  clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
+  animation:floatTriangle 8s ease-in-out infinite;
+  pointer-events:none;
+}
+.container::before{
+  content:'';position:fixed;top:60%;right:8%;z-index:0;
+  width:20px;height:20px;
+  border-radius:50%;
+  background:var(--mem-blue);
+  opacity:0.07;
+  animation:floatCircle 6s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* -- ZIGZAG PATTERN on dividers -- */
+@keyframes zigzagSlide{
+  0%{background-position:0 0}
+  100%{background-position:40px 0}
+}
+.deco-divider::before,.deco-divider::after{
+  background:repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 8px,
+    rgba(212,168,83,0.15) 8px, rgba(212,168,83,0.15) 12px
+  );
+  background-size:40px 1px;
+  animation:zigzagSlide 3s linear infinite;
+  height:2px;
+}
+
+/* -- MEMPHIS CONFETTI DRIFT -- */
+@keyframes confettiDrift{
+  0%{transform:translateY(-10px) rotate(0deg);opacity:0}
+  10%{opacity:0.12}
+  90%{opacity:0.12}
+  100%{transform:translateY(100vh) rotate(720deg);opacity:0}
+}
+.container::after{
+  content:'';position:fixed;top:-20px;left:45%;z-index:0;
+  width:8px;height:8px;
+  background:var(--mem-yellow);
+  animation:confettiDrift 12s linear infinite;
+  pointer-events:none;
+}
+
+/* -- ART DECO FAN UNFOLD on card entrance -- */
+@keyframes decoFanUnfold{
+  0%{clip-path:polygon(50% 100%, 50% 100%, 50% 100%);opacity:0}
+  100%{clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%);opacity:1}
+}
+.card{animation:decoIn 0.5s cubic-bezier(0.22,1,0.36,1) both, decoFanUnfold 0.7s ease both;}
 </style>
 </head>
 <body>
@@ -509,5 +590,115 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // Jazzy piano pluck (card hover)
+  function playHover(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(523.25, c.currentTime); // C5
+    osc.frequency.exponentialRampToValueAtTime(440, c.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.15);
+  }
+
+  // Brass fanfare hit (card click)
+  function playCardClick(){
+    const c = getCtx();
+    const osc1 = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    osc1.type = 'sawtooth';
+    osc2.type = 'square';
+    osc1.frequency.setValueAtTime(349.23, c.currentTime);
+    osc2.frequency.setValueAtTime(440, c.currentTime);
+    gain.gain.setValueAtTime(0.08, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc1.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc1.stop(c.currentTime + 0.2);
+    osc2.stop(c.currentTime + 0.2);
+  }
+
+  // Cocktail glass clink (nav pill)
+  function playNavClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(2200, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1800, c.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.07, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.12);
+  }
+
+  // Button confirmation sound
+  function playBtnClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(660, c.currentTime);
+    osc.frequency.setValueAtTime(880, c.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.07, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.18);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.18);
+  }
+
+  // Swing rhythm intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    const notes = [349.23, 440, 523.25, 659.25];
+    notes.forEach(function(f,i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(f, c.currentTime + i*0.12);
+      gain.gain.setValueAtTime(0, c.currentTime + i*0.12);
+      gain.gain.linearRampToValueAtTime(0.05, c.currentTime + i*0.12 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i*0.12 + 0.2);
+      osc.connect(gain).connect(c.destination);
+      osc.start(c.currentTime + i*0.12);
+      osc.stop(c.currentTime + i*0.12 + 0.25);
+    });
+  }
+
+  document.addEventListener('click', function(){playIntro();}, {once:true});
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHover);
+    el.addEventListener('click', playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', playBtnClick);
+  });
+})();
+</script>
 </body>
 </html>

@@ -145,6 +145,81 @@ body{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* -- WAVE PATTERN UNDULATION (Great Wave) -- */
+@keyframes waveUndulate{
+  0%{background-position:0 0}
+  100%{background-position:60px 0}
+}
+body::before{
+  content:'';position:fixed;bottom:0;left:0;right:0;height:80px;z-index:0;
+  background:repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    rgba(42,107,138,0.03) 15px,
+    transparent 30px,
+    rgba(38,70,83,0.02) 45px,
+    transparent 60px
+  );
+  mask-image:linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+  animation:waveUndulate 4s linear infinite;
+  pointer-events:none;
+}
+
+/* -- CHERRY BLOSSOM PETAL DRIFT -- */
+@keyframes petalDrift{
+  0%{transform:translate(0,-20px) rotate(0deg);opacity:0}
+  10%{opacity:0.2}
+  50%{transform:translate(-30px,50vh) rotate(180deg);opacity:0.15}
+  100%{transform:translate(20px,100vh) rotate(360deg);opacity:0}
+}
+body::after{
+  content:'';position:fixed;top:-10px;right:20%;z-index:0;
+  width:8px;height:6px;
+  background:var(--ukiyo-red);
+  border-radius:50% 0 50% 50%;
+  opacity:0;
+  animation:petalDrift 10s ease-in-out infinite;
+  pointer-events:none;
+}
+.container::before{
+  content:'';position:fixed;top:-10px;left:35%;z-index:0;
+  width:6px;height:5px;
+  background:rgba(193,39,45,0.6);
+  border-radius:0 50% 50% 50%;
+  opacity:0;
+  animation:petalDrift 12s ease-in-out 3s infinite;
+  pointer-events:none;
+}
+
+/* -- INK BRUSH STROKE REVEAL on cards -- */
+@keyframes brushReveal{
+  0%{clip-path:inset(0 100% 0 0)}
+  100%{clip-path:inset(0 0 0 0)}
+}
+.card{
+  animation:ukIn 0.5s ease both, brushReveal 0.8s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+/* -- PAPER TEXTURE SUBTLE SHIFT -- */
+@keyframes paperShift{
+  0%,100%{background-color:#FAF7F2}
+  50%{background-color:#F8F4ED}
+}
+body{
+  animation:paperShift 8s ease-in-out infinite;
+}
+
+/* -- ZEN RIPPLE on click (via pseudo on cards) -- */
+@keyframes zenRipple{
+  0%{box-shadow:0 1px 2px rgba(0,0,0,0.04), inset 0 0 0 0 rgba(42,107,138,0.08)}
+  50%{box-shadow:0 1px 2px rgba(0,0,0,0.04), inset 0 0 0 3px rgba(42,107,138,0.04)}
+  100%{box-shadow:0 1px 2px rgba(0,0,0,0.04), inset 0 0 0 0 rgba(42,107,138,0)}
+}
+.card:active{
+  animation:zenRipple 0.6s ease-out;
+}
 </style>
 </head>
 <body>
@@ -281,5 +356,133 @@ body{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // Koto string pluck (card hover)
+  function playHover(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc2.type = 'sine';
+    osc.frequency.setValueAtTime(587, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(520, c.currentTime + 0.15);
+    osc2.frequency.setValueAtTime(1174, c.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(1040, c.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+    osc2.stop(c.currentTime + 0.2);
+  }
+
+  // Shishi-odoshi bamboo knock (card click)
+  function playCardClick(){
+    const c = getCtx();
+    const bufLen = c.sampleRate * 0.12;
+    const buf = c.createBuffer(1, bufLen, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufLen;i++){
+      var env = Math.exp(-i/(bufLen*0.05));
+      data[i] = (Math.random()*2-1) * env * 0.5 + Math.sin(i*0.08) * env * 0.5;
+    }
+    const src = c.createBufferSource();
+    const filt = c.createBiquadFilter();
+    const gain = c.createGain();
+    src.buffer = buf;
+    filt.type = 'bandpass';
+    filt.frequency.value = 800;
+    filt.Q.value = 2;
+    gain.gain.setValueAtTime(0.1, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+    src.connect(filt).connect(gain).connect(c.destination);
+    src.start(c.currentTime);
+  }
+
+  // Wind chime (nav pill)
+  function playNavClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1568, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1200, c.currentTime + 0.25);
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.3);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.3);
+  }
+
+  // Brush stroke whoosh (button)
+  function playBtnClick(){
+    const c = getCtx();
+    const bufLen = c.sampleRate * 0.15;
+    const buf = c.createBuffer(1, bufLen, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufLen;i++){
+      data[i] = (Math.random()*2-1) * Math.sin(Math.PI * i / bufLen);
+    }
+    const src = c.createBufferSource();
+    const filt = c.createBiquadFilter();
+    const gain = c.createGain();
+    src.buffer = buf;
+    filt.type = 'bandpass';
+    filt.frequency.setValueAtTime(500, c.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(3000, c.currentTime + 0.1);
+    filt.Q.value = 1;
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+    src.connect(filt).connect(gain).connect(c.destination);
+    src.start(c.currentTime);
+  }
+
+  // Gentle wind chime intro (water + bells)
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    var chimes = [1047, 1319, 1568, 1760, 2093];
+    chimes.forEach(function(f,i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, c.currentTime + i*0.15);
+      gain.gain.setValueAtTime(0, c.currentTime + i*0.15);
+      gain.gain.linearRampToValueAtTime(0.03, c.currentTime + i*0.15 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i*0.15 + 0.4);
+      osc.connect(gain).connect(c.destination);
+      osc.start(c.currentTime + i*0.15);
+      osc.stop(c.currentTime + i*0.15 + 0.45);
+    });
+  }
+
+  document.addEventListener('click', function(){playIntro();}, {once:true});
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHover);
+    el.addEventListener('click', playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', playBtnClick);
+  });
+})();
+</script>
 </body>
 </html>

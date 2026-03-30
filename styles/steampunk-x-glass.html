@@ -157,6 +157,88 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* --- NEW ANIMATIONS --- */
+
+/* Rotating gear cogs in background */
+@keyframes gearSpin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+@keyframes gearSpinReverse{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(-360deg)}
+}
+body::after{
+  content:'\2699';
+  position:fixed;top:15%;right:8%;
+  font-size:8rem;color:var(--brass);
+  opacity:0.04;pointer-events:none;z-index:0;
+  animation:gearSpin 30s linear infinite;
+}
+.container::after{
+  content:'\2699';
+  position:fixed;bottom:10%;left:5%;
+  font-size:5rem;color:var(--copper);
+  opacity:0.03;pointer-events:none;z-index:0;
+  animation:gearSpinReverse 20s linear infinite;
+}
+
+/* Steam particle rise */
+@keyframes steamRise{
+  0%{transform:translateY(0) scale(1);opacity:0.06}
+  50%{opacity:0.03}
+  100%{transform:translateY(-60px) scale(1.5);opacity:0}
+}
+.card::after{
+  content:'';position:absolute;bottom:-5px;left:50%;
+  width:30px;height:30px;border-radius:50%;
+  background:radial-gradient(circle, rgba(245,240,224,0.1), transparent);
+  pointer-events:none;
+  animation:steamRise 4s ease-out infinite;
+}
+
+/* Pendulum swing on gear-ring */
+@keyframes pendulum{
+  0%{transform:rotate(-5deg)}
+  50%{transform:rotate(5deg)}
+  100%{transform:rotate(-5deg)}
+}
+.gear-ring{
+  animation:pendulum 3s ease-in-out infinite;
+  transform-origin:top center;
+}
+
+/* Brass rivet pulse on badges and tags */
+@keyframes rivetPulse{
+  0%,100%{box-shadow:0 0 0px rgba(184,134,11,0)}
+  50%{box-shadow:0 0 8px rgba(184,134,11,0.25)}
+}
+.badge{animation:rivetPulse 3s ease-in-out infinite;}
+.tag{animation:rivetPulse 3.5s ease-in-out 0.5s infinite;}
+
+/* Piston pumping on progress bars */
+@keyframes pistonPump{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+.progress-fill{
+  background-size:200% 100%;
+  animation:pistonPump 2.5s linear infinite;
+}
+.pf-brass{background:linear-gradient(90deg, var(--brass), var(--brass-light), var(--brass));background-size:200% 100%;}
+.pf-copper{background:linear-gradient(90deg, var(--gear-brown), var(--copper), var(--gear-brown));background-size:200% 100%;}
+.pf-frost{background:linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,255,255,0.6), rgba(255,255,255,0.3));background-size:200% 100%;}
+
+/* Clock hand rotation on avatars */
+@keyframes clockTick{
+  0%,90%,100%{transform:rotate(0deg)}
+  95%{transform:rotate(6deg)}
+}
+.avatar{animation:clockTick 2s steps(1) infinite;}
+.avatar:nth-child(2){animation-delay:0.5s}
+.avatar:nth-child(3){animation-delay:1s}
+.avatar:nth-child(4){animation-delay:1.5s}
 </style>
 </head>
 <body>
@@ -294,5 +376,117 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  function playTone(freq, dur, type, vol){
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    g.gain.setValueAtTime(vol || 0.06, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    o.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur);
+  }
+
+  function playNoise(dur, vol, filterFreq, filterType){
+    const c = getCtx();
+    const bufSize = c.sampleRate * dur;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) data[i] = Math.random()*2-1;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const f = c.createBiquadFilter();
+    f.type = filterType || 'bandpass';
+    f.frequency.setValueAtTime(filterFreq || 1000, c.currentTime);
+    f.Q.setValueAtTime(5, c.currentTime);
+    const g = c.createGain();
+    g.gain.setValueAtTime(vol || 0.03, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    src.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    src.start();
+    src.stop(c.currentTime + dur);
+  }
+
+  // Clockwork tick-tock + steam hiss + pressure valve intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    // tick
+    playTone(800, 0.04, 'square', 0.05);
+    setTimeout(function(){
+      // tock
+      playTone(600, 0.04, 'square', 0.04);
+    }, 250);
+    setTimeout(function(){
+      // steam hiss
+      playNoise(0.6, 0.04, 4000, 'highpass');
+    }, 100);
+    // pressure valve whistle
+    setTimeout(function(){
+      const c = getCtx();
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(2000, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(800, c.currentTime+0.4);
+      g.gain.setValueAtTime(0.025, c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+0.4);
+      o.connect(g);g.connect(c.destination);
+      o.start(c.currentTime);o.stop(c.currentTime+0.4);
+    }, 400);
+  }
+
+  // Card hover: clockwork tick
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){
+      playIntro();
+      playTone(1200, 0.03, 'square', 0.04);
+      setTimeout(function(){ playTone(900, 0.03, 'square', 0.03); }, 80);
+    });
+    // Card click: brass gear clank
+    el.addEventListener('click', function(){
+      playTone(200, 0.12, 'sawtooth', 0.07);
+      playNoise(0.08, 0.05, 800, 'bandpass');
+      playTone(150, 0.08, 'triangle', 0.05);
+    });
+  });
+
+  // Nav pill: mechanical lever click
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playTone(500, 0.04, 'square', 0.06);
+      setTimeout(function(){ playTone(700, 0.03, 'square', 0.04); }, 30);
+      playNoise(0.05, 0.03, 2000, 'bandpass');
+    });
+  });
+
+  // Button click: steam hiss + brass confirmation
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playNoise(0.15, 0.04, 3000, 'highpass');
+      playTone(350, 0.1, 'sawtooth', 0.05);
+      setTimeout(function(){ playTone(500, 0.08, 'triangle', 0.04); }, 60);
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -162,6 +162,74 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.25s}
 .grid-2 .card:nth-child(1){animation-delay:0.3s}
 .grid-2 .card:nth-child(2){animation-delay:0.35s}
+
+/* --- Psychedelic x Swiss: Extra Animations --- */
+
+@keyframes kaleidoscopeRotate{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+.logo span{animation:kaleidoscopeRotate 8s linear infinite;}
+
+@keyframes breathingGrid{
+  0%,100%{opacity:0.04;background-size:1px 1px,1px 1px;}
+  50%{opacity:0.08;}
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(rgba(173,255,47,0.15) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(173,255,47,0.15) 1px, transparent 1px);
+  background-size:60px 60px;
+  animation:breathingGrid 6s ease-in-out infinite;
+  opacity:0.04;
+}
+
+@keyframes rainbowText{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+.card-title{
+  background:linear-gradient(90deg,var(--acid-green),var(--acid-yellow),var(--acid-orange),var(--acid-pink),var(--acid-violet),var(--acid-cyan),var(--acid-green));
+  background-size:200% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:rainbowText 6s linear infinite;
+}
+
+@keyframes lavaBlob{
+  0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}
+  25%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}
+  50%{border-radius:50% 60% 30% 60%/30% 50% 70% 50%}
+  75%{border-radius:60% 30% 50% 40%/70% 40% 60% 30%}
+}
+.avatar{animation:lavaBlob 5s ease-in-out infinite;}
+
+@keyframes mandalaSpinSlow{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+.progress-fill{position:relative;}
+.progress-fill::after{
+  content:'';position:absolute;right:-3px;top:-5px;
+  width:13px;height:13px;border-radius:50%;
+  background:currentColor;
+  box-shadow:0 0 10px var(--acid-green);
+  animation:mandalaSpinSlow 2s linear infinite;
+}
+
+@keyframes fractalZoom{
+  0%{transform:scale(1)}
+  100%{transform:scale(1.03)}
+}
+.card:hover{animation:fractalZoom 0.3s ease forwards;}
+
+@keyframes phaseShift{
+  0%,100%{border-color:rgba(173,255,47,0.12)}
+  33%{border-color:rgba(255,20,147,0.2)}
+  66%{border-color:rgba(138,43,226,0.2)}
+}
+.card{animation:fadeIn 0.4s ease both, phaseShift 8s ease-in-out infinite;}
 </style>
 </head>
 <body>
@@ -301,5 +369,113 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();}
+    if(ctx.state==='suspended') ctx.resume();
+    return ctx;
+  }
+
+  // Wah-wah oscillating tone on card hover
+  function playCardHover(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain(), f=c.createBiquadFilter();
+    o.type='sine'; o.frequency.value=440;
+    f.type='bandpass'; f.Q.value=12;
+    f.frequency.setValueAtTime(300,t);
+    f.frequency.linearRampToValueAtTime(2000,t+0.05);
+    f.frequency.linearRampToValueAtTime(300,t+0.1);
+    f.frequency.linearRampToValueAtTime(2000,t+0.15);
+    g.gain.setValueAtTime(0.07,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+    o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.18);
+  }
+
+  // Trippy echo delay click
+  function playCardClick(){
+    const c=getCtx(), t=c.currentTime;
+    for(let i=0;i<4;i++){
+      const o=c.createOscillator(), g=c.createGain();
+      o.type='triangle';
+      o.frequency.setValueAtTime(660*(1+i*0.2),t+i*0.06);
+      o.frequency.exponentialRampToValueAtTime(220,t+i*0.06+0.15);
+      g.gain.setValueAtTime(0.1/(i+1),t+i*0.06);
+      g.gain.exponentialRampToValueAtTime(0.001,t+i*0.06+0.15);
+      o.connect(g); g.connect(c.destination);
+      o.start(t+i*0.06); o.stop(t+i*0.06+0.15);
+    }
+  }
+
+  // Kaleidoscope wind chime on nav click
+  function playNavClick(){
+    const c=getCtx(), t=c.currentTime;
+    [1200,1500,1800,2100].forEach(function(freq,i){
+      const o=c.createOscillator(), g=c.createGain();
+      o.type='sine';
+      o.frequency.setValueAtTime(freq,t+i*0.04);
+      g.gain.setValueAtTime(0.06,t+i*0.04);
+      g.gain.exponentialRampToValueAtTime(0.001,t+i*0.04+0.25);
+      o.connect(g); g.connect(c.destination);
+      o.start(t+i*0.04); o.stop(t+i*0.04+0.25);
+    });
+  }
+
+  // Phase shift confirmation on button
+  function playBtnClick(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), o2=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.value=440;
+    o2.type='sine'; o2.frequency.value=443; // slight detune = phaser
+    g.gain.setValueAtTime(0.1,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+    o.connect(g); o2.connect(g); g.connect(c.destination);
+    o.start(t); o2.start(t); o.stop(t+0.3); o2.stop(t+0.3);
+  }
+
+  // Sitar-like drone intro
+  function playIntro(){
+    if(introPlayed) return; introPlayed=true;
+    const c=getCtx(), t=c.currentTime;
+    // Drone fundamental
+    const o=c.createOscillator(), g=c.createGain(), f=c.createBiquadFilter();
+    o.type='sawtooth'; o.frequency.value=146.83; // D3
+    f.type='lowpass'; f.frequency.setValueAtTime(200,t);
+    f.frequency.exponentialRampToValueAtTime(3000,t+0.4);
+    f.frequency.exponentialRampToValueAtTime(400,t+0.8);
+    g.gain.setValueAtTime(0.08,t);
+    g.gain.setValueAtTime(0.08,t+0.5);
+    g.gain.exponentialRampToValueAtTime(0.001,t+1.0);
+    o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+1.0);
+    // Harmonic shimmer
+    const o2=c.createOscillator(), g2=c.createGain();
+    o2.type='sine'; o2.frequency.value=440;
+    o2.frequency.setValueAtTime(440,t);
+    o2.frequency.linearRampToValueAtTime(445,t+0.5);
+    o2.frequency.linearRampToValueAtTime(440,t+1.0);
+    g2.gain.setValueAtTime(0.04,t);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+1.0);
+    o2.connect(g2); g2.connect(c.destination);
+    o2.start(t); o2.stop(t+1.0);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter',playCardHover);
+    el.addEventListener('click',playCardClick);
+  });
+  document.querySelectorAll('.nav-link').forEach(function(el){
+    el.addEventListener('click',playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click',playBtnClick);
+  });
+  document.addEventListener('click',playIntro,{once:true});
+})();
+</script>
 </body>
 </html>

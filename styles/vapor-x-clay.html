@@ -290,6 +290,75 @@ body::before{
   background:linear-gradient(90deg, transparent, rgba(185,103,255,0.25), rgba(255,113,206,0.25), rgba(1,205,254,0.25), transparent);
   border-radius:1px;
 }
+
+/* --- NEW ANIMATIONS --- */
+
+/* VHS tracking glitch */
+@keyframes vhsGlitch{
+  0%,95%,100%{transform:translateX(0);filter:none}
+  96%{transform:translateX(-3px);filter:hue-rotate(90deg)}
+  97%{transform:translateX(2px);filter:hue-rotate(-60deg) saturate(2)}
+  98%{transform:translateX(-1px);filter:hue-rotate(45deg)}
+  99%{transform:translateX(1px);filter:none}
+}
+.logo{animation:vhsGlitch 8s ease-in-out infinite;}
+
+/* Floating Roman column silhouettes */
+@keyframes floatColumn{
+  0%,100%{transform:translateY(0px) rotate(0deg);opacity:0.04}
+  50%{transform:translateY(-20px) rotate(2deg);opacity:0.07}
+}
+body::after{
+  content:'\2759 \2759 \2759';
+  position:fixed;bottom:10%;right:5%;
+  font-size:5rem;color:var(--vapor-purple);
+  pointer-events:none;z-index:0;
+  opacity:0.04;letter-spacing:1rem;
+  animation:floatColumn 12s ease-in-out infinite;
+}
+
+/* Vaporwave grid floor perspective scroll */
+@keyframes gridScroll{
+  0%{background-position:0 0}
+  100%{background-position:0 40px}
+}
+.container::before{
+  content:'';position:fixed;bottom:0;left:0;right:0;height:30vh;
+  background:repeating-linear-gradient(0deg, rgba(185,103,255,0.06) 0px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(90deg, rgba(255,113,206,0.04) 0px, transparent 1px, transparent 40px);
+  transform:perspective(400px) rotateX(60deg);
+  transform-origin:bottom;
+  pointer-events:none;z-index:0;
+  animation:gridScroll 2s linear infinite;
+}
+
+/* Slow color cycle on card backgrounds */
+@keyframes colorCycle{
+  0%{filter:hue-rotate(0deg)}
+  50%{filter:hue-rotate(15deg)}
+  100%{filter:hue-rotate(0deg)}
+}
+.card{animation:puffIn 0.55s cubic-bezier(0.22,1,0.36,1) both, colorCycle 10s ease-in-out infinite;}
+
+/* Soft blob morph on clay bubbles */
+@keyframes blobMorph{
+  0%,100%{border-radius:50%;transform:scale(1)}
+  25%{border-radius:48% 52% 55% 45%;transform:scale(1.02)}
+  50%{border-radius:55% 45% 48% 52%;transform:scale(0.98)}
+  75%{border-radius:45% 55% 52% 48%;transform:scale(1.01)}
+}
+.clay-bubble{animation:blobMorph 6s ease-in-out infinite;}
+
+/* Vapor divider shimmer */
+@keyframes vaporShimmer{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+.vapor-divider{
+  background:linear-gradient(90deg, transparent, rgba(185,103,255,0.25), rgba(255,113,206,0.35), rgba(1,205,254,0.25), transparent);
+  background-size:200% 100%;
+  animation:vaporShimmer 4s linear infinite;
+}
 </style>
 </head>
 <body>
@@ -483,5 +552,127 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  function playTone(freq, dur, type, vol, detune){
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    if(detune) o.detune.setValueAtTime(detune, c.currentTime);
+    g.gain.setValueAtTime(vol || 0.06, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    o.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur);
+  }
+
+  function playReverbTone(freq, dur, vol){
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    const f = c.createBiquadFilter();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq*0.7, c.currentTime + dur);
+    f.type = 'lowpass';
+    f.frequency.setValueAtTime(2000, c.currentTime);
+    f.frequency.exponentialRampToValueAtTime(400, c.currentTime + dur);
+    g.gain.setValueAtTime(vol || 0.05, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    o.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur);
+  }
+
+  function playNoise(dur, vol, filterFreq, filterType){
+    const c = getCtx();
+    const bufSize = c.sampleRate * dur;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) data[i] = Math.random()*2-1;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const f = c.createBiquadFilter();
+    f.type = filterType || 'lowpass';
+    f.frequency.setValueAtTime(filterFreq || 800, c.currentTime);
+    const g = c.createGain();
+    g.gain.setValueAtTime(vol || 0.03, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    src.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    src.start();
+    src.stop(c.currentTime + dur);
+  }
+
+  // Dreamy synth pad + lo-fi tape warble intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    playReverbTone(220, 0.8, 0.05);
+    playReverbTone(330, 0.7, 0.03);
+    playReverbTone(440, 0.6, 0.025);
+    // tape warble
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(110, c.currentTime);
+    o.frequency.linearRampToValueAtTime(115, c.currentTime+0.3);
+    o.frequency.linearRampToValueAtTime(108, c.currentTime+0.6);
+    g.gain.setValueAtTime(0.02, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime+0.8);
+    o.connect(g);g.connect(c.destination);
+    o.start(c.currentTime);o.stop(c.currentTime+0.8);
+  }
+
+  // Card hover: soft bubble pop
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){
+      playIntro();
+      playTone(600, 0.08, 'sine', 0.05);
+      setTimeout(function(){ playTone(900, 0.06, 'sine', 0.03, 10); }, 40);
+    });
+    // Card click: underwater bell
+    el.addEventListener('click', function(){
+      playReverbTone(500, 0.3, 0.07);
+      playReverbTone(750, 0.25, 0.04);
+    });
+  });
+
+  // Nav pill: vapor hiss
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playNoise(0.12, 0.05, 3000, 'highpass');
+      playTone(800, 0.1, 'sine', 0.04);
+    });
+  });
+
+  // Button click: dreamy confirmation
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playReverbTone(400, 0.2, 0.06);
+      setTimeout(function(){ playReverbTone(600, 0.15, 0.04); }, 80);
+      setTimeout(function(){ playReverbTone(800, 0.12, 0.03); }, 150);
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -156,6 +156,76 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* --- Organic x Industrial: Extra Animations --- */
+
+@keyframes vineGrow{
+  0%{background-size:0% 3px, 3px 0%}
+  50%{background-size:100% 3px, 3px 0%}
+  100%{background-size:100% 3px, 3px 100%}
+}
+.card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;top:0;
+  pointer-events:none;z-index:1;
+  background:
+    linear-gradient(90deg, var(--org-green) 100%, transparent 0%) no-repeat left bottom,
+    linear-gradient(180deg, var(--org-green) 100%, transparent 0%) no-repeat left bottom;
+  background-size:0% 2px, 2px 0%;
+  opacity:0;
+  transition:opacity 0.2s;
+}
+.card:hover::before{
+  opacity:0.4;
+  animation:vineGrow 0.8s ease forwards;
+}
+
+@keyframes gearSpin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+.org-ring{animation:gearSpin 12s linear infinite;}
+
+@keyframes steamRise{
+  0%{opacity:0.3;transform:translateY(0) scaleX(1)}
+  50%{opacity:0.15;transform:translateY(-8px) scaleX(1.3)}
+  100%{opacity:0;transform:translateY(-16px) scaleX(0.8)}
+}
+.progress-track::after{
+  content:'';display:block;width:20px;height:6px;
+  background:rgba(120,144,156,0.3);
+  border-radius:50%;
+  margin-left:auto;
+  filter:blur(2px);
+  animation:steamRise 2.5s ease-in-out infinite;
+}
+
+@keyframes heartbeatPulse{
+  0%,100%{transform:scale(1)}
+  14%{transform:scale(1.02)}
+  28%{transform:scale(1)}
+  42%{transform:scale(1.015)}
+  56%{transform:scale(1)}
+}
+.card{animation:orgIn 0.5s ease both, heartbeatPulse 4s ease-in-out infinite;}
+
+@keyframes rustSpread{
+  0%{background-position:100% 0}
+  100%{background-position:0% 0}
+}
+.card-rust{
+  background-image:linear-gradient(90deg, rgba(191,54,12,0.06) 0%, transparent 40%);
+  background-size:200% 100%;
+  animation:orgIn 0.5s ease both, rustSpread 3s ease both;
+}
+
+@keyframes leafFlutter{
+  0%,100%{transform:rotate(0deg) translateY(0)}
+  25%{transform:rotate(5deg) translateY(-2px)}
+  50%{transform:rotate(-3deg) translateY(1px)}
+  75%{transform:rotate(4deg) translateY(-1px)}
+}
+.tag-green{animation:leafFlutter 4s ease-in-out infinite;}
+.tag-sage{animation:leafFlutter 4.5s ease-in-out infinite 0.3s;}
 </style>
 </head>
 <body>
@@ -293,5 +363,127 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();}
+    if(ctx.state==='suspended') ctx.resume();
+    return ctx;
+  }
+
+  // Leaf rustle on card hover
+  function playCardHover(){
+    const c=getCtx(), t=c.currentTime;
+    const buf=c.createBuffer(1,c.sampleRate*0.12,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    const n=c.createBufferSource(), g=c.createGain(), f=c.createBiquadFilter();
+    n.buffer=buf;
+    f.type='bandpass'; f.frequency.value=4000; f.Q.value=1;
+    g.gain.setValueAtTime(0.04,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.12);
+    n.connect(f); f.connect(g); g.connect(c.destination);
+    n.start(t); n.stop(t+0.12);
+  }
+
+  // Mechanical press clang on card click
+  function playCardClick(){
+    const c=getCtx(), t=c.currentTime;
+    // Metal impact
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='square'; o.frequency.setValueAtTime(300,t);
+    o.frequency.exponentialRampToValueAtTime(50,t+0.15);
+    g.gain.setValueAtTime(0.12,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.18);
+    // Metallic ring
+    const o2=c.createOscillator(), g2=c.createGain();
+    o2.type='sine'; o2.frequency.value=1800;
+    g2.gain.setValueAtTime(0.06,t);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+0.25);
+    o2.connect(g2); g2.connect(c.destination);
+    o2.start(t); o2.stop(t+0.25);
+  }
+
+  // Hydraulic hiss on nav pill click
+  function playNavClick(){
+    const c=getCtx(), t=c.currentTime;
+    const buf=c.createBuffer(1,c.sampleRate*0.2,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    const n=c.createBufferSource(), g=c.createGain(), f=c.createBiquadFilter();
+    n.buffer=buf;
+    f.type='highpass'; f.frequency.value=3000;
+    g.gain.setValueAtTime(0.07,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    n.connect(f); f.connect(g); g.connect(c.destination);
+    n.start(t); n.stop(t+0.2);
+  }
+
+  // Vine snap on button click
+  function playBtnClick(){
+    const c=getCtx(), t=c.currentTime;
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='sawtooth'; o.frequency.setValueAtTime(600,t);
+    o.frequency.exponentialRampToValueAtTime(150,t+0.06);
+    g.gain.setValueAtTime(0.1,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.1);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+0.1);
+    // Organic pop
+    const o2=c.createOscillator(), g2=c.createGain();
+    o2.type='sine'; o2.frequency.setValueAtTime(1200,t+0.03);
+    o2.frequency.exponentialRampToValueAtTime(600,t+0.08);
+    g2.gain.setValueAtTime(0.06,t+0.03);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+0.1);
+    o2.connect(g2); g2.connect(c.destination);
+    o2.start(t+0.03); o2.stop(t+0.1);
+  }
+
+  // Rain on metal + earth rumble intro
+  function playIntro(){
+    if(introPlayed) return; introPlayed=true;
+    const c=getCtx(), t=c.currentTime;
+    // Rain on metal (filtered noise)
+    const buf=c.createBuffer(1,c.sampleRate*0.8,c.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1);
+    const n=c.createBufferSource(), g=c.createGain(), f=c.createBiquadFilter();
+    n.buffer=buf;
+    f.type='bandpass'; f.frequency.value=5000; f.Q.value=2;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.04,t+0.15);
+    g.gain.setValueAtTime(0.04,t+0.4);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.8);
+    n.connect(f); f.connect(g); g.connect(c.destination);
+    n.start(t); n.stop(t+0.8);
+    // Earth rumble (low oscillator)
+    const o=c.createOscillator(), g2=c.createGain();
+    o.type='sine'; o.frequency.value=55;
+    g2.gain.setValueAtTime(0,t);
+    g2.gain.linearRampToValueAtTime(0.1,t+0.2);
+    g2.gain.setValueAtTime(0.1,t+0.4);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+0.8);
+    o.connect(g2); g2.connect(c.destination);
+    o.start(t); o.stop(t+0.8);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter',playCardHover);
+    el.addEventListener('click',playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click',playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click',playBtnClick);
+  });
+  document.addEventListener('click',playIntro,{once:true});
+})();
+</script>
 </body>
 </html>

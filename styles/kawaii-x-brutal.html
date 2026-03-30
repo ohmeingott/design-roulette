@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kawaii x Brutal - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brutal-border: 3px solid #1a1a1a;
+  --brutal-border-thick: 4px solid #1a1a1a;
+  --brutal-shadow: 8px 8px 0 #1a1a1a;
+  --brutal-shadow-lg: 12px 12px 0 #1a1a1a;
+  --pink: #FF8FAB;
+  --lavender: #C3B1E1;
+  --mint: #98E4C8;
+  --butter: #FFF3B0;
+  --peach: #FFCDB2;
+  --sky: #A0D2DB;
+  --bg: #FFF0F0;
+  --ink: #1a1a1a;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Space Mono',monospace;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+}
+
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  background-image:radial-gradient(circle, #f5c6d0 1px, transparent 1px);
+  background-size:28px 28px;
+  opacity:0.35;
+  pointer-events:none;z-index:0;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* ---- Header ---- */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:2.6rem;
+  line-height:1;letter-spacing:-1px;
+  color:var(--pink);
+  text-shadow:4px 4px 0 var(--ink);
+  animation:logoBounce 2s ease-in-out infinite;
+  cursor:default;
+  position:relative;
+}
+.logo::after{
+  content:' ✿';
+  font-size:1.4rem;
+  animation:twinkle 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes logoBounce{
+  0%,100%{transform:translateY(0)}
+  25%{transform:translateY(-6px) rotate(-2deg)}
+  50%{transform:translateY(0)}
+  75%{transform:translateY(-4px) rotate(1deg)}
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:#fff;
+  border:var(--brutal-border);border-radius:40px;
+  padding:0.5rem 1.2rem;
+  font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;
+  cursor:pointer;transition:all 0.15s;
+  letter-spacing:0.5px;
+}
+.nav-pill:hover{
+  background:var(--butter);
+  box-shadow:var(--brutal-shadow);transform:translate(-4px,-4px);
+}
+.nav-pill.active{
+  background:var(--pink);
+  box-shadow:var(--brutal-shadow);
+  color:var(--ink);
+}
+
+/* ---- Cards ---- */
+.card{
+  border:var(--brutal-border-thick);border-radius:18px;
+  box-shadow:var(--brutal-shadow);
+  padding:1.8rem;
+  transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+  position:relative;overflow:hidden;
+  background:#fff;
+}
+.card:hover{
+  transform:translate(-4px,-6px);
+  box-shadow:var(--brutal-shadow-lg);
+}
+
+.card-pink{background:var(--pink);}
+.card-lavender{background:var(--lavender);}
+.card-mint{background:var(--mint);}
+.card-butter{background:var(--butter);}
+.card-peach{background:var(--peach);}
+.card-sky{background:var(--sky);}
+
+.card-title{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:1.3rem;
+  margin-bottom:0.4rem;
+}
+.card-subtitle{
+  font-family:'Space Mono',monospace;
+  font-size:0.68rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:2px;opacity:0.6;
+}
+.card-body{font-size:0.85rem;line-height:1.7;}
+
+/* ---- Stats ---- */
+.stat-value{
+  font-family:'Nunito',sans-serif;font-weight:900;font-size:3.2rem;
+  line-height:1;
+}
+.stat-label{
+  font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;
+  margin-top:0.35rem;opacity:0.55;
+}
+
+/* ---- Tags ---- */
+.tag{
+  display:inline-block;border:2.5px solid var(--ink);border-radius:20px;
+  padding:0.2rem 0.7rem;font-size:0.65rem;font-weight:700;
+  font-family:'Nunito',sans-serif;
+  letter-spacing:0.5px;margin:0.15rem;
+}
+.tag-pink{background:var(--pink);}
+.tag-lavender{background:var(--lavender);}
+.tag-mint{background:var(--mint);}
+.tag-butter{background:var(--butter);}
+.tag-peach{background:var(--peach);}
+.tag-sky{background:var(--sky);}
+
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:var(--butter);border:2.5px solid var(--ink);
+  border-radius:10px;padding:0.3rem 0.65rem;
+  font-size:0.7rem;font-weight:700;
+  font-family:'Nunito',sans-serif;
+  box-shadow:3px 3px 0 var(--ink);
+}
+
+/* ---- Progress ---- */
+.progress-track{
+  width:100%;height:18px;
+  border:3px solid var(--ink);border-radius:12px;
+  background:#fff;overflow:hidden;margin-top:0.7rem;
+}
+.progress-fill{height:100%;border-radius:9px;transition:width 1s ease;}
+.pf-pink{background:linear-gradient(90deg, var(--pink), var(--lavender));}
+.pf-mint{background:linear-gradient(90deg, var(--mint), var(--sky));}
+.pf-peach{background:linear-gradient(90deg, var(--peach), var(--butter), var(--pink));}
+
+/* ---- Avatars (kawaii faces!) ---- */
+.avatar-stack{display:flex;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  border:3px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;
+  margin-left:-10px;position:relative;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.avatar:first-child{margin-left:0;}
+/* Kawaii face via CSS */
+.avatar .face{
+  position:relative;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+.avatar .face::before{
+  content:'• •';
+  font-size:0.55rem;letter-spacing:3px;
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  line-height:1;color:var(--ink);
+}
+.avatar .face::after{
+  content:'‿';
+  font-size:0.7rem;
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  line-height:1;color:var(--ink);
+}
+
+/* ---- Grids ---- */
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+  margin-bottom:1.5rem;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* ---- Tasks ---- */
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.65rem 0;border-bottom:3px dashed #e8b4c0;
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:26px;height:26px;border:3px solid var(--ink);border-radius:50%;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:900;background:#fff;
+}
+.task-check.done{background:var(--mint);}
+.task-text{font-size:0.85rem;font-family:'Nunito',sans-serif;font-weight:700;}
+.task-text.done{text-decoration:line-through;opacity:0.35;}
+
+/* ---- Divider ---- */
+.divider{
+  text-align:center;
+  font-size:1.1rem;letter-spacing:6px;
+  padding:1.2rem 0;
+  color:var(--pink);
+  text-shadow:1px 1px 0 var(--ink);
+  user-select:none;
+}
+
+/* ---- SVG Sparkline ---- */
+.sparkline-wrap{margin-top:1rem;}
+.sparkline-wrap svg{width:100%;height:50px;}
+
+/* ---- Buttons ---- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:700;
+  padding:0.6rem 1.3rem;border:var(--brutal-border);border-radius:12px;
+  cursor:pointer;transition:all 0.15s;background:#fff;
+  box-shadow:4px 4px 0 var(--ink);
+}
+.btn:hover{
+  box-shadow:var(--brutal-shadow);transform:translate(-2px,-2px);
+}
+.btn-kawaii{
+  background:var(--pink);color:var(--ink);
+  box-shadow:var(--brutal-shadow);
+}
+.btn-kawaii:hover{
+  background:var(--lavender);
+  box-shadow:var(--brutal-shadow-lg);transform:translate(-3px,-3px);
+}
+
+/* ---- Sparkle animation ---- */
+.sparkle-char{
+  display:inline-block;
+  animation:twinkle 1.6s ease-in-out infinite alternate;
+}
+.sparkle-char:nth-child(2){animation-delay:0.3s;}
+.sparkle-char:nth-child(3){animation-delay:0.6s;}
+.sparkle-char:nth-child(4){animation-delay:0.9s;}
+
+@keyframes twinkle{
+  0%{opacity:0.3;transform:scale(0.8)}
+  100%{opacity:1;transform:scale(1.15)}
+}
+
+/* ---- Card entrance ---- */
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(24px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.card{animation:fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;}
+.grid-hero .card:nth-child(1){animation-delay:0.05s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.25s}
+.grid-3 .card:nth-child(3){animation-delay:0.32s}
+.grid-2 .card:nth-child(1){animation-delay:0.38s}
+.grid-2 .card:nth-child(2){animation-delay:0.44s}
+
+/* ---- Floating sparkles on cards ---- */
+.card-sparkle{
+  position:absolute;font-size:1rem;
+  animation:twinkle 2s ease-in-out infinite alternate;
+  pointer-events:none;opacity:0.5;user-select:none;
+}
+
+/* --- NEW ANIMATIONS --- */
+
+/* Happy bounce wiggle on card hover */
+@keyframes happyBounceWiggle{
+  0%{transform:translate(-4px,-6px) rotate(0deg);}
+  20%{transform:translate(-4px,-10px) rotate(-1.5deg);}
+  40%{transform:translate(-4px,-6px) rotate(1.5deg);}
+  60%{transform:translate(-4px,-9px) rotate(-1deg);}
+  80%{transform:translate(-4px,-6px) rotate(0.5deg);}
+  100%{transform:translate(-4px,-6px) rotate(0deg);}
+}
+.card:hover{
+  animation:happyBounceWiggle 0.6s ease-in-out;
+  transform:translate(-4px,-6px);
+  box-shadow:var(--brutal-shadow-lg);
+}
+
+/* Aggressive shadow slam on click */
+@keyframes shadowSlam{
+  0%{transform:translate(-4px,-6px);box-shadow:var(--brutal-shadow-lg);}
+  30%{transform:translate(2px,2px);box-shadow:2px 2px 0 #1a1a1a;}
+  60%{transform:translate(-2px,-4px);box-shadow:6px 6px 0 #1a1a1a;}
+  100%{transform:translate(-4px,-6px);box-shadow:var(--brutal-shadow-lg);}
+}
+.card:active{
+  animation:shadowSlam 0.3s ease-out !important;
+}
+
+/* Heart float-up particles */
+@keyframes heartFloat{
+  0%{transform:translateY(0) scale(1);opacity:1;}
+  100%{transform:translateY(-60px) scale(0.5);opacity:0;}
+}
+
+/* Rainbow trail shimmer on progress bars */
+@keyframes rainbowShimmer{
+  0%{background-position:0% 50%;}
+  100%{background-position:200% 50%;}
+}
+.progress-fill{
+  background-size:200% 100% !important;
+  animation:rainbowShimmer 3s linear infinite;
+}
+
+/* Sparkle burst keyframes */
+@keyframes sparkleBurst{
+  0%{transform:scale(0) rotate(0deg);opacity:1;}
+  50%{transform:scale(1.5) rotate(180deg);opacity:0.8;}
+  100%{transform:scale(0) rotate(360deg);opacity:0;}
+}
+
+/* Kawaii face expression change - eyes become hearts on hover */
+.card:hover .avatar .face::before{
+  content:'\2665 \2665' !important;
+  font-size:0.5rem;
+  color:var(--pink);
+  letter-spacing:3px;
+  animation:twinkle 0.5s ease-in-out infinite alternate;
+}
+
+/* Button jelly press */
+@keyframes jellyPress{
+  0%{transform:translate(-2px,-2px) scale(1);}
+  30%{transform:translate(0,0) scale(0.92);}
+  50%{transform:translate(-1px,-1px) scale(1.05);}
+  70%{transform:translate(-2px,-2px) scale(0.98);}
+  100%{transform:translate(-2px,-2px) scale(1);}
+}
+.btn:active{
+  animation:jellyPress 0.35s ease-out;
+}
+
+/* Divider sparkle dance */
+@keyframes sparkleDance{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  25%{transform:translateY(-3px) rotate(5deg);}
+  50%{transform:translateY(0) rotate(0deg);}
+  75%{transform:translateY(-2px) rotate(-5deg);}
+}
+.divider{
+  animation:sparkleDance 3s ease-in-out infinite;
+  display:inline-block;
+  width:100%;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">KAWAII&times;BRUTAL</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <!-- ============ GRID HERO ============ -->
+  <div class="grid-hero">
+    <div class="card card-pink">
+      <span class="card-sparkle" style="top:10px;right:16px;animation-delay:0.2s;">&#10048;</span>
+      <span class="card-sparkle" style="top:40px;right:50px;font-size:0.7rem;animation-delay:0.8s;">&#10022;</span>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="card-subtitle">This week's sparkle report</div>
+          <div class="card-title" style="font-size:1.5rem;">Sprint velocity is super cute! &#9829;</div>
+        </div>
+        <div style="display:flex;gap:0.3rem;">
+          <span class="sparkle-char">&#10022;</span>
+          <span class="sparkle-char">&#9733;</span>
+          <span class="sparkle-char">&#10022;</span>
+        </div>
+      </div>
+      <div class="card-body" style="margin-top:0.8rem;">
+        Your team shipped 42 tasks this week &mdash; that's 28% above last quarter's average! Three features launched ahead of schedule. So proud of you! &#10048;
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;flex-wrap:wrap;">
+        <button class="btn btn-kawaii">View report &#10140;</button>
+        <button class="btn">Share &#9829;</button>
+      </div>
+    </div>
+    <div class="card card-lavender">
+      <span class="card-sparkle" style="top:8px;right:14px;">&#9733;</span>
+      <div class="card-subtitle">Completion</div>
+      <div class="stat-value">84%</div>
+      <div class="stat-label">sprint done &#10048;</div>
+      <div class="progress-track">
+        <div class="progress-fill pf-pink" style="width:84%"></div>
+      </div>
+      <div style="margin-top:1rem;">
+        <span class="badge">&#9650; 16% vs last sprint</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DIVIDER ============ -->
+  <div class="divider">&#9733; &#10022; &#9733; &#10022; &#9733; &#10022; &#9733; &#10022; &#9733;</div>
+
+  <!-- ============ GRID 3 ============ -->
+  <div class="grid-3">
+    <div class="card card-mint">
+      <span class="card-sparkle" style="top:8px;right:12px;animation-delay:0.5s;">&#10049;</span>
+      <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.8rem;">
+        <div class="avatar" style="background:var(--butter);margin:0;width:36px;height:36px;">
+          <div class="face"></div>
+        </div>
+        <div class="card-subtitle" style="margin:0;">Mood score</div>
+      </div>
+      <div class="stat-value">9.2</div>
+      <div class="stat-label">team happiness &#9829;</div>
+      <div class="progress-track">
+        <div class="progress-fill pf-peach" style="width:92%"></div>
+      </div>
+    </div>
+    <div class="card card-butter">
+      <span class="card-sparkle" style="top:10px;right:10px;animation-delay:0.3s;">&#9829;</span>
+      <div class="card-subtitle">Active cuties</div>
+      <div class="avatar-stack" style="margin-bottom:0.8rem;">
+        <div class="avatar" style="background:var(--pink);z-index:4;"><div class="face"></div></div>
+        <div class="avatar" style="background:var(--mint);z-index:3;"><div class="face"></div></div>
+        <div class="avatar" style="background:var(--lavender);z-index:2;"><div class="face"></div></div>
+        <div class="avatar" style="background:var(--peach);z-index:1;"><div class="face"></div></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Design</span>
+        <span class="tag tag-mint">Frontend</span>
+        <span class="tag tag-lavender">Backend</span>
+      </div>
+    </div>
+    <div class="card card-sky">
+      <span class="card-sparkle" style="top:8px;right:14px;animation-delay:0.7s;">&#10022;</span>
+      <div class="card-subtitle">Deploys</div>
+      <div class="stat-value">7</div>
+      <div class="stat-label">shipped with love &#10048;</div>
+      <div class="sparkline-wrap">
+        <svg viewBox="0 0 200 50" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#FF8FAB"/>
+              <stop offset="50%" stop-color="#C3B1E1"/>
+              <stop offset="100%" stop-color="#98E4C8"/>
+            </linearGradient>
+          </defs>
+          <polyline
+            fill="none"
+            stroke="url(#sparkGrad)"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            points="5,40 30,30 55,35 80,15 105,20 130,10 155,25 180,8 195,12"
+          />
+          <circle cx="80" cy="15" r="4" fill="#FF8FAB" stroke="#1a1a1a" stroke-width="2"/>
+          <circle cx="130" cy="10" r="4" fill="#C3B1E1" stroke="#1a1a1a" stroke-width="2"/>
+          <circle cx="195" cy="12" r="4" fill="#98E4C8" stroke="#1a1a1a" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DIVIDER ============ -->
+  <div class="divider">&#9829; &#10048; &#9829; &#10048; &#9829; &#10048; &#9829; &#10048; &#9829;</div>
+
+  <!-- ============ GRID 2 ============ -->
+  <div class="grid-2">
+    <div class="card" style="background:#fff;">
+      <span class="card-sparkle" style="top:8px;right:14px;animation-delay:0.4s;">&#10048;</span>
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks &#9829;
+        <span class="tag tag-mint" style="font-size:0.55rem;">3 left</span>
+      </div>
+      <div class="card-subtitle">today's to-do list</div>
+      <div class="task-item">
+        <div class="task-check done">&#10003;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&#10003;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-sky" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-mint" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-lavender" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-peach" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+    <div class="card card-peach">
+      <span class="card-sparkle" style="top:10px;right:16px;animation-delay:0.6s;">&#9733;</span>
+      <div class="card-title">Activity feed &#10022;</div>
+      <div class="card-subtitle">who's being cute today</div>
+      <div class="card-body" style="margin-top:0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.9rem;">
+          <div class="avatar" style="background:var(--mint);width:34px;height:34px;margin:0;">
+            <div class="face"></div>
+          </div>
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;">
+              Paul <span style="font-weight:400;opacity:0.6;">merged</span>
+            </div>
+            <span class="tag tag-mint" style="font-size:0.55rem;padding:0.1rem 0.5rem;">PR #421</span>
+            <span style="font-size:0.65rem;opacity:0.45;margin-left:0.3rem;">2m</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.9rem;">
+          <div class="avatar" style="background:var(--sky);width:34px;height:34px;margin:0;">
+            <div class="face"></div>
+          </div>
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;">
+              Anna <span style="font-weight:400;opacity:0.6;">opened</span>
+            </div>
+            <span class="tag tag-pink" style="font-size:0.55rem;padding:0.1rem 0.5rem;">Bug #89</span>
+            <span style="font-size:0.65rem;opacity:0.45;margin-left:0.3rem;">18m</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.9rem;">
+          <div class="avatar" style="background:var(--lavender);width:34px;height:34px;margin:0;">
+            <div class="face"></div>
+          </div>
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;">
+              Kai <span style="font-weight:400;opacity:0.6;">deployed</span>
+            </div>
+            <span class="tag tag-butter" style="font-size:0.55rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+            <span style="font-size:0.65rem;opacity:0.45;margin-left:0.3rem;">1h</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <div class="avatar" style="background:var(--pink);width:34px;height:34px;margin:0;">
+            <div class="face"></div>
+          </div>
+          <div>
+            <div style="font-family:'Nunito',sans-serif;font-weight:700;">
+              Mika <span style="font-weight:400;opacity:0.6;">reviewed</span>
+            </div>
+            <span class="tag tag-lavender" style="font-size:0.55rem;padding:0.1rem 0.5rem;">PR #419</span>
+            <span style="font-size:0.65rem;opacity:0.45;margin-left:0.3rem;">3h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider" style="font-size:0.75rem;letter-spacing:4px;padding:1.5rem 0;">
+    made with &#9829; and thick borders &mdash; kawaii forever, brutalism always &#10048;
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let audioCtx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  // Cute "pyon" bounce boing
+  function playBoing(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, now);
+    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.05);
+    osc.frequency.exponentialRampToValueAtTime(400, now + 0.15);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.1, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  // Heavy concrete slam
+  function playConcreteSlam(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    // Low thud
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(100, now);
+    osc.frequency.exponentialRampToValueAtTime(30, now + 0.12);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.18);
+    // Impact noise
+    var bufSize = ctx.sampleRate * 0.08;
+    var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for(var i=0;i<bufSize;i++) d[i]=(Math.random()*2-1);
+    var ns = ctx.createBufferSource();
+    var ng = ctx.createGain();
+    ns.buffer = buf;
+    ng.gain.setValueAtTime(0.1, now);
+    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    ns.connect(ng);
+    ng.connect(ctx.destination);
+    ns.start(now);
+    ns.stop(now + 0.1);
+  }
+
+  // Kawaii sparkle chime
+  function playSparkleChime(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    [1318.5, 1568, 2093].forEach(function(f, i){
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      var t = now + i * 0.04;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.06, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.25);
+    });
+  }
+
+  // Brutal stamp impact
+  function playStampImpact(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(200, now);
+    osc.frequency.exponentialRampToValueAtTime(60, now + 0.08);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.12);
+  }
+
+  // Happy giggle-like ascending tones
+  function playGiggle(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    [523, 659, 784, 1047].forEach(function(f, i){
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      var t = now + i * 0.06;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.07, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.15);
+    });
+  }
+
+  // Ambient intro - kawaii music box
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    var notes = [784, 880, 1047, 880, 784];
+    notes.forEach(function(f, i){
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      var t = now + i * 0.12;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.05, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.2);
+    });
+  }
+
+  // Spawn floating heart particle
+  function spawnHeart(x, y){
+    var el = document.createElement('span');
+    el.textContent = ['♥','♡','✦','★'][Math.floor(Math.random()*4)];
+    el.style.cssText = 'position:fixed;left:'+x+'px;top:'+y+'px;font-size:'+(12+Math.random()*14)+'px;color:#FF8FAB;pointer-events:none;z-index:9999;animation:heartFloat 0.8s ease-out forwards;';
+    document.body.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 850);
+  }
+
+  // First interaction
+  function firstInteraction(){
+    playIntro();
+    document.removeEventListener('click', firstInteraction);
+    document.removeEventListener('mouseover', firstInteraction);
+  }
+  document.addEventListener('click', firstInteraction);
+  document.addEventListener('mouseover', firstInteraction);
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playBoing(); });
+    el.addEventListener('click', function(e){
+      playConcreteSlam();
+      // spawn heart particles
+      for(var i=0;i<5;i++){
+        setTimeout(function(){
+          spawnHeart(
+            e.clientX + (Math.random()-0.5)*40,
+            e.clientY + (Math.random()-0.5)*20
+          );
+        }, i * 60);
+      }
+    });
+  });
+
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playSparkleChime(); });
+  });
+
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      playGiggle();
+    });
+  });
+
+  document.querySelectorAll('.task-check').forEach(function(el){
+    el.addEventListener('click', function(){ playStampImpact(); });
+  });
+})();
+</script>
+
+</body>
+</html>

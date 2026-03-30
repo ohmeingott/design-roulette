@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soviet x Vaporwave - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#E63946;
+  --red-dark:#9B1B24;
+  --pink:#FF6B9D;
+  --cyan:#00D4FF;
+  --gold:#D4A853;
+  --bg:#120A0D;
+  --bg-card:rgba(30,12,18,0.92);
+  --bg-card-hover:rgba(40,16,24,0.95);
+  --text:#E8D5DC;
+  --text-muted:rgba(232,213,220,0.5);
+  --border-red:3px solid var(--red);
+  --font-head:'Bebas Neue',sans-serif;
+  --font-body:'Share Tech Mono',monospace;
+}
+
+body{
+  min-height:100vh;
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Soviet diagonal stripe pattern + vaporwave sunset gradient */
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 18px,
+      rgba(230,57,70,0.04) 18px,
+      rgba(230,57,70,0.04) 20px
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      transparent 50%,
+      rgba(230,57,70,0.08) 65%,
+      rgba(255,107,157,0.1) 75%,
+      rgba(0,212,255,0.06) 90%,
+      rgba(0,212,255,0.12) 100%
+    );
+  pointer-events:none;z-index:0;
+}
+
+/* Vaporwave perspective grid floor */
+body::after{
+  content:'';position:fixed;bottom:0;left:0;right:0;height:45vh;
+  background:
+    linear-gradient(to bottom, transparent 0%, rgba(0,212,255,0.06) 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 58px,
+      rgba(255,107,157,0.12) 58px,
+      rgba(255,107,157,0.12) 60px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(0,212,255,0.08) 28px,
+      rgba(0,212,255,0.08) 30px
+    );
+  transform:perspective(400px) rotateX(45deg);
+  transform-origin:bottom center;
+  pointer-events:none;z-index:0;
+  mask-image:linear-gradient(to bottom, transparent 0%, black 30%);
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, black 30%);
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Header */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  border-bottom:var(--border-red);
+  padding-bottom:1.2rem;
+  position:relative;
+}
+.header::after{
+  content:'★';position:absolute;bottom:-0.7rem;left:50%;
+  transform:translateX(-50%);
+  background:var(--bg);padding:0 0.8rem;
+  color:var(--red);font-size:1rem;
+}
+
+.logo{
+  font-family:var(--font-head);font-size:2.8rem;
+  letter-spacing:3px;line-height:1;
+  text-transform:uppercase;
+  background:linear-gradient(135deg, var(--red), var(--pink), var(--cyan));
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:logoShift 4s ease infinite;
+}
+@keyframes logoShift{
+  0%,100%{background-position:0% 50%}
+  33%{background-position:100% 50%}
+  66%{background-position:50% 100%}
+}
+
+.nav-pills{display:flex;gap:0.5rem;}
+.nav-pill{
+  font-family:var(--font-head);font-size:1rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:0.5rem 1.3rem;
+  background:transparent;
+  border:2px solid var(--red);
+  color:var(--text);
+  cursor:pointer;transition:all 0.2s;
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+}
+.nav-pill:hover{
+  background:var(--red);color:#fff;
+  box-shadow:0 0 12px rgba(230,57,70,0.4);
+}
+.nav-pill.active{
+  background:var(--red);color:#fff;
+  box-shadow:0 0 16px rgba(230,57,70,0.5);
+}
+
+/* Cards */
+.card{
+  background:var(--bg-card);
+  border-top:4px solid var(--red);
+  border-left:1px solid rgba(230,57,70,0.2);
+  border-right:1px solid rgba(0,212,255,0.1);
+  border-bottom:1px solid rgba(255,107,157,0.1);
+  padding:1.8rem;
+  position:relative;overflow:hidden;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card::before{
+  content:'';position:absolute;top:0;right:0;width:50px;height:50px;
+  background:linear-gradient(135deg, rgba(230,57,70,0.15), transparent);
+  pointer-events:none;
+}
+.card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, var(--red), var(--pink), var(--cyan), transparent);
+  opacity:0.3;
+}
+.card:hover{
+  transform:rotate(-0.5deg) translateY(-3px);
+  box-shadow:0 8px 30px rgba(230,57,70,0.15), 0 0 20px rgba(0,212,255,0.08);
+  background:var(--bg-card-hover);
+}
+
+.card-accent-pink{border-top-color:var(--pink);}
+.card-accent-cyan{border-top-color:var(--cyan);}
+.card-accent-gold{border-top-color:var(--gold);}
+
+.card-title{
+  font-family:var(--font-head);font-size:1.5rem;
+  letter-spacing:2px;text-transform:uppercase;
+  color:#fff;margin-bottom:0.4rem;
+}
+.card-subtitle{
+  font-size:0.7rem;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:2px;
+  margin-bottom:1rem;
+}
+.card-body{
+  font-size:0.82rem;line-height:1.7;color:var(--text);
+}
+
+/* Stats */
+.stat-value{
+  font-family:var(--font-head);font-size:3.2rem;
+  color:#fff;line-height:1;
+  text-shadow:0 0 20px rgba(230,57,70,0.3);
+}
+.stat-label{
+  font-size:0.68rem;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:2.5px;margin-top:0.5rem;
+}
+.stat-change{
+  display:inline-block;
+  background:var(--red);color:#fff;
+  padding:0.2rem 0.7rem;font-size:0.68rem;font-weight:700;
+  margin-top:0.8rem;letter-spacing:1px;
+  clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);
+}
+
+/* Progress bars */
+.progress-track{
+  width:100%;height:12px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(230,57,70,0.3);
+  overflow:hidden;margin-top:0.8rem;
+}
+.progress-fill{
+  height:100%;
+  transition:width 1.2s cubic-bezier(0.22,1,0.36,1);
+  position:relative;
+}
+.progress-fill::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.2) 3px,
+    rgba(0,0,0,0.2) 6px
+  );
+}
+.pf-red{background:linear-gradient(90deg, var(--red), var(--pink));}
+.pf-cyan{background:linear-gradient(90deg, var(--cyan), var(--pink));}
+.pf-gold{background:linear-gradient(90deg, var(--gold), var(--red));}
+
+/* Tags */
+.tag{
+  display:inline-block;
+  padding:0.2rem 0.8rem;font-size:0.68rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin:0.15rem;
+  clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);
+}
+.tag-red{background:var(--red);color:#fff;}
+.tag-cyan{background:var(--cyan);color:var(--bg);}
+.tag-pink{background:var(--pink);color:var(--bg);}
+.tag-gold{background:var(--gold);color:var(--bg);}
+
+/* Badge */
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  font-family:var(--font-head);font-size:0.85rem;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold);
+}
+.badge::before{content:'★';color:var(--red);font-size:0.9rem;}
+
+/* Avatars */
+.avatar-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  border:2px solid var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-head);font-size:1rem;
+  color:#fff;letter-spacing:1px;
+  background:rgba(230,57,70,0.15);
+  position:relative;
+}
+.avatar::after{
+  content:'★';position:absolute;bottom:-2px;right:-2px;
+  font-size:0.55rem;color:var(--gold);
+  text-shadow:0 0 4px rgba(212,168,83,0.6);
+}
+
+/* Tasks */
+.task-item{
+  display:flex;align-items:center;gap:0.8rem;
+  padding:0.7rem 0;
+  border-bottom:1px solid rgba(230,57,70,0.15);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:20px;height:20px;
+  border:2px solid rgba(230,57,70,0.5);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;color:var(--red);
+  background:rgba(230,57,70,0.05);
+}
+.task-check.done{background:var(--red);color:#fff;border-color:var(--red);}
+.task-text{font-size:0.82rem;color:var(--text);}
+.task-text.done{text-decoration:line-through;opacity:0.4;}
+
+/* Activity feed */
+.activity-item{
+  margin-bottom:0.9rem;padding-bottom:0.9rem;
+  border-bottom:1px solid rgba(230,57,70,0.1);
+}
+.activity-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.activity-name{font-family:var(--font-head);font-size:1rem;letter-spacing:1.5px;}
+.activity-time{font-size:0.65rem;color:var(--text-muted);margin-top:0.2rem;}
+
+/* Sparkline */
+.sparkline-wrap{margin-top:1rem;}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:var(--font-head);font-size:1rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:0.6rem 1.4rem;
+  border:2px solid var(--red);
+  cursor:pointer;transition:all 0.2s;
+  background:transparent;color:var(--text);
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+}
+.btn:hover{
+  background:var(--red);color:#fff;
+  box-shadow:0 0 14px rgba(230,57,70,0.4);
+}
+.btn-solid{
+  background:var(--red);color:#fff;
+}
+.btn-solid:hover{
+  background:var(--pink);
+  box-shadow:0 0 20px rgba(255,107,157,0.4);
+}
+
+/* Grids */
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:2rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:2rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+  margin-bottom:2rem;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* Divider */
+.divider{
+  height:2px;margin:0.5rem 2rem 2rem;position:relative;
+  background:linear-gradient(90deg, transparent, var(--red), var(--pink), var(--cyan), transparent);
+  opacity:0.5;
+}
+.divider::after{
+  content:'★ ★ ★';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:var(--bg);padding:0 1rem;
+  color:var(--red);font-size:0.6rem;letter-spacing:4px;
+  white-space:nowrap;
+}
+
+/* Animations */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(25px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes glitch{
+  0%,100%{text-shadow:0 0 0 transparent;}
+  20%{text-shadow:2px 0 var(--cyan), -2px 0 var(--pink);}
+  40%{text-shadow:-1px 0 var(--pink), 1px 0 var(--cyan);}
+  60%{text-shadow:1px 0 var(--red), -1px 0 var(--cyan);}
+  80%{text-shadow:0 0 0 transparent;}
+}
+@keyframes scanline{
+  0%{top:-100%}
+  100%{top:100%}
+}
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 0 8px rgba(230,57,70,0.2);}
+  50%{box-shadow:0 0 20px rgba(230,57,70,0.4);}
+}
+
+.card,.header{animation:fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.1s}
+.grid-hero .card:nth-child(2){animation-delay:0.2s}
+.grid-3 .card:nth-child(1){animation-delay:0.3s}
+.grid-3 .card:nth-child(2){animation-delay:0.4s}
+.grid-3 .card:nth-child(3){animation-delay:0.5s}
+.grid-2 .card:nth-child(1){animation-delay:0.6s}
+.grid-2 .card:nth-child(2){animation-delay:0.7s}
+
+/* Scanline effect on cards */
+.card>.scanline{
+  position:absolute;top:-100%;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, rgba(0,212,255,0.3), transparent);
+  animation:scanline 6s linear infinite;
+  pointer-events:none;
+}
+
+/* Hover glitch on stat values */
+.stat-value:hover{
+  animation:glitch 0.3s ease;
+}
+
+/* --- NEW ANIMATIONS --- */
+
+/* Red star rotation & pulse */
+@keyframes starRotatePulse{
+  0%{transform:rotate(0deg) scale(1);filter:drop-shadow(0 0 4px rgba(230,57,70,0.3));}
+  50%{transform:rotate(180deg) scale(1.25);filter:drop-shadow(0 0 12px rgba(230,57,70,0.7));}
+  100%{transform:rotate(360deg) scale(1);filter:drop-shadow(0 0 4px rgba(230,57,70,0.3));}
+}
+.header::after{
+  animation:starRotatePulse 4s ease-in-out infinite;
+  display:inline-block;
+}
+
+/* Propaganda poster zoom/pan on hero card */
+@keyframes propagandaZoomPan{
+  0%{background-position:0% 0%;transform:scale(1);}
+  25%{background-position:30% 10%;transform:scale(1.02);}
+  50%{background-position:60% 20%;transform:scale(1.04);}
+  75%{background-position:30% 10%;transform:scale(1.02);}
+  100%{background-position:0% 0%;transform:scale(1);}
+}
+.grid-hero .card:first-child::before{
+  animation:propagandaZoomPan 12s ease-in-out infinite;
+  width:100%;height:100%;top:0;right:0;
+  background:linear-gradient(135deg, rgba(230,57,70,0.08), rgba(255,107,157,0.05), transparent);
+}
+
+/* Vaporwave sun descending behind grid */
+@keyframes vaporSunDescend{
+  0%{transform:translateX(-50%) translateY(-20px);opacity:0.6;box-shadow:0 0 40px rgba(255,107,157,0.4);}
+  50%{transform:translateX(-50%) translateY(10px);opacity:1;box-shadow:0 0 80px rgba(255,107,157,0.6), 0 0 120px rgba(0,212,255,0.2);}
+  100%{transform:translateX(-50%) translateY(-20px);opacity:0.6;box-shadow:0 0 40px rgba(255,107,157,0.4);}
+}
+.divider::before{
+  content:'';position:absolute;top:50%;left:50%;
+  width:50px;height:50px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,107,157,0.5), rgba(230,57,70,0.3), transparent);
+  animation:vaporSunDescend 6s ease-in-out infinite;
+  pointer-events:none;z-index:-1;
+}
+.divider{position:relative;overflow:visible;}
+
+/* Hammer strike impact shake */
+@keyframes hammerShake{
+  0%,100%{transform:translateX(0);}
+  10%{transform:translateX(-4px) rotate(-0.5deg);}
+  20%{transform:translateX(4px) rotate(0.5deg);}
+  30%{transform:translateX(-3px);}
+  40%{transform:translateX(3px);}
+  50%{transform:translateX(-1px);}
+  60%{transform:translateX(0);}
+}
+.card:active{
+  animation:hammerShake 0.4s ease-out;
+}
+
+/* Comrade march step - subtle bob on tags */
+@keyframes comradeMarch{
+  0%,100%{transform:translateY(0);}
+  25%{transform:translateY(-2px);}
+  50%{transform:translateY(0);}
+  75%{transform:translateY(-1px);}
+}
+.tag{animation:comradeMarch 2s ease-in-out infinite;}
+.tag:nth-child(2){animation-delay:0.3s;}
+.tag:nth-child(3){animation-delay:0.6s;}
+
+/* Red banner wave/flutter */
+@keyframes bannerWave{
+  0%{transform:skewX(0deg);}
+  25%{transform:skewX(1.5deg);}
+  50%{transform:skewX(0deg);}
+  75%{transform:skewX(-1.5deg);}
+  100%{transform:skewX(0deg);}
+}
+.stat-change{animation:bannerWave 3s ease-in-out infinite;}
+
+/* Progress bar pulsing glow */
+@keyframes progressGlow{
+  0%,100%{filter:brightness(1) drop-shadow(0 0 2px rgba(230,57,70,0.3));}
+  50%{filter:brightness(1.2) drop-shadow(0 0 8px rgba(230,57,70,0.6));}
+}
+.progress-fill{animation:progressGlow 2.5s ease-in-out infinite;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Soviet&times;Vapor</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <!-- Hero Grid -->
+  <div class="grid-hero">
+    <div class="card">
+      <div class="scanline"></div>
+      <div class="card-subtitle">&#9733; Weekly Directive &#9733;</div>
+      <div class="card-title">Production Output Exceeds Quota</div>
+      <div class="card-body">
+        Comrade, your collective closed 34 tasks this sprint &mdash; the highest throughput since Q1.
+        Three milestones achieved ahead of the five-year plan. The motherboard is proud.
+      </div>
+      <div style="margin-top:1.4rem;display:flex;gap:0.6rem;flex-wrap:wrap;">
+        <button class="btn btn-solid">View Report &rarr;</button>
+        <button class="btn">Broadcast</button>
+      </div>
+    </div>
+    <div class="card card-accent-cyan">
+      <div class="scanline"></div>
+      <div class="card-subtitle">Sprint Progress</div>
+      <div class="stat-value">78%</div>
+      <div class="stat-label">&#9733; Completion Rate</div>
+      <div class="stat-change">&uarr; 12% vs last cycle</div>
+      <div class="progress-track"><div class="progress-fill pf-red" style="width:78%"></div></div>
+      <div class="sparkline-wrap">
+        <svg viewBox="0 0 200 40" width="100%" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="0,35 20,28 40,30 60,18 80,22 100,12 120,15 140,8 160,10 180,5 200,3"
+            stroke="url(#sparkGrad)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="0,35 20,28 40,30 60,18 80,22 100,12 120,15 140,8 160,10 180,5 200,3 200,40 0,40"
+            fill="url(#sparkFill)" opacity="0.2"/>
+          <defs>
+            <linearGradient id="sparkGrad" x1="0" y1="0" x2="200" y2="0">
+              <stop offset="0%" stop-color="#E63946"/>
+              <stop offset="50%" stop-color="#FF6B9D"/>
+              <stop offset="100%" stop-color="#00D4FF"/>
+            </linearGradient>
+            <linearGradient id="sparkFill" x1="0" y1="0" x2="200" y2="0">
+              <stop offset="0%" stop-color="#E63946"/>
+              <stop offset="100%" stop-color="#00D4FF"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3-Column Grid -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="scanline"></div>
+      <div class="card-subtitle">Open Directives</div>
+      <div class="stat-value">12</div>
+      <div class="stat-label">remaining this cycle</div>
+      <div class="progress-track"><div class="progress-fill pf-gold" style="width:35%"></div></div>
+    </div>
+    <div class="card card-accent-pink">
+      <div class="scanline"></div>
+      <div class="card-subtitle">The Collective</div>
+      <div class="avatar-row">
+        <div class="avatar" style="border-color:var(--pink);">&#9760;</div>
+        <div class="avatar" style="border-color:var(--cyan);">&#9733;</div>
+        <div class="avatar" style="border-color:var(--gold);">&#9768;</div>
+        <div class="avatar" style="border-color:var(--red);">&#9762;</div>
+      </div>
+      <div class="card-body">4 comrades active &middot; 2 in review</div>
+      <div style="margin-top:0.8rem;">
+        <span class="tag tag-red">Agitprop</span>
+        <span class="tag tag-cyan">Systems</span>
+        <span class="tag tag-gold">Output</span>
+      </div>
+    </div>
+    <div class="card card-accent-gold">
+      <div class="scanline"></div>
+      <div class="card-subtitle">Deploys Today</div>
+      <div class="stat-value">5</div>
+      <div class="stat-label">across 3 sectors</div>
+      <div class="stat-change">&#9733; all operational</div>
+      <div class="badge" style="margin-top:1rem;">Supreme Uptime</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 2-Column Grid -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="scanline"></div>
+      <div class="card-title">&#9733; Directives</div>
+      <div class="task-item">
+        <div class="task-check done">&#10003;</div>
+        <span class="task-text done">Design system audit</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&#10003;</div>
+        <span class="task-text done">API rate-limit decree</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard refactor protocol</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Compose release manifesto</span>
+      </div>
+    </div>
+    <div class="card card-accent-cyan">
+      <div class="scanline"></div>
+      <div class="card-title">&#9733; Activity Feed</div>
+      <div class="activity-item">
+        <div><span class="activity-name" style="color:var(--pink);">Comrade Pavel</span> merged
+          <span class="tag tag-cyan" style="font-size:0.6rem;padding:0.12rem 0.5rem;">PR #421</span>
+        </div>
+        <div class="activity-time">2 min ago</div>
+      </div>
+      <div class="activity-item">
+        <div><span class="activity-name" style="color:var(--cyan);">Comrade Anna</span> opened directive
+          <span class="tag tag-red" style="font-size:0.6rem;padding:0.12rem 0.5rem;">Priority</span>
+        </div>
+        <div class="activity-time">18 min ago</div>
+      </div>
+      <div class="activity-item">
+        <div><span class="activity-name" style="color:var(--gold);">Comrade Kai</span> deployed
+          <span class="tag tag-pink" style="font-size:0.6rem;padding:0.12rem 0.5rem;">v2.4.1</span>
+        </div>
+        <div class="activity-time">1 hr ago</div>
+      </div>
+      <div class="activity-item">
+        <div><span class="activity-name" style="color:var(--red);">Comrade Mira</span> approved
+          <span class="tag tag-gold" style="font-size:0.6rem;padding:0.12rem 0.5rem;">Spec</span>
+        </div>
+        <div class="activity-time">3 hrs ago</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let audioCtx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  // Soviet brass chord (short)
+  function playBrassChord(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const freqs = [220, 277.18, 329.63]; // A3, C#4, E4 - minor chord
+    freqs.forEach(function(f, i){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(f, now);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.06, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.6);
+    });
+  }
+
+  // Industrial factory clang
+  function playClang(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(100, now + 0.15);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  // Vaporwave reverbed synth note
+  function playVaporSynth(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523.25, now); // C5
+    osc.frequency.exponentialRampToValueAtTime(261.63, now + 0.25);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2000, now);
+    filter.frequency.exponentialRampToValueAtTime(400, now + 0.25);
+    filter.Q.value = 5;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.08, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.35);
+  }
+
+  // Marching drum hit
+  function playDrumHit(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.15);
+    // noise burst for snare texture
+    var bufSize = ctx.sampleRate * 0.05;
+    var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    var data = buf.getChannelData(0);
+    for(var i=0;i<bufSize;i++) data[i] = (Math.random()*2-1)*0.3;
+    var noise = ctx.createBufferSource();
+    var ng = ctx.createGain();
+    noise.buffer = buf;
+    ng.gain.setValueAtTime(0.08, now);
+    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    noise.connect(ng);
+    ng.connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 0.08);
+  }
+
+  // Radio static burst
+  function playStaticBurst(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    var bufSize = ctx.sampleRate * 0.12;
+    var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    var data = buf.getChannelData(0);
+    for(var i=0;i<bufSize;i++) data[i] = (Math.random()*2-1);
+    var noise = ctx.createBufferSource();
+    var gain = ctx.createGain();
+    var filter = ctx.createBiquadFilter();
+    noise.buffer = buf;
+    filter.type = 'bandpass';
+    filter.frequency.value = 3000;
+    filter.Q.value = 2;
+    gain.gain.setValueAtTime(0.06, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start(now);
+    noise.stop(now + 0.15);
+  }
+
+  // Ambient intro - short Soviet broadcast
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    // Low brass pad
+    [130.81, 164.81, 196].forEach(function(f){
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.value = f;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(0.04, now + 0.2);
+      g.gain.linearRampToValueAtTime(0.03, now + 0.6);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 1);
+    });
+    // Static crackle underneath
+    var bufSize = ctx.sampleRate * 0.8;
+    var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for(var i=0;i<bufSize;i++) d[i] = (Math.random()*2-1);
+    var ns = ctx.createBufferSource();
+    var ng = ctx.createGain();
+    var flt = ctx.createBiquadFilter();
+    ns.buffer = buf;
+    flt.type = 'bandpass';
+    flt.frequency.value = 1500;
+    flt.Q.value = 1;
+    ng.gain.setValueAtTime(0, now);
+    ng.gain.linearRampToValueAtTime(0.02, now + 0.1);
+    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+    ns.connect(flt);
+    flt.connect(ng);
+    ng.connect(ctx.destination);
+    ns.start(now);
+    ns.stop(now + 0.9);
+  }
+
+  // Event listeners
+  function firstInteraction(){
+    playIntro();
+    document.removeEventListener('click', firstInteraction);
+    document.removeEventListener('mouseover', firstInteraction);
+  }
+  document.addEventListener('click', firstInteraction);
+  document.addEventListener('mouseover', firstInteraction);
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playVaporSynth(); });
+    el.addEventListener('click', function(){ playClang(); });
+  });
+
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playDrumHit(); });
+  });
+
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      playBrassChord();
+    });
+  });
+
+  document.querySelectorAll('.tag').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      playStaticBurst();
+    });
+  });
+})();
+</script>
+
+</div>
+</body>
+</html>

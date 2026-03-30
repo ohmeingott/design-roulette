@@ -352,6 +352,85 @@ body::before{
   background:linear-gradient(90deg, transparent, #A29BFE55, #FD79A855, #55EFC455, transparent);
   border-radius:1px;
 }
+
+/* === NEW ANIMATIONS === */
+
+/* Floating particles */
+.card::before{
+  content:'';position:absolute;width:4px;height:4px;border-radius:50%;
+  background:rgba(162,155,254,0.6);
+  top:20%;left:15%;
+  animation:auroraParticle 6s ease-in-out infinite;
+  pointer-events:none;z-index:2;
+  box-shadow:
+    60px 30px 0 rgba(253,121,168,0.5),
+    120px -10px 0 rgba(85,239,196,0.4),
+    30px 50px 0 rgba(253,203,110,0.4),
+    90px 40px 0 rgba(162,155,254,0.3);
+}
+@keyframes auroraParticle{
+  0%,100%{transform:translateY(0) translateX(0);opacity:0.6;}
+  25%{transform:translateY(-12px) translateX(5px);opacity:1;}
+  50%{transform:translateY(-6px) translateX(-8px);opacity:0.4;}
+  75%{transform:translateY(-15px) translateX(3px);opacity:0.8;}
+}
+
+/* Pulsing glow on orb */
+.orb{
+  box-shadow:0 0 15px rgba(85,239,196,0.3), 0 0 30px rgba(85,239,196,0.1);
+  animation:orbFloat 4s ease-in-out infinite, orbPulseGlow 3s ease-in-out infinite;
+}
+@keyframes orbPulseGlow{
+  0%,100%{box-shadow:0 0 15px rgba(85,239,196,0.3), 0 0 30px rgba(85,239,196,0.1);}
+  50%{box-shadow:0 0 25px rgba(85,239,196,0.5), 0 0 50px rgba(85,239,196,0.2), 0 0 80px rgba(162,155,254,0.1);}
+}
+
+/* Aurora shimmer on card backgrounds */
+@keyframes auroraShimmer{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+.card:hover::after{
+  background:linear-gradient(135deg, rgba(162,155,254,0.12) 0%, transparent 30%, rgba(253,121,168,0.08) 50%, transparent 70%, rgba(85,239,196,0.1) 100%);
+  background-size:200% 200%;
+  animation:auroraShimmer 3s ease infinite;
+}
+
+/* Sparkle effect on badges */
+.badge{
+  position:relative;overflow:hidden;
+}
+.badge::after{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+  animation:badgeSparkle 4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes badgeSparkle{
+  0%{transform:translateX(-100%) rotate(0deg);}
+  100%{transform:translateX(100%) rotate(15deg);}
+}
+
+/* Gentle parallax drift on background */
+@keyframes parallaxDrift{
+  0%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(10px,-8px) scale(1.02);}
+  66%{transform:translate(-5px,5px) scale(0.99);}
+  100%{transform:translate(0,0) scale(1);}
+}
+body::before{
+  animation:auroraDrift 20s ease-in-out infinite alternate, parallaxDrift 30s ease-in-out infinite;
+}
+
+/* Breathing effect on progress bars */
+.progress-fill{
+  animation:progressBreath 3s ease-in-out infinite;
+}
+@keyframes progressBreath{
+  0%,100%{opacity:1;filter:brightness(1);}
+  50%{opacity:0.85;filter:brightness(1.2);}
+}
 </style>
 </head>
 <body>
@@ -561,5 +640,139 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx){
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  // Ethereal bell-like tone for card hover
+  function playHoverTone(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    const osc2 = c.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800 + Math.random()*400, c.currentTime);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1200 + Math.random()*300, c.currentTime);
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+    osc2.stop(c.currentTime + 0.2);
+  }
+
+  // Deep bass thud for card click
+  function playClickThud(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(120, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(40, c.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.15, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+  }
+
+  // UI selection sound for nav pills
+  function playNavSelect(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(600, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(900, c.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.12);
+  }
+
+  // Action confirmation for buttons
+  function playBtnConfirm(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, c.currentTime);
+    osc.frequency.setValueAtTime(660, c.currentTime + 0.06);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(880, c.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.07, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.15);
+    osc2.stop(c.currentTime + 0.15);
+  }
+
+  // Cosmic whoosh intro sound
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const filter = c.createBiquadFilter();
+    const gain = c.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(80, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(300, c.currentTime + 0.6);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(200, c.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(600, c.currentTime + 0.8);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(200, c.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(2000, c.currentTime + 0.5);
+    filter.frequency.exponentialRampToValueAtTime(400, c.currentTime + 0.8);
+    gain.gain.setValueAtTime(0.001, c.currentTime);
+    gain.gain.linearRampToValueAtTime(0.06, c.currentTime + 0.3);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.9);
+    osc.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.9);
+    osc2.stop(c.currentTime + 0.9);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHoverTone);
+    el.addEventListener('click', playClickThud);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playNavSelect(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playBtnConfirm(); playIntro(); });
+  });
+  document.addEventListener('click', playIntro, {once:true});
+})();
+</script>
 </body>
 </html>

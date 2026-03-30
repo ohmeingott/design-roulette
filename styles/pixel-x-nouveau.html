@@ -202,6 +202,75 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* -- PIXEL RAIN/SNOWFALL -- */
+@keyframes pixelRain{
+  0%{transform:translateY(-20px);opacity:0}
+  10%{opacity:0.15}
+  90%{opacity:0.15}
+  100%{transform:translateY(100vh);opacity:0}
+}
+body::after{
+  content:'';position:fixed;top:-20px;left:30%;z-index:0;
+  width:4px;height:4px;
+  background:var(--pixel-green);
+  animation:pixelRain 8s linear infinite;
+  pointer-events:none;
+  image-rendering:pixelated;
+  box-shadow:
+    60px 40px 0 var(--pixel-blue),
+    180px 80px 0 var(--pixel-yellow),
+    320px 20px 0 var(--pixel-red),
+    450px 60px 0 var(--pixel-purple);
+}
+
+/* -- VINE GROWING on card borders -- */
+@keyframes vineGrow{
+  0%{width:0;height:0;opacity:0}
+  50%{width:40px;height:0;opacity:0.4}
+  100%{width:40px;height:40px;opacity:0.3}
+}
+.card::before{
+  animation:vineGrow 1s ease-out both;
+}
+.card::after{
+  animation:vineGrow 1s ease-out 0.3s both;
+}
+
+/* -- BLOOM FLOWER on hover -- */
+@keyframes bloomFlower{
+  0%{box-shadow:0 0 0 0 rgba(193,123,123,0)}
+  50%{box-shadow:0 0 0 6px rgba(193,123,123,0.08), 0 0 20px rgba(197,164,90,0.06)}
+  100%{box-shadow:0 0 0 0 rgba(193,123,123,0)}
+}
+.card:hover{
+  animation:bloomFlower 1.2s ease-out;
+}
+
+/* -- SCANLINE CRT -- */
+@keyframes scanline{
+  0%{top:-4px}
+  100%{top:100%}
+}
+.container::before{
+  content:'';position:fixed;left:0;right:0;top:-4px;z-index:9999;
+  height:4px;
+  background:rgba(0,255,65,0.03);
+  box-shadow:0 0 10px rgba(0,255,65,0.02);
+  animation:scanline 4s linear infinite;
+  pointer-events:none;
+}
+
+/* -- BUTTERFLY WING MORPH -- */
+@keyframes butterflyMorph{
+  0%,100%{border-radius:4px;transform:scale(1)}
+  25%{border-radius:4px 20px 4px 20px;transform:scale(1.005)}
+  50%{border-radius:20px 4px 20px 4px;transform:scale(1)}
+  75%{border-radius:4px 20px 4px 20px;transform:scale(1.005)}
+}
+.badge{
+  animation:butterflyMorph 6s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
@@ -337,5 +406,112 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // 8-bit bleep (card hover)
+  function playHover(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, c.currentTime);
+    osc.frequency.setValueAtTime(1047, c.currentTime + 0.03);
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.08);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.08);
+  }
+
+  // Coin collect (card click)
+  function playCardClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(988, c.currentTime);
+    osc.frequency.setValueAtTime(1319, c.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.linearRampToValueAtTime(0.06, c.currentTime + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+  }
+
+  // Pixel placement tick (nav pill)
+  function playNavClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(1500, c.currentTime);
+    gain.gain.setValueAtTime(0.05, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.05);
+  }
+
+  // Button click - action confirmation
+  function playBtnClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(523, c.currentTime);
+    osc.frequency.setValueAtTime(659, c.currentTime + 0.05);
+    osc.frequency.setValueAtTime(784, c.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.05, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+  }
+
+  // Level-up jingle intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    const melody = [523, 659, 784, 1047, 784, 1047];
+    const durations = [0.08, 0.08, 0.08, 0.12, 0.08, 0.16];
+    let t = c.currentTime;
+    melody.forEach(function(f,i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(f, t);
+      gain.gain.setValueAtTime(0.04, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + durations[i]);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t);
+      osc.stop(t + durations[i] + 0.02);
+      t += durations[i];
+    });
+  }
+
+  document.addEventListener('click', function(){playIntro();}, {once:true});
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHover);
+    el.addEventListener('click', playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', playBtnClick);
+  });
+})();
+</script>
 </body>
 </html>

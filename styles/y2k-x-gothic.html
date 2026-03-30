@@ -219,6 +219,97 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.36s}
 .grid-2 .card:nth-child(1){animation-delay:0.42s}
 .grid-2 .card:nth-child(2){animation-delay:0.48s}
+
+/* --- NEW ANIMATIONS --- */
+
+/* Chrome reflection sweep on surfaces */
+@keyframes chromeSweep{
+  0%{left:-100%;opacity:0;}
+  40%{opacity:0.4;}
+  100%{left:200%;opacity:0;}
+}
+.card::after{
+  content:'';position:absolute;top:0;left:-100%;
+  width:40%;height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.08), rgba(192,192,192,0.12), transparent);
+  animation:chromeSweep 5s ease-in-out infinite;
+  pointer-events:none;
+  transform:skewX(-15deg);
+}
+.card{overflow:hidden;}
+
+/* Gothic rose window mandala rotation */
+@keyframes mandalaRotate{
+  0%{transform:translateX(-50%) rotate(0deg);}
+  100%{transform:translateX(-50%) rotate(360deg);}
+}
+.card::before{
+  animation:mandalaRotate 30s linear infinite;
+  border-radius:50%;
+  width:50px;height:50px;
+  background:conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(74,26,107,0.15),
+    transparent,
+    rgba(255,105,180,0.1),
+    transparent,
+    rgba(74,26,107,0.15),
+    transparent,
+    rgba(255,105,180,0.1),
+    transparent
+  );
+}
+
+/* Stained glass color shift */
+@keyframes stainedGlassShift{
+  0%{border-image:linear-gradient(90deg, var(--y2k-pink), var(--gothic-purple)) 1;}
+  33%{border-image:linear-gradient(90deg, var(--y2k-aqua), var(--gothic-wine)) 1;}
+  66%{border-image:linear-gradient(90deg, var(--y2k-lilac), var(--y2k-pink)) 1;}
+  100%{border-image:linear-gradient(90deg, var(--y2k-pink), var(--gothic-purple)) 1;}
+}
+
+/* Cathedral arch reveal on card entrance */
+@keyframes archReveal{
+  0%{clip-path:polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%);}
+  100%{clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);}
+}
+.card{animation:gothIn 0.6s cubic-bezier(0.22,1,0.36,1) both, archReveal 0.8s ease-out both;}
+
+/* Chrome bubble float */
+@keyframes chromeBubble{
+  0%{transform:translateY(0) scale(1);opacity:0.6;}
+  50%{transform:translateY(-15px) scale(1.1);opacity:0.9;}
+  100%{transform:translateY(0) scale(1);opacity:0.6;}
+}
+.y2k-orb{
+  animation:chromeBubble 4s ease-in-out infinite;
+}
+
+/* Matrix-style falling characters overlay on hover */
+@keyframes matrixFall{
+  0%{transform:translateY(-100%);opacity:0.6;}
+  100%{transform:translateY(100%);opacity:0;}
+}
+
+/* Nav pill glow pulse */
+@keyframes navGlowPulse{
+  0%,100%{box-shadow:0 0 0 rgba(255,105,180,0);}
+  50%{box-shadow:0 0 12px rgba(255,105,180,0.3);}
+}
+.nav-pill.active{
+  animation:navGlowPulse 2s ease-in-out infinite;
+}
+
+/* Chrome text shimmer on stat values */
+@keyframes chromeTextShimmer{
+  0%{background-position:0% 50%;}
+  100%{background-position:200% 50%;}
+}
+.stat-value{
+  background-size:200% 100% !important;
+  animation:chromeTextShimmer 3s linear infinite;
+}
 </style>
 </head>
 <body>
@@ -394,5 +485,218 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let audioCtx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  // Windows startup-like chime
+  function playStartupChime(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    var notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach(function(f, i){
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = f;
+      var t = now + i * 0.1;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.06, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.4);
+    });
+  }
+
+  // Cathedral organ chord
+  function playOrganChord(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    var freqs = [130.81, 164.81, 196, 261.63]; // C3 E3 G3 C4
+    freqs.forEach(function(f){
+      // fundamental
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.value = f;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(0.025, now + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      var flt = ctx.createBiquadFilter();
+      flt.type = 'lowpass';
+      flt.frequency.value = 800;
+      osc.connect(flt);
+      flt.connect(g);
+      g.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.55);
+    });
+  }
+
+  // Dial-up modem burst
+  function playDialup(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(1000, now);
+    osc.frequency.linearRampToValueAtTime(2400, now + 0.05);
+    osc.frequency.linearRampToValueAtTime(1200, now + 0.1);
+    osc.frequency.linearRampToValueAtTime(2000, now + 0.15);
+    g.gain.setValueAtTime(0.04, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    osc.connect(g);
+    g.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  // Church bell toll
+  function playBellToll(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    // Bell fundamental
+    var osc1 = ctx.createOscillator();
+    var g1 = ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.value = 220;
+    g1.gain.setValueAtTime(0.1, now);
+    g1.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+    osc1.connect(g1);
+    g1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.65);
+    // Overtone
+    var osc2 = ctx.createOscillator();
+    var g2 = ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = 554;
+    g2.gain.setValueAtTime(0.05, now);
+    g2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc2.connect(g2);
+    g2.connect(ctx.destination);
+    osc2.start(now);
+    osc2.stop(now + 0.45);
+    // High partial
+    var osc3 = ctx.createOscillator();
+    var g3 = ctx.createGain();
+    osc3.type = 'sine';
+    osc3.frequency.value = 880;
+    g3.gain.setValueAtTime(0.03, now);
+    g3.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    osc3.connect(g3);
+    g3.connect(ctx.destination);
+    osc3.start(now);
+    osc3.stop(now + 0.3);
+  }
+
+  // Metallic chrome ping
+  function playChromePing(){
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(4000, now);
+    osc.frequency.exponentialRampToValueAtTime(2000, now + 0.15);
+    g.gain.setValueAtTime(0.08, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    osc.connect(g);
+    g.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  }
+
+  // Ambient intro - cathedral + Y2K boot
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const ctx = getCtx();
+    const now = ctx.currentTime;
+    // Deep organ drone
+    [65.41, 98, 130.81].forEach(function(f){
+      var osc = ctx.createOscillator();
+      var g = ctx.createGain();
+      var flt = ctx.createBiquadFilter();
+      osc.type = 'sawtooth';
+      osc.frequency.value = f;
+      flt.type = 'lowpass';
+      flt.frequency.value = 600;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(0.03, now + 0.2);
+      g.gain.linearRampToValueAtTime(0.025, now + 0.6);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+      osc.connect(flt);
+      flt.connect(g);
+      g.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 1);
+    });
+    // Y2K chime on top
+    setTimeout(function(){
+      var c = getCtx();
+      var t = c.currentTime;
+      [784, 1047].forEach(function(f, i){
+        var o = c.createOscillator();
+        var gn = c.createGain();
+        o.type = 'sine';
+        o.frequency.value = f;
+        var st = t + i * 0.15;
+        gn.gain.setValueAtTime(0, st);
+        gn.gain.linearRampToValueAtTime(0.04, st + 0.02);
+        gn.gain.exponentialRampToValueAtTime(0.001, st + 0.3);
+        o.connect(gn);
+        gn.connect(c.destination);
+        o.start(st);
+        o.stop(st + 0.35);
+      });
+    }, 400);
+  }
+
+  // First interaction triggers intro
+  function firstInteraction(){
+    playIntro();
+    document.removeEventListener('click', firstInteraction);
+    document.removeEventListener('mouseover', firstInteraction);
+  }
+  document.addEventListener('click', firstInteraction);
+  document.addEventListener('mouseover', firstInteraction);
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playChromePing(); });
+    el.addEventListener('click', function(){ playBellToll(); });
+  });
+
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playDialup(); });
+  });
+
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      playStartupChime();
+    });
+  });
+
+  document.querySelectorAll('.tag').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      playOrganChord();
+    });
+  });
+})();
+</script>
+
 </body>
 </html>

@@ -185,6 +185,72 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* -- SUNBURST GRADIENT ROTATION -- */
+@keyframes sunburstRotate{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(30deg)}
+}
+.retro-circle{
+  animation:sunburstRotate 6s ease-in-out alternate infinite;
+}
+
+/* -- DISCO SPARKLE DOTS -- */
+@keyframes discoDot{
+  0%,100%{opacity:0.04;transform:scale(1)}
+  50%{opacity:0.12;transform:scale(1.5)}
+}
+body::after{
+  content:'';position:fixed;z-index:0;pointer-events:none;
+  inset:0;
+  background-image:
+    radial-gradient(circle 2px, var(--mem-yellow) 100%, transparent 100%),
+    radial-gradient(circle 2px, var(--mem-pink) 100%, transparent 100%),
+    radial-gradient(circle 2px, var(--retro-orange) 100%, transparent 100%);
+  background-size:90px 90px, 130px 130px, 110px 110px;
+  background-position:10px 10px, 60px 60px, 30px 80px;
+  animation:discoDot 3s ease-in-out infinite;
+}
+
+/* -- LAVA LAMP BLOB -- */
+@keyframes lavaBlob{
+  0%,100%{border-radius:40% 60% 60% 40% / 60% 30% 70% 40%;transform:translate(0,0) scale(1)}
+  25%{border-radius:60% 40% 30% 70% / 50% 60% 40% 50%;transform:translate(10px,-15px) scale(1.05)}
+  50%{border-radius:30% 70% 50% 50% / 40% 50% 50% 60%;transform:translate(-5px,-25px) scale(0.95)}
+  75%{border-radius:50% 50% 70% 30% / 60% 40% 60% 40%;transform:translate(8px,-10px) scale(1.02)}
+}
+.container::before{
+  content:'';position:fixed;bottom:15%;left:5%;z-index:0;
+  width:60px;height:60px;
+  background:radial-gradient(circle, var(--retro-orange), var(--retro-rust));
+  opacity:0.06;
+  animation:lavaBlob 10s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* -- VINYL RECORD SPIN -- */
+@keyframes vinylSpin{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(360deg)}
+}
+.retro-circle::after{
+  content:'';position:absolute;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--bg);
+  animation:vinylSpin 4s linear infinite;
+  border:2px solid var(--retro-mustard);
+}
+
+/* -- WAVY TEXT on headings -- */
+@keyframes wavyText{
+  0%,100%{transform:translateY(0)}
+  25%{transform:translateY(-2px)}
+  75%{transform:translateY(2px)}
+}
+.card-title{
+  display:inline-block;
+  animation:wavyText 3s ease-in-out infinite;
+}
 </style>
 </head>
 <body>
@@ -321,5 +387,128 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // Funky bass pluck (card hover)
+  function playHover(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(110, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(55, c.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.12);
+  }
+
+  // Record scratch (card click)
+  function playCardClick(){
+    const c = getCtx();
+    const bufLen = c.sampleRate * 0.15;
+    const buf = c.createBuffer(1, bufLen, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufLen;i++){
+      data[i] = (Math.random()*2-1) * Math.exp(-i/(bufLen*0.2));
+    }
+    const src = c.createBufferSource();
+    const filt = c.createBiquadFilter();
+    const gain = c.createGain();
+    src.buffer = buf;
+    filt.type = 'bandpass';
+    filt.frequency.setValueAtTime(2000, c.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(500, c.currentTime + 0.15);
+    filt.Q.value = 3;
+    gain.gain.setValueAtTime(0.1, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+    src.connect(filt).connect(gain).connect(c.destination);
+    src.start(c.currentTime);
+  }
+
+  // Wah-wah guitar (nav pill)
+  function playNavClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const filt = c.createBiquadFilter();
+    const gain = c.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(220, c.currentTime);
+    filt.type = 'bandpass';
+    filt.Q.value = 8;
+    filt.frequency.setValueAtTime(400, c.currentTime);
+    filt.frequency.exponentialRampToValueAtTime(2000, c.currentTime + 0.08);
+    filt.frequency.exponentialRampToValueAtTime(400, c.currentTime + 0.16);
+    gain.gain.setValueAtTime(0.07, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+    osc.connect(filt).connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.2);
+  }
+
+  // Button click - funky confirmation
+  function playBtnClick(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(196, c.currentTime);
+    osc.frequency.setValueAtTime(262, c.currentTime + 0.07);
+    osc.frequency.setValueAtTime(330, c.currentTime + 0.14);
+    gain.gain.setValueAtTime(0.05, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.22);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.22);
+  }
+
+  // Groovy hi-hat intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    for(let i=0;i<6;i++){
+      const bufLen = c.sampleRate * 0.04;
+      const buf = c.createBuffer(1, bufLen, c.sampleRate);
+      const data = buf.getChannelData(0);
+      for(let j=0;j<bufLen;j++){
+        data[j] = (Math.random()*2-1) * Math.exp(-j/(bufLen*0.15));
+      }
+      const src = c.createBufferSource();
+      const filt = c.createBiquadFilter();
+      const gain = c.createGain();
+      src.buffer = buf;
+      filt.type = 'highpass';
+      filt.frequency.value = 7000;
+      gain.gain.setValueAtTime(i%2===0 ? 0.06 : 0.03, c.currentTime + i*0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + i*0.12 + 0.05);
+      src.connect(filt).connect(gain).connect(c.destination);
+      src.start(c.currentTime + i*0.12);
+    }
+  }
+
+  document.addEventListener('click', function(){playIntro();}, {once:true});
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHover);
+    el.addEventListener('click', playCardClick);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', playNavClick);
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', playBtnClick);
+  });
+})();
+</script>
 </body>
 </html>

@@ -256,6 +256,82 @@ body::before{
 .grid-3 .card:nth-child(3){animation-delay:0.30s}
 .grid-2 .card:nth-child(1){animation-delay:0.36s}
 .grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* === NEW ANIMATIONS === */
+
+/* Neon flicker on logo */
+@keyframes neonFlicker{
+  0%,93%,95%,97%,100%{opacity:1;text-shadow:0 0 20px rgba(57,255,20,0.4);}
+  94%{opacity:0.7;text-shadow:0 0 5px rgba(57,255,20,0.1);}
+  96%{opacity:0.85;text-shadow:0 0 10px rgba(57,255,20,0.2);}
+}
+.logo{animation:neonFlicker 4s infinite;}
+
+/* Scanning line across cards */
+.card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  opacity:0;
+  animation:scanLine 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes scanLine{
+  0%{top:0;opacity:0;}
+  5%{opacity:0.6;}
+  50%{top:100%;opacity:0.6;}
+  55%{opacity:0;}
+  100%{opacity:0;}
+}
+
+/* Geometric shapes rotating in background */
+body::after{
+  content:'';position:fixed;z-index:0;
+  width:200px;height:200px;
+  top:10%;right:5%;
+  border:1px solid rgba(255,214,10,0.06);
+  animation:geoRotate 25s linear infinite;
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 0 40px transparent,
+    -300px 200px 0 0 rgba(230,57,70,0.03),
+    -300px 200px 0 60px rgba(230,57,70,0.02);
+}
+@keyframes geoRotate{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+
+/* Glitch-shift on hover */
+@keyframes glitchShift{
+  0%,100%{transform:translate(0);}
+  20%{transform:translate(-2px, 1px);}
+  40%{transform:translate(2px, -1px);}
+  60%{transform:translate(-1px, -1px);}
+  80%{transform:translate(1px, 1px);}
+}
+.card:hover .card-title{
+  animation:glitchShift 0.3s ease;
+}
+
+/* Electric pulse on borders */
+@keyframes electricPulse{
+  0%,100%{border-left-color:var(--neon-green);box-shadow:inset 3px 0 8px rgba(57,255,20,0);}
+  50%{box-shadow:inset 3px 0 12px rgba(57,255,20,0.15);}
+}
+.card-green{animation:cyberIn 0.5s cubic-bezier(0.22,1,0.36,1) both, electricPulse 3s ease-in-out infinite;}
+.card-cyan{animation:cyberIn 0.5s cubic-bezier(0.22,1,0.36,1) both, electricPulse 3s ease-in-out 1s infinite;}
+
+/* Data flow on progress bars */
+@keyframes dataFlow{
+  0%{background-position:0% 0;}
+  100%{background-position:200% 0;}
+}
+.progress-fill{
+  background-size:200% 100%;
+  animation:dataFlow 2s linear infinite;
+}
+.pf-green{background:linear-gradient(90deg, var(--neon-green), rgba(57,255,20,0.5), var(--neon-green));background-size:200% 100%;}
+.pf-cyan{background:linear-gradient(90deg, var(--neon-cyan), rgba(0,240,255,0.5), var(--neon-cyan));background-size:200% 100%;}
 </style>
 </head>
 <body>
@@ -435,5 +511,123 @@ body::before{
   </div>
 
 </div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if(ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  // Sharp electronic zap for card hover
+  function playHoverZap(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(2000 + Math.random()*1000, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.03, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.08);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.08);
+  }
+
+  // Low synthwave bass hit for card click
+  function playBassHit(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    const dist = c.createWaveShaper();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(80, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(30, c.currentTime + 0.2);
+    const curve = new Float32Array(256);
+    for(let i=0;i<256;i++){const x=i*2/256-1;curve[i]=Math.tanh(x*2);}
+    dist.curve = curve;
+    gain.gain.setValueAtTime(0.12, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.25);
+    osc.connect(dist);
+    dist.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.25);
+  }
+
+  // Digital beep for nav pills
+  function playDigitalBeep(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(1200, c.currentTime);
+    osc.frequency.setValueAtTime(1600, c.currentTime + 0.04);
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.1);
+  }
+
+  // Action beep for buttons
+  function playBtnAction(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc2.type = 'square';
+    osc.frequency.setValueAtTime(800, c.currentTime);
+    osc2.frequency.setValueAtTime(1000, c.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.05, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime + 0.05);
+    osc.stop(c.currentTime + 0.12);
+    osc2.stop(c.currentTime + 0.12);
+  }
+
+  // Data transmission intro sound
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.7);
+    gain.connect(c.destination);
+    for(let i=0;i<8;i++){
+      const osc = c.createOscillator();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(400 + i*200, c.currentTime + i*0.07);
+      osc.connect(gain);
+      osc.start(c.currentTime + i*0.07);
+      osc.stop(c.currentTime + i*0.07 + 0.05);
+    }
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHoverZap);
+    el.addEventListener('click', playBassHit);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playDigitalBeep(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playBtnAction(); playIntro(); });
+  });
+  document.addEventListener('click', playIntro, {once:true});
+})();
+</script>
 </body>
 </html>
