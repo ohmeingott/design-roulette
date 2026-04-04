@@ -491,6 +491,143 @@ nav[aria-label="Style selector"] {
   box-shadow: 4px 4px 0 #000;
 }
 
+/* Liquid Glass — translucent refractive */
+.tab-btn[data-style="liquid-glass"] {
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #3a5a8c;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 100px;
+  box-shadow: 0 2px 16px rgba(0,113,227,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+.tab-btn[data-style="liquid-glass"]:hover,
+.tab-btn[data-style="liquid-glass"][aria-selected="true"] {
+  background: rgba(255,255,255,0.55);
+  box-shadow: 0 4px 24px rgba(0,113,227,0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+  color: #0071E3;
+  border-color: rgba(0,113,227,0.3);
+}
+
+/* Mono Electric — pure electric blue */
+.tab-btn[data-style="mono-electric"] {
+  background: #0a1628;
+  color: #4d9fff;
+  border: 1.5px solid #0066FF;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.tab-btn[data-style="mono-electric"]:hover,
+.tab-btn[data-style="mono-electric"][aria-selected="true"] {
+  background: #0066FF;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(0,102,255,0.4);
+}
+
+/* Earthy Organic — warm natural */
+.tab-btn[data-style="earthy-organic"] {
+  background: #F5F0EB;
+  color: #6b4a3a;
+  border: 1.5px solid #D4A574;
+  border-radius: 24px;
+}
+.tab-btn[data-style="earthy-organic"]:hover,
+.tab-btn[data-style="earthy-organic"][aria-selected="true"] {
+  background: #C4654A;
+  color: #fff;
+  border-color: #C4654A;
+  box-shadow: 0 3px 12px rgba(196,101,74,0.25);
+}
+
+/* Kinetic Type — bold black & yellow */
+.tab-btn[data-style="kinetic-type"] {
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 0;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.7rem;
+}
+.tab-btn[data-style="kinetic-type"]:hover,
+.tab-btn[data-style="kinetic-type"][aria-selected="true"] {
+  background: #FFE600;
+  color: #000;
+  border-color: #FFE600;
+}
+
+/* Dark Luxe — premium gold */
+.tab-btn[data-style="dark-luxe"] {
+  background: #0C0A09;
+  color: #C9A96E;
+  border: 1px solid #3a3020;
+  border-radius: 100px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+.tab-btn[data-style="dark-luxe"]:hover,
+.tab-btn[data-style="dark-luxe"][aria-selected="true"] {
+  background: linear-gradient(135deg, #1a1510, #2a2010);
+  border-color: #C9A96E;
+  box-shadow: 0 0 16px rgba(201,169,110,0.2);
+  color: #f0d9a0;
+}
+
+/* Candy Pop — bright playful */
+.tab-btn[data-style="candy-pop"] {
+  background: linear-gradient(135deg, #FF3399, #7C3AED);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  font-weight: 700;
+  box-shadow: 0 3px 12px rgba(255,51,153,0.25);
+}
+.tab-btn[data-style="candy-pop"]:hover,
+.tab-btn[data-style="candy-pop"][aria-selected="true"] {
+  background: linear-gradient(135deg, #FFD60A, #FF3399);
+  box-shadow: 0 4px 20px rgba(255,51,153,0.35);
+  color: #000;
+}
+
+/* Terminal Hacker — matrix green */
+.tab-btn[data-style="terminal-hacker"] {
+  background: #000;
+  color: #00FF41;
+  border: 1px solid #00AA2A;
+  border-radius: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+.tab-btn[data-style="terminal-hacker"]::before {
+  content: '> ';
+  opacity: 0.5;
+}
+.tab-btn[data-style="terminal-hacker"]:hover,
+.tab-btn[data-style="terminal-hacker"][aria-selected="true"] {
+  background: #00FF41;
+  color: #000;
+  box-shadow: 0 0 14px rgba(0,255,65,0.3);
+  text-shadow: none;
+}
+
+/* Soft Matte — muted pastels */
+.tab-btn[data-style="soft-matte"] {
+  background: #e8e3dd;
+  color: #6b6560;
+  border: none;
+  border-radius: 10px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+.tab-btn[data-style="soft-matte"]:hover,
+.tab-btn[data-style="soft-matte"][aria-selected="true"] {
+  background: #9CAF88;
+  color: #fff;
+}
+
 /* -- STYLE INFO -- */
 .style-meta {
   max-width: 960px;
@@ -702,6 +839,54 @@ footer p {
       <button class="tab-btn" role="tab" aria-selected="false" data-style="kawaii" data-src="styles/kawaii-x-brutal.html" data-name="Kawaii &times; Brutal" data-tagline="Bubblegum cute Japanese aesthetics caged in heavy black brutalist frames &mdash; pink meets concrete.">
         <span class="tab-dot" aria-hidden="true"></span>
         Kawaii &times; Brutal
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="liquid-glass" data-src="styles/liquid-glass.html" data-name="Liquid Glass" data-tagline="Apple-inspired translucent glass UI with refractive blur, soft light, and layered depth.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Liquid Glass
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="mono-electric" data-src="styles/mono-electric.html" data-name="Mono Electric" data-tagline="Single bold electric blue pushed to extremes &mdash; high contrast, modern, striking.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Mono Electric
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="earthy-organic" data-src="styles/earthy-organic.html" data-name="Earthy Organic" data-tagline="Warm clay, terracotta, and sage tones with rounded shapes &mdash; grounded and refined.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Earthy Organic
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="kinetic-type" data-src="styles/kinetic-type.html" data-name="Kinetic Type" data-tagline="Bold oversized typography-driven design &mdash; massive headings, black-and-white with electric yellow.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Kinetic Type
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="dark-luxe" data-src="styles/dark-luxe.html" data-name="Dark Luxe" data-tagline="Premium dark theme with champagne and gold accents &mdash; elegant serif typography, luxury feel.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Dark Luxe
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="candy-pop" data-src="styles/candy-pop.html" data-name="Candy Pop" data-tagline="Bright playful gradients, bubbly shapes, saturated pinks and purples &mdash; joyful and energetic.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Candy Pop
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="terminal-hacker" data-src="styles/terminal-hacker.html" data-name="Terminal Hacker" data-tagline="Green-on-black terminal aesthetic with monospace type, scanlines, and CRT glow.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Terminal Hacker
+      </button>
+    </li>
+    <li>
+      <button class="tab-btn" role="tab" aria-selected="false" data-style="soft-matte" data-src="styles/soft-matte.html" data-name="Soft Matte" data-tagline="Muted desaturated pastels with flat matte surfaces &mdash; Scandinavian calm, ultra-clean.">
+        <span class="tab-dot" aria-hidden="true"></span>
+        Soft Matte
       </button>
     </li>
   </ul>

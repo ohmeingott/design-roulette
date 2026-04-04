@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Luxe - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg: #0C0A09;
+  --surface: #1A1715;
+  --surface-elevated: #221F1A;
+  --gold: #C9A96E;
+  --gold-dim: #8B7A5E;
+  --gold-bright: #E4C88A;
+  --ivory: #F5E6D0;
+  --ivory-soft: #C4B8A5;
+  --ivory-muted: #7A7168;
+  --border: rgba(201,169,110,0.12);
+  --border-hover: rgba(201,169,110,0.25);
+  --shadow: 0 4px 24px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+  --glow-gold: 0 0 30px rgba(201,169,110,0.08);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ivory);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+  line-height:1.7;
+  font-weight:300;
+}
+
+/* Warm ambient glow */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 25% 20%, rgba(201,169,110,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 30%, rgba(201,169,110,0.04) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 80%, rgba(139,122,94,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 10% 70%, rgba(201,169,110,0.03) 0%, transparent 40%);
+  animation:ambientWarmth 20s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes ambientWarmth{
+  0%{opacity:1;filter:brightness(1);}
+  50%{opacity:0.8;filter:brightness(1.1);}
+  100%{opacity:1;filter:brightness(0.95);}
+}
+
+/* Subtle gold dust particles */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(201,169,110,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 45%, rgba(228,200,138,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 25%, rgba(201,169,110,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 60%, rgba(228,200,138,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 35%, rgba(201,169,110,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 55%, rgba(228,200,138,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 20%, rgba(201,169,110,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 75%, rgba(228,200,138,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 85%, rgba(201,169,110,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 80%, rgba(228,200,138,0.2) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 10%, rgba(201,169,110,0.35) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 30% 55%, rgba(228,200,138,0.18) 0%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 85% 40%, rgba(201,169,110,0.4) 0%, transparent 100%),
+    radial-gradient(0.5px 0.5px at 40% 70%, rgba(228,200,138,0.3) 0%, transparent 100%);
+  animation:dustFloat 25s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes dustFloat{
+  0%{transform:translateY(0) translateX(0);}
+  33%{transform:translateY(-8px) translateX(5px);}
+  66%{transform:translateY(5px) translateX(-3px);}
+  100%{transform:translateY(-3px) translateX(8px);}
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Header */
+.header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.2rem 2rem;margin-bottom:2rem;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow), var(--glow-gold);
+}
+.logo{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:700;font-size:1.6rem;
+  color:var(--gold);
+  letter-spacing:0.06em;
+  text-shadow:0 0 20px rgba(201,169,110,0.2);
+}
+.nav-pills{display:flex;gap:0.3rem;}
+.nav-pill{
+  padding:0.5rem 1.1rem;border-radius:10px;
+  font-size:0.75rem;font-weight:500;letter-spacing:0.04em;
+  color:var(--ivory-muted);cursor:pointer;
+  transition:all 0.3s ease;
+  border:1px solid transparent;
+}
+.nav-pill:hover{
+  color:var(--ivory-soft);
+  background:rgba(201,169,110,0.06);
+  border-color:rgba(201,169,110,0.1);
+}
+.nav-pill.active{
+  color:var(--gold);
+  background:rgba(201,169,110,0.1);
+  border-color:rgba(201,169,110,0.2);
+  box-shadow:0 0 15px rgba(201,169,110,0.06);
+}
+
+/* Grid layouts */
+.grid-hero{display:grid;grid-template-columns:1.5fr 1fr;gap:1.2rem;margin-bottom:1.5rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.5rem;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* Cards */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem 1.6rem;
+  box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+  transition:all 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.card::before{
+  content:'';position:absolute;inset:-1px;border-radius:16px;
+  background:linear-gradient(135deg, rgba(201,169,110,0.15), transparent 40%, transparent 60%, rgba(201,169,110,0.08));
+  opacity:0;transition:opacity 0.4s ease;pointer-events:none;z-index:1;
+}
+.card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-lg), 0 0 40px rgba(201,169,110,0.06);
+  transform:translateY(-2px);
+}
+.card:hover::before{opacity:1;}
+
+/* Gold divider */
+.luxe-divider{
+  height:1px;margin:0.3rem 3rem 1.2rem;
+  background:linear-gradient(90deg, transparent, rgba(201,169,110,0.2), rgba(228,200,138,0.15), rgba(201,169,110,0.2), transparent);
+  border-radius:1px;position:relative;
+}
+.luxe-divider::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg, transparent, rgba(201,169,110,0.25), transparent);
+  background-size:200% 100%;
+  animation:goldShimmer 6s ease infinite;
+  filter:blur(3px);
+}
+@keyframes goldShimmer{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Typography */
+.card-subtitle{
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:0.15em;
+  color:var(--gold-dim);margin-bottom:0.6rem;font-weight:500;
+}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.2rem;font-weight:600;color:var(--ivory);
+  letter-spacing:0.02em;line-height:1.3;
+}
+.card-body{
+  font-size:0.8rem;color:var(--ivory-soft);line-height:1.7;
+  margin-top:0.5rem;font-weight:300;
+}
+
+/* Badge */
+.badge{
+  display:inline-block;padding:0.25rem 0.75rem;border-radius:20px;
+  font-size:0.65rem;font-weight:600;letter-spacing:0.04em;
+  background:linear-gradient(135deg, rgba(201,169,110,0.2), rgba(201,169,110,0.1));
+  color:var(--gold-bright);
+  border:1px solid rgba(201,169,110,0.2);
+}
+
+/* Buttons */
+.btn{
+  padding:0.55rem 1.2rem;border-radius:10px;border:1px solid var(--border);
+  font-size:0.72rem;font-weight:500;cursor:pointer;
+  background:transparent;color:var(--ivory-soft);
+  font-family:'Inter',sans-serif;letter-spacing:0.03em;
+  transition:all 0.3s ease;
+}
+.btn:hover{border-color:var(--border-hover);color:var(--ivory);background:rgba(201,169,110,0.05);}
+.btn-gold{
+  background:linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color:var(--bg);border-color:var(--gold);font-weight:600;
+  box-shadow:0 0 20px rgba(201,169,110,0.15);
+}
+.btn-gold:hover{
+  background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+  box-shadow:0 0 30px rgba(201,169,110,0.25);
+  transform:translateY(-1px);
+}
+
+/* Completion orb */
+.orb{
+  width:110px;height:110px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 35% 35%, var(--surface-elevated), var(--surface));
+  border:2px solid rgba(201,169,110,0.2);
+  box-shadow:0 0 30px rgba(201,169,110,0.08), inset 0 0 20px rgba(0,0,0,0.3);
+  position:relative;
+}
+.orb::after{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  background:conic-gradient(from 0deg, var(--gold), transparent 86%, transparent);
+  opacity:0.4;z-index:-1;
+  animation:orbGlow 4s linear infinite;
+}
+@keyframes orbGlow{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+.orb-val{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;font-weight:700;color:var(--gold-bright);
+  line-height:1;
+}
+.orb-lbl{font-size:0.6rem;color:var(--gold-dim);text-transform:uppercase;letter-spacing:0.12em;margin-top:0.2rem;}
+
+/* Progress bar */
+.progress-track{
+  height:5px;border-radius:4px;
+  background:rgba(201,169,110,0.08);
+  overflow:hidden;margin-top:0.8rem;
+}
+.progress-fill{
+  height:100%;border-radius:4px;
+  transition:width 1s ease;
+}
+.pf-gold{background:linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-bright));}
+.pf-warm{background:linear-gradient(90deg, var(--gold-dim), var(--gold));}
+
+/* Bar chart */
+.luxe-bars{
+  display:flex;align-items:flex-end;gap:0.5rem;height:80px;
+  padding-bottom:1.2rem;position:relative;
+}
+.luxe-bars::after{
+  content:'';position:absolute;bottom:1.1rem;left:0;right:0;height:1px;
+  background:rgba(201,169,110,0.1);
+}
+.luxe-bar{
+  flex:1;border-radius:4px 4px 0 0;position:relative;
+  transition:all 0.3s ease;min-height:4px;
+}
+.luxe-bar:hover{filter:brightness(1.2);transform:scaleY(1.05);transform-origin:bottom;}
+.luxe-bar-lbl{
+  position:absolute;bottom:-1.1rem;left:50%;transform:translateX(-50%);
+  font-size:0.55rem;color:var(--ivory-muted);letter-spacing:0.04em;
+}
+
+/* Avatars */
+.avatar-stack{display:flex;}
+.avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:600;color:var(--bg);
+  margin-left:-8px;
+  border:2px solid var(--surface);
+  box-shadow:0 2px 8px rgba(0,0,0,0.3);
+  transition:transform 0.2s ease;
+}
+.avatar:first-child{margin-left:0;}
+.avatar:hover{transform:translateY(-3px) scale(1.1);z-index:10!important;}
+
+/* Tags */
+.tag{
+  display:inline-block;padding:0.2rem 0.6rem;border-radius:6px;
+  font-size:0.6rem;font-weight:500;letter-spacing:0.03em;
+}
+.tag-gold{background:rgba(201,169,110,0.15);color:var(--gold);}
+.tag-warm{background:rgba(139,122,94,0.2);color:var(--ivory-soft);}
+.tag-champagne{background:rgba(245,230,208,0.1);color:var(--ivory-soft);}
+.tag-amber{background:rgba(201,169,110,0.12);color:var(--gold-dim);}
+.tag-ivory{background:rgba(245,230,208,0.08);color:var(--ivory-muted);}
+
+/* Gold ring icon */
+.gold-ring{
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-weight:700;
+  background:radial-gradient(circle, var(--surface-elevated), var(--surface));
+  border:1.5px solid rgba(201,169,110,0.25);
+  color:var(--gold);
+  box-shadow:0 0 12px rgba(201,169,110,0.08);
+}
+
+/* Tasks */
+.task-item{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.55rem 0;
+  border-bottom:1px solid rgba(201,169,110,0.06);
+  transition:background 0.2s ease;
+}
+.task-item:last-child{border-bottom:none;}
+.task-item:hover{background:rgba(201,169,110,0.03);margin:0 -0.5rem;padding-left:0.5rem;padding-right:0.5rem;border-radius:8px;}
+.task-check{
+  width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--gold-dim);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;color:transparent;flex-shrink:0;
+  transition:all 0.3s ease;
+}
+.task-check.done{
+  background:linear-gradient(135deg, var(--gold), var(--gold-dim));
+  border-color:var(--gold);color:var(--bg);
+}
+.task-text{font-size:0.78rem;color:var(--ivory-soft);font-weight:400;}
+.task-text.done{text-decoration:line-through;color:var(--ivory-muted);opacity:0.6;}
+
+/* Activity feed */
+.feed-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.6rem 0;
+  border-bottom:1px solid rgba(201,169,110,0.06);
+  transition:background 0.2s ease;
+}
+.feed-item:last-child{border-bottom:none;}
+.feed-item:hover{background:rgba(201,169,110,0.03);margin:0 -0.5rem;padding-left:0.5rem;padding-right:0.5rem;border-radius:8px;}
+
+/* Sparkline */
+.sparkline-wrap{margin-top:0.8rem;height:40px;overflow:hidden;opacity:0.6;}
+.sparkline-svg{width:100%;height:100%;}
+
+/* Animations */
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(20px) scale(0.98)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.card,.header{animation:fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.07s}
+.grid-hero .card:nth-child(2){animation-delay:0.14s}
+.grid-3 .card:nth-child(1){animation-delay:0.21s}
+.grid-3 .card:nth-child(2){animation-delay:0.28s}
+.grid-3 .card:nth-child(3){animation-delay:0.35s}
+.grid-2 .card:nth-child(1){animation-delay:0.42s}
+.grid-2 .card:nth-child(2){animation-delay:0.49s}
+
+/* Warm light shaft */
+.light-shaft{
+  position:absolute;top:0;right:0;width:50%;height:100%;
+  background:linear-gradient(135deg, transparent 30%, rgba(201,169,110,0.03) 50%, transparent 70%);
+  pointer-events:none;
+}
+
+/* Subtle gold pulse on card corners */
+@keyframes cornerPulse{
+  0%,100%{opacity:0.3;}
+  50%{opacity:0.6;}
+}
+.card::after{
+  content:'';position:absolute;top:-1px;right:-1px;
+  width:40px;height:40px;
+  background:radial-gradient(circle at 100% 0%, rgba(201,169,110,0.12), transparent 70%);
+  pointer-events:none;z-index:2;
+  animation:cornerPulse 5s ease-in-out infinite;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Dark Luxe</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card">
+      <div class="light-shaft"></div>
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title" style="font-size:1.55rem;">Exceeding every benchmark</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.4rem;margin-top:1.3rem;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--ivory-muted);">Velocity</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.9rem;color:var(--gold-bright);">42 pts</div>
+        </div>
+        <div>
+          <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--ivory-muted);">Target</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.9rem;color:var(--ivory);">34 pts</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <span class="badge">&uarr; 24%</span>
+        </div>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-gold">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-subtitle">Completion</div>
+      <div class="orb" style="margin:1.2rem auto;">
+        <div class="orb-val">86%</div>
+        <div class="orb-lbl">Done</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-gold" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="luxe-divider"></div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div class="gold-ring" style="width:42px;height:42px;font-size:0.9rem;">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">Deploys</div>
+          <div style="font-size:0.7rem;color:var(--ivory-muted);">this week</div>
+        </div>
+      </div>
+      <div class="luxe-bars" style="margin-bottom:1.4rem;">
+        <div class="luxe-bar" style="height:30%;background:linear-gradient(180deg,rgba(201,169,110,0.5),rgba(139,122,94,0.3));">
+          <div class="luxe-bar-lbl">Mon</div>
+        </div>
+        <div class="luxe-bar" style="height:55%;background:linear-gradient(180deg,rgba(201,169,110,0.6),rgba(139,122,94,0.35));">
+          <div class="luxe-bar-lbl">Tue</div>
+        </div>
+        <div class="luxe-bar" style="height:80%;background:linear-gradient(180deg,rgba(228,200,138,0.65),rgba(201,169,110,0.4));">
+          <div class="luxe-bar-lbl">Wed</div>
+        </div>
+        <div class="luxe-bar" style="height:45%;background:linear-gradient(180deg,rgba(201,169,110,0.55),rgba(139,122,94,0.3));">
+          <div class="luxe-bar-lbl">Thu</div>
+        </div>
+        <div class="luxe-bar" style="height:100%;background:linear-gradient(180deg,rgba(228,200,138,0.7),rgba(201,169,110,0.45));">
+          <div class="luxe-bar-lbl">Fri</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-stack" style="margin-bottom:0.8rem;">
+        <div class="avatar" style="background:linear-gradient(135deg,var(--gold),var(--gold-bright));z-index:4;">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--gold-dim),var(--gold));z-index:3;">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--ivory-soft),var(--ivory));z-index:2;">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--gold-bright),#D4B87A);z-index:1;">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.25rem;">
+        <span class="tag tag-gold">Design</span>
+        <span class="tag tag-warm">Frontend</span>
+        <span class="tag tag-champagne">Backend</span>
+      </div>
+      <div class="sparkline-wrap">
+        <svg class="sparkline-svg" viewBox="0 0 200 50" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--gold-dim)"/>
+              <stop offset="50%" stop-color="var(--gold)"/>
+              <stop offset="100%" stop-color="var(--gold-bright)"/>
+            </linearGradient>
+            <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--gold)" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,35 C20,30 35,15 55,20 C75,25 85,10 105,8 C125,6 140,22 160,18 C180,14 195,5 200,3" fill="none" stroke="url(#sparkGrad)" stroke-width="2"/>
+          <path d="M0,35 C20,30 35,15 55,20 C75,25 85,10 105,8 C125,6 140,22 160,18 C180,14 195,5 200,3 L200,50 L0,50 Z" fill="url(#sparkFill)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.9rem;color:var(--gold-bright);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ivory-muted);letter-spacing:0.15em;">P50</div>
+        </div>
+        <div style="width:1px;background:linear-gradient(180deg, transparent, rgba(201,169,110,0.15), transparent);"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.9rem;color:var(--ivory);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:uppercase;color:var(--ivory-muted);letter-spacing:0.15em;">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-warm" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.6rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:var(--ivory-muted);">Uptime</span>
+        <span style="font-size:0.65rem;font-weight:600;color:var(--gold);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="luxe-divider"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-warm" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-gold" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-champagne" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-warm" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-amber" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-ivory" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="light-shaft"></div>
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;">
+        <div class="feed-item">
+          <div class="gold-ring" style="width:34px;height:34px;font-size:0.7rem;">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong style="color:var(--ivory);">Paul</strong> <span style="color:var(--ivory-muted);">merged</span></div>
+            <span class="tag tag-warm" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ivory-muted);">2m</span>
+        </div>
+        <div class="feed-item">
+          <div class="gold-ring" style="width:34px;height:34px;font-size:0.7rem;">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong style="color:var(--ivory);">Anna</strong> <span style="color:var(--ivory-muted);">opened</span></div>
+            <span class="tag tag-gold" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ivory-muted);">18m</span>
+        </div>
+        <div class="feed-item">
+          <div class="gold-ring" style="width:34px;height:34px;font-size:0.7rem;">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong style="color:var(--ivory);">Kai</strong> <span style="color:var(--ivory-muted);">deployed</span></div>
+            <span class="tag tag-champagne" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ivory-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new AudioContext();
+    return ctx;
+  }
+
+  function ensureCtx(){
+    const c = getCtx();
+    if(c.state === 'suspended') c.resume();
+    return c;
+  }
+
+  // Soft crystal chime (card hover)
+  function playChime(){
+    const c = ensureCtx(), t = c.currentTime;
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    const pick = notes[Math.floor(Math.random() * notes.length)];
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    const filter = c.createBiquadFilter();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(pick, t);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(pick * 2, t);
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(3000, t);
+    filter.frequency.exponentialRampToValueAtTime(800, t + 0.4);
+    gain.gain.setValueAtTime(0.06, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+    osc.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain).connect(c.destination);
+    osc.start(t); osc2.start(t);
+    osc.stop(t + 0.5); osc2.stop(t + 0.5);
+  }
+
+  // Rich warm tone (card click)
+  function playRichTone(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    const filter = c.createBiquadFilter();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(261.63, t); // C4
+    osc.frequency.exponentialRampToValueAtTime(329.63, t + 0.1); // E4
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(392, t); // G4
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2000, t);
+    filter.frequency.exponentialRampToValueAtTime(500, t + 0.3);
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain).connect(c.destination);
+    osc.start(t); osc2.start(t);
+    osc.stop(t + 0.35); osc2.stop(t + 0.35);
+  }
+
+  // Velvet click (nav pill)
+  function playVelvetClick(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1200, t);
+    osc.frequency.exponentialRampToValueAtTime(600, t + 0.04);
+    gain.gain.setValueAtTime(0.07, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t); osc.stop(t + 0.08);
+  }
+
+  // Soft silk brush (button hover/click)
+  function playSilkBrush(){
+    const c = ensureCtx(), t = c.currentTime;
+    const bufSize = c.sampleRate * 0.06;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i = 0; i < bufSize; i++) d[i] = (Math.random() * 2 - 1) * 0.3;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const filter = c.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 3000;
+    filter.Q.value = 2;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.06, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    src.connect(filter).connect(gain).connect(c.destination);
+    src.start(t);
+  }
+
+  // Luxurious ambient intro (warm pad with golden harmonics)
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = ensureCtx(), t = c.currentTime;
+    // Warm pad
+    const pad = c.createOscillator();
+    const pad2 = c.createOscillator();
+    const padGain = c.createGain();
+    const padFilter = c.createBiquadFilter();
+    pad.type = 'sine';
+    pad.frequency.setValueAtTime(130.81, t); // C3
+    pad2.type = 'sine';
+    pad2.frequency.setValueAtTime(196, t); // G3 - perfect fifth
+    padFilter.type = 'lowpass';
+    padFilter.frequency.setValueAtTime(400, t);
+    padFilter.frequency.linearRampToValueAtTime(800, t + 0.3);
+    padFilter.frequency.linearRampToValueAtTime(300, t + 1);
+    padGain.gain.setValueAtTime(0, t);
+    padGain.gain.linearRampToValueAtTime(0.05, t + 0.25);
+    padGain.gain.linearRampToValueAtTime(0, t + 1);
+    pad.connect(padFilter);
+    pad2.connect(padFilter);
+    padFilter.connect(padGain).connect(c.destination);
+    pad.start(t); pad2.start(t);
+    pad.stop(t + 1.1); pad2.stop(t + 1.1);
+    // Gentle high chime
+    const chime = c.createOscillator();
+    const chimeGain = c.createGain();
+    chime.type = 'sine';
+    chime.frequency.setValueAtTime(1046.5, t + 0.2); // C6
+    chimeGain.gain.setValueAtTime(0, t);
+    chimeGain.gain.linearRampToValueAtTime(0.03, t + 0.25);
+    chimeGain.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+    chime.connect(chimeGain).connect(c.destination);
+    chime.start(t + 0.2); chime.stop(t + 0.9);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playChime(); playIntro(); });
+    el.addEventListener('click', function(){ playRichTone(); playIntro(); });
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playVelvetClick(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(e){ e.stopPropagation(); playSilkBrush(); playIntro(); });
+  });
+})();
+</script>
+</body>
+</html>

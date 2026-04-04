@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinetic Type - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg: #000000;
+  --ink: #ffffff;
+  --ink-soft: #bbbbbb;
+  --ink-muted: #666666;
+  --accent: #FFE600;
+  --border: rgba(255,255,255,0.2);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Space Mono',monospace;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Header */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  border-bottom:2px solid var(--ink);
+  padding-bottom:1.5rem;
+}
+.logo{
+  font-family:'Anton',sans-serif;
+  font-size:3.5rem;
+  letter-spacing:-2px;
+  line-height:0.85;
+  text-transform:uppercase;
+  color:var(--ink);
+  position:relative;
+}
+.logo::after{
+  content:'';
+  display:block;
+  width:100%;height:4px;
+  background:var(--accent);
+  margin-top:4px;
+}
+
+.nav-pills{display:flex;gap:0;}
+.nav-pill{
+  padding:0.5rem 1.2rem;
+  font-family:'Space Mono',monospace;
+  font-size:0.7rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--ink-muted);
+  cursor:pointer;
+  border:1px solid var(--border);
+  border-right:none;
+  transition:all 0.15s ease;
+  position:relative;
+}
+.nav-pill:last-child{border-right:1px solid var(--border);}
+.nav-pill.active{
+  color:var(--bg);
+  background:var(--ink);
+}
+.nav-pill:hover:not(.active){
+  color:var(--ink);
+  background:rgba(255,255,255,0.05);
+}
+
+/* Cards */
+.card{
+  border:1px solid var(--border);
+  padding:1.8rem;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.2s ease;
+  cursor:pointer;
+}
+.card:hover{
+  border-color:var(--accent);
+}
+
+.card-label{
+  font-family:'Space Mono',monospace;
+  font-size:0.6rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:3px;
+  color:var(--ink-muted);
+  margin-bottom:1rem;
+}
+
+.card-title{
+  font-family:'Anton',sans-serif;
+  font-size:2rem;
+  text-transform:uppercase;
+  letter-spacing:-1px;
+  line-height:0.95;
+  margin-bottom:0.8rem;
+}
+
+/* Giant metric numbers */
+.metric-giant{
+  font-family:'Anton',sans-serif;
+  font-size:5rem;
+  line-height:0.85;
+  letter-spacing:-3px;
+  color:var(--ink);
+}
+.metric-giant.accent{color:var(--accent);}
+
+.metric-unit{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--ink-muted);
+}
+
+/* Badge */
+.badge{
+  display:inline-block;
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  font-weight:700;
+  letter-spacing:1px;
+  padding:0.25rem 0.6rem;
+  border:1px solid var(--accent);
+  color:var(--accent);
+}
+
+/* Buttons */
+.btn{
+  font-family:'Space Mono',monospace;
+  font-size:0.65rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  padding:0.5rem 1.2rem;
+  border:1px solid var(--ink);
+  background:transparent;
+  color:var(--ink);
+  cursor:pointer;
+  transition:all 0.15s ease;
+}
+.btn:hover{background:var(--ink);color:var(--bg);}
+.btn.primary{
+  background:var(--accent);
+  color:var(--bg);
+  border-color:var(--accent);
+}
+.btn.primary:hover{
+  background:transparent;
+  color:var(--accent);
+}
+
+/* Grids */
+.grid-hero{
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr;
+  gap:0;
+  margin-bottom:0;
+}
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  margin-bottom:0;
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:0;
+}
+
+/* Remove double borders */
+.grid-hero .card,
+.grid-3 .card,
+.grid-2 .card{
+  margin-top:-1px;
+  margin-left:-1px;
+}
+.grid-hero{margin-left:1px;margin-top:1px;}
+.grid-3{margin-left:1px;}
+.grid-2{margin-left:1px;}
+
+/* Progress bar */
+.progress-track{
+  width:100%;height:3px;
+  background:rgba(255,255,255,0.1);
+  margin:1rem 0 0.5rem;
+}
+.progress-fill{
+  height:100%;
+  background:var(--accent);
+  transition:width 0.6s ease;
+}
+
+/* Bar chart */
+.bar-chart{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  height:60px;
+  margin:1rem 0 0.5rem;
+}
+.bar-col{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+.bar{
+  width:100%;
+  background:var(--ink);
+  min-height:2px;
+  transition:height 0.3s ease;
+}
+.bar.highlight{background:var(--accent);}
+.bar-label{
+  font-size:0.5rem;
+  letter-spacing:1px;
+  color:var(--ink-muted);
+  text-transform:uppercase;
+}
+
+/* Avatars */
+.avatar-row{display:flex;gap:0.6rem;margin:0.8rem 0;}
+.avatar{
+  width:36px;height:36px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anton',sans-serif;
+  font-size:1rem;
+  color:var(--ink);
+  transition:border-color 0.2s ease;
+}
+.avatar:hover{border-color:var(--accent);color:var(--accent);}
+
+.tag{
+  display:inline-block;
+  font-family:'Space Mono',monospace;
+  font-size:0.55rem;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:var(--ink-muted);
+  border:1px solid rgba(255,255,255,0.1);
+  padding:0.2rem 0.5rem;
+  margin-right:0.3rem;
+  margin-top:0.3rem;
+}
+
+/* Task list */
+.task-list{list-style:none;margin:0.8rem 0;}
+.task-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.5rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:0.75rem;
+  letter-spacing:0.5px;
+}
+.task-check{
+  width:14px;height:14px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.6rem;
+  flex-shrink:0;
+}
+.task-check.done{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+.task-item.done{color:var(--ink-muted);text-decoration:line-through;}
+
+/* Activity feed */
+.activity-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.5rem 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:0.72rem;
+}
+.activity-text{flex:1;}
+.activity-text strong{color:var(--accent);font-weight:700;}
+.activity-time{
+  font-size:0.6rem;
+  color:var(--ink-muted);
+  letter-spacing:1px;
+  white-space:nowrap;
+  margin-left:1rem;
+}
+
+/* Oversized decorative type */
+.bleed-letter{
+  position:absolute;
+  font-family:'Anton',sans-serif;
+  font-size:12rem;
+  line-height:1;
+  color:rgba(255,255,255,0.03);
+  pointer-events:none;
+  z-index:0;
+  text-transform:uppercase;
+}
+
+/* Stacked type effect on hero */
+.stacked-type{
+  position:relative;
+  display:inline-block;
+}
+.stacked-type::before{
+  content:attr(data-text);
+  position:absolute;
+  top:2px;left:2px;
+  color:var(--accent);
+  z-index:-1;
+  opacity:0.4;
+}
+
+/* Responsive */
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+  .logo{font-size:2.5rem;}
+  .metric-giant{font-size:3.5rem;}
+  .header{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Kinetic Type</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <!-- Card 1: Sprint overview -->
+    <div class="card">
+      <span class="bleed-letter" style="top:-40px;right:-20px;">S</span>
+      <div class="card-label">Sprint Overview</div>
+      <div style="display:flex;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;">
+        <div>
+          <div class="metric-unit">Velocity</div>
+          <div class="metric-giant stacked-type" data-text="42">42</div>
+          <div class="metric-unit">Points</div>
+        </div>
+        <div>
+          <div class="metric-unit">Target</div>
+          <div class="metric-giant" style="font-size:3rem;color:var(--ink-muted);">34</div>
+          <div class="metric-unit">Points</div>
+        </div>
+        <div style="margin-bottom:0.5rem;">
+          <span class="badge">+24%</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.6rem;margin-top:1.5rem;">
+        <button class="btn primary">View Sprint</button>
+        <button class="btn">History</button>
+      </div>
+    </div>
+
+    <!-- Card 2: Completion gauge -->
+    <div class="card">
+      <span class="bleed-letter" style="top:-30px;right:-10px;">%</span>
+      <div class="card-label">Completion</div>
+      <div class="metric-giant accent" style="font-size:6rem;">86</div>
+      <div class="metric-unit" style="margin-top:-0.3rem;">Percent Complete</div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:86%;"></div>
+      </div>
+      <span class="badge" style="margin-top:0.5rem;">On Track</span>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <!-- Card 1: Deploys -->
+    <div class="card">
+      <div class="card-label">Deploys</div>
+      <div style="display:flex;align-items:flex-end;gap:0.5rem;">
+        <div class="metric-giant" style="font-size:3.5rem;">8</div>
+        <div class="metric-unit" style="margin-bottom:0.5rem;">/week</div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-col">
+          <div class="bar" style="height:35px;"></div>
+          <span class="bar-label">M</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:50px;"></div>
+          <span class="bar-label">T</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar highlight" style="height:60px;"></div>
+          <span class="bar-label">W</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:25px;"></div>
+          <span class="bar-label">T</span>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:45px;"></div>
+          <span class="bar-label">F</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Team -->
+    <div class="card">
+      <div class="card-label">Team</div>
+      <div class="avatar-row">
+        <div class="avatar">P</div>
+        <div class="avatar">A</div>
+        <div class="avatar">M</div>
+        <div class="avatar">K</div>
+      </div>
+      <div style="margin-top:0.6rem;">
+        <span class="tag">Frontend</span>
+        <span class="tag">Backend</span>
+        <span class="tag">Design</span>
+      </div>
+    </div>
+
+    <!-- Card 3: Latency -->
+    <div class="card">
+      <span class="bleed-letter" style="top:-30px;right:-15px;font-size:8rem;">ms</span>
+      <div class="card-label">Latency</div>
+      <div style="display:flex;gap:1.2rem;align-items:flex-end;">
+        <div>
+          <div class="metric-unit">P50</div>
+          <div class="metric-giant" style="font-size:2.8rem;">38</div>
+          <div class="metric-unit">ms</div>
+        </div>
+        <div>
+          <div class="metric-unit">P99</div>
+          <div class="metric-giant" style="font-size:2.8rem;color:var(--ink-muted);">112</div>
+          <div class="metric-unit">ms</div>
+        </div>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <span class="badge">99.97% uptime</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Card 1: Tasks -->
+    <div class="card">
+      <div class="card-label">Tasks</div>
+      <ul class="task-list">
+        <li class="task-item done">
+          <span class="task-check done">&#10003;</span>
+          Update API endpoints
+        </li>
+        <li class="task-item done">
+          <span class="task-check done">&#10003;</span>
+          Review PR #418
+        </li>
+        <li class="task-item">
+          <span class="task-check"></span>
+          Write migration script
+        </li>
+        <li class="task-item">
+          <span class="task-check"></span>
+          Deploy staging build
+        </li>
+        <li class="task-item">
+          <span class="task-check"></span>
+          Update design tokens
+        </li>
+      </ul>
+    </div>
+
+    <!-- Card 2: Activity -->
+    <div class="card">
+      <div class="card-label">Activity</div>
+      <div style="margin-top:0.5rem;">
+        <div class="activity-item">
+          <div class="activity-text"><strong>Paul</strong> merged PR#421</div>
+          <span class="activity-time">2m</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-text"><strong>Anna</strong> opened Bug#89</div>
+          <span class="activity-time">18m</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-text"><strong>Kai</strong> deployed v2.4.1</div>
+          <span class="activity-time">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new AudioContext();
+    return ctx;
+  }
+
+  function ensureCtx(){
+    const c = getCtx();
+    if(c.state === 'suspended') c.resume();
+    return c;
+  }
+
+  // Typewriter key click (card hover)
+  function playTypeClick(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(1800, t);
+    osc.frequency.exponentialRampToValueAtTime(600, t + 0.015);
+    gain.gain.setValueAtTime(0.1, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.04);
+  }
+
+  // Snap — sharp percussive burst (card click)
+  function playSnap(){
+    const c = ensureCtx(), t = c.currentTime;
+    // Noise burst
+    const bufSize = c.sampleRate * 0.03;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i = 0; i < bufSize; i++) d[i] = (Math.random() * 2 - 1);
+    const ns = c.createBufferSource();
+    ns.buffer = buf;
+    const filter = c.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 5000;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.15, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+    ns.connect(filter).connect(gain).connect(c.destination);
+    ns.start(t);
+    // Tonal punch
+    const osc = c.createOscillator();
+    const og = c.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(2400, t);
+    osc.frequency.exponentialRampToValueAtTime(200, t + 0.02);
+    og.gain.setValueAtTime(0.12, t);
+    og.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    osc.connect(og).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.05);
+  }
+
+  // Typewriter carriage return — for nav clicks
+  function playCarriageReturn(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(300, t);
+    osc.frequency.linearRampToValueAtTime(1200, t + 0.06);
+    osc.frequency.exponentialRampToValueAtTime(100, t + 0.12);
+    gain.gain.setValueAtTime(0.06, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    const filter = c.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 800;
+    filter.Q.value = 2;
+    osc.connect(filter).connect(gain).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.15);
+    // Bell ding
+    const bell = c.createOscillator();
+    const bg = c.createGain();
+    bell.type = 'sine';
+    bell.frequency.setValueAtTime(3200, t + 0.08);
+    bg.gain.setValueAtTime(0, t);
+    bg.gain.setValueAtTime(0.08, t + 0.08);
+    bg.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    bell.connect(bg).connect(c.destination);
+    bell.start(t + 0.08);
+    bell.stop(t + 0.3);
+  }
+
+  // Button click — mechanical key press
+  function playKeyPress(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(3000, t);
+    osc.frequency.exponentialRampToValueAtTime(800, t + 0.01);
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.03);
+    // Second click (key bottoming out)
+    const osc2 = c.createOscillator();
+    const g2 = c.createGain();
+    osc2.type = 'square';
+    osc2.frequency.setValueAtTime(1500, t + 0.025);
+    osc2.frequency.exponentialRampToValueAtTime(500, t + 0.04);
+    g2.gain.setValueAtTime(0.06, t + 0.025);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+    osc2.connect(g2).connect(c.destination);
+    osc2.start(t + 0.025);
+    osc2.stop(t + 0.06);
+  }
+
+  // Intro — rapid typewriter burst
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = ensureCtx(), t = c.currentTime;
+    // Rapid succession of clicks
+    for(let i = 0; i < 6; i++){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      const offset = t + i * 0.07;
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1400 + Math.random() * 800, offset);
+      osc.frequency.exponentialRampToValueAtTime(400, offset + 0.02);
+      gain.gain.setValueAtTime(0.06, offset);
+      gain.gain.exponentialRampToValueAtTime(0.001, offset + 0.04);
+      osc.connect(gain).connect(c.destination);
+      osc.start(offset);
+      osc.stop(offset + 0.04);
+    }
+    // Final carriage return bell
+    const bell = c.createOscillator();
+    const bg = c.createGain();
+    bell.type = 'sine';
+    bell.frequency.setValueAtTime(3400, t + 0.5);
+    bg.gain.setValueAtTime(0, t);
+    bg.gain.setValueAtTime(0.07, t + 0.5);
+    bg.gain.exponentialRampToValueAtTime(0.001, t + 0.9);
+    bell.connect(bg).connect(c.destination);
+    bell.start(t + 0.5);
+    bell.stop(t + 0.9);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playTypeClick(); playIntro(); });
+    el.addEventListener('click', function(){ playSnap(); playIntro(); });
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playCarriageReturn(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playKeyPress(); playIntro(); });
+  });
+  document.querySelectorAll('.task-item').forEach(function(el){
+    el.addEventListener('click', function(){ playTypeClick(); });
+  });
+  document.querySelectorAll('.avatar').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playTypeClick(); });
+  });
+})();
+</script>
+
+</body>
+</html>

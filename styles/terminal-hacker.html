@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal Hacker - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg: #0a0a0a;
+  --green: #00FF41;
+  --green-dim: #00AA2A;
+  --green-dark: #003B00;
+  --green-tint: rgba(0,255,65,0.04);
+  --amber: #FFB000;
+  --red: #FF0040;
+  --text: #00FF41;
+  --text-dim: #00AA2A;
+  --text-muted: #005F1A;
+  --border: rgba(0,255,65,0.3);
+  --border-bright: rgba(0,255,65,0.6);
+}
+
+body{
+  min-height:100vh;
+  font-family:'JetBrains Mono','Fira Code',monospace;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* CRT scanline overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events:none;
+}
+
+/* Screen flicker */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9998;
+  background:rgba(0,255,65,0.01);
+  animation:screenFlicker 0.1s infinite;
+  pointer-events:none;
+}
+@keyframes screenFlicker{
+  0%{opacity:0.01;}
+  5%{opacity:0.02;}
+  10%{opacity:0.01;}
+  15%{opacity:0;}
+  90%{opacity:0;}
+  92%{opacity:0.03;}
+  94%{opacity:0;}
+  100%{opacity:0.01;}
+}
+
+/* CRT vignette */
+.crt-vignette{
+  position:fixed;inset:0;z-index:9997;
+  background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+  pointer-events:none;
+}
+
+/* Green ambient glow */
+.glow-ambient{
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(0,255,65,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(0,255,65,0.02) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Blinking cursor */
+@keyframes blink{
+  0%,50%{opacity:1;}
+  51%,100%{opacity:0;}
+}
+@keyframes typeIn{
+  from{width:0;}
+  to{width:100%;}
+}
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(12px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+@keyframes dataStream{
+  0%{background-position:0 0;}
+  100%{background-position:0 -200px;}
+}
+
+/* Header */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.4rem;
+  color:var(--green);
+  text-shadow:0 0 10px rgba(0,255,65,0.5), 0 0 20px rgba(0,255,65,0.2);
+  letter-spacing:-0.5px;
+}
+.logo::before{
+  content:'> ';color:var(--green-dim);
+}
+.logo::after{
+  content:'\2588';
+  animation:blink 1s step-end infinite;
+  margin-left:2px;
+  color:var(--green);
+}
+
+/* Nav */
+.nav-pills{display:flex;gap:0;}
+.nav-pill{
+  padding:0.45rem 1rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.75rem;font-weight:500;
+  color:var(--green-dim);
+  cursor:pointer;
+  border:1px solid var(--border);
+  border-radius:0;
+  background:transparent;
+  transition:all 0.15s;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.nav-pill+.nav-pill{border-left:none;}
+.nav-pill:hover{
+  color:var(--green);
+  background:rgba(0,255,65,0.05);
+  text-shadow:0 0 8px rgba(0,255,65,0.4);
+}
+.nav-pill.active{
+  color:#0a0a0a;
+  background:var(--green);
+  text-shadow:none;
+  font-weight:700;
+}
+
+/* Grids */
+.grid-hero{display:grid;grid-template-columns:1.2fr 0.8fr;gap:1rem;margin-bottom:1rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* Cards */
+.card{
+  border:1px solid var(--border);
+  border-radius:0;
+  background:var(--green-tint);
+  padding:1.2rem 1.3rem;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg, transparent, var(--green), transparent);
+  opacity:0.3;
+}
+.card:hover{
+  border-color:var(--border-bright);
+  box-shadow:0 0 15px rgba(0,255,65,0.08), inset 0 0 30px rgba(0,255,65,0.02);
+}
+
+/* Card elements */
+.card-label{
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;
+  color:var(--text-muted);margin-bottom:0.3rem;font-weight:500;
+}
+.card-label::before{
+  content:'$ ';color:var(--green-dim);
+}
+.card-title{
+  font-size:1rem;font-weight:700;color:var(--green);
+  margin-bottom:0.5rem;
+  text-shadow:0 0 8px rgba(0,255,65,0.3);
+}
+.card-body{
+  font-size:0.8rem;color:var(--green-dim);line-height:1.7;
+}
+
+/* Big numbers */
+.big-num{
+  font-family:'JetBrains Mono',monospace;
+  font-weight:800;font-size:2.2rem;
+  color:var(--green);
+  text-shadow:0 0 15px rgba(0,255,65,0.4), 0 0 30px rgba(0,255,65,0.15);
+  line-height:1;
+}
+.big-num-sm{
+  font-weight:700;font-size:1.4rem;color:var(--green);
+  text-shadow:0 0 10px rgba(0,255,65,0.3);
+  line-height:1;
+}
+
+/* Badge */
+.badge{
+  display:inline-block;
+  padding:0.2rem 0.6rem;
+  font-size:0.7rem;font-weight:700;
+  border:1px solid;
+  border-radius:0;
+  font-family:'JetBrains Mono',monospace;
+}
+.badge-green{
+  color:#0a0a0a;background:var(--green);border-color:var(--green);
+}
+.badge-amber{
+  color:var(--amber);background:transparent;border-color:var(--amber);
+  text-shadow:0 0 8px rgba(255,176,0,0.4);
+}
+.badge-red{
+  color:var(--red);background:transparent;border-color:var(--red);
+  text-shadow:0 0 8px rgba(255,0,64,0.4);
+}
+
+/* Buttons */
+.btn{
+  display:inline-block;
+  padding:0.5rem 1.2rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.75rem;font-weight:600;
+  border:1px solid var(--green);
+  border-radius:0;
+  background:transparent;
+  color:var(--green);
+  cursor:pointer;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:all 0.15s;
+}
+.btn:hover{
+  background:var(--green);
+  color:#0a0a0a;
+  box-shadow:0 0 15px rgba(0,255,65,0.3);
+}
+.btn-primary{
+  background:var(--green);
+  color:#0a0a0a;
+}
+.btn-primary:hover{
+  background:#33ff66;
+  box-shadow:0 0 20px rgba(0,255,65,0.5);
+}
+
+/* Progress bar */
+.progress-track{
+  width:100%;height:8px;
+  background:rgba(0,255,65,0.08);
+  border:1px solid var(--border);
+  border-radius:0;
+  overflow:hidden;
+  position:relative;
+}
+.progress-fill{
+  height:100%;background:var(--green);
+  position:relative;
+  box-shadow:0 0 10px rgba(0,255,65,0.5);
+}
+.progress-fill::after{
+  content:'';position:absolute;right:0;top:0;bottom:0;width:4px;
+  background:#fff;
+  animation:blink 0.8s step-end infinite;
+}
+
+/* Bar chart */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:70px;margin-top:0.8rem;}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.bar{
+  width:100%;
+  background:var(--green);
+  border:none;
+  border-radius:0;
+  min-height:4px;
+  position:relative;
+  box-shadow:0 0 6px rgba(0,255,65,0.3);
+  transition:height 0.3s;
+}
+.bar::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+}
+.bar-label{font-size:0.55rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+
+/* Avatars */
+.avatar-row{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.avatar{
+  width:40px;height:40px;
+  border:1px solid var(--green);
+  border-radius:0;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:0.8rem;
+  color:var(--green);
+  background:rgba(0,255,65,0.05);
+  text-shadow:0 0 8px rgba(0,255,65,0.4);
+}
+.avatar:hover{
+  background:rgba(0,255,65,0.15);
+  box-shadow:0 0 10px rgba(0,255,65,0.3);
+}
+
+/* Tags */
+.tag{
+  display:inline-block;
+  padding:0.15rem 0.5rem;
+  font-size:0.6rem;font-weight:600;
+  border:1px solid var(--border);
+  border-radius:0;
+  color:var(--green-dim);
+  letter-spacing:0.5px;
+}
+
+/* Task list */
+.task-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.55rem 0;
+  border-bottom:1px solid rgba(0,255,65,0.08);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:18px;height:18px;
+  border:1px solid var(--border);
+  border-radius:0;
+  background:transparent;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;font-weight:900;color:var(--green);
+}
+.task-check.done{
+  background:var(--green);
+  color:#0a0a0a;
+  border-color:var(--green);
+}
+.task-text{font-size:0.8rem;color:var(--green-dim);}
+.task-text.done{text-decoration:line-through;opacity:0.3;}
+
+/* Feed */
+.feed-item{
+  display:flex;align-items:flex-start;gap:0.7rem;
+  padding:0.55rem 0;
+  border-bottom:1px solid rgba(0,255,65,0.08);
+  font-size:0.8rem;
+}
+.feed-item:last-child{border-bottom:none;}
+.feed-time{
+  font-size:0.65rem;color:var(--text-muted);white-space:nowrap;
+  min-width:2.5rem;
+}
+.feed-text{color:var(--green-dim);}
+.feed-text strong{color:var(--green);font-weight:600;}
+.feed-icon{
+  color:var(--green);font-size:0.7rem;flex-shrink:0;
+  width:16px;text-align:center;
+}
+
+/* Uptime dot */
+.status-dot{
+  display:inline-block;width:8px;height:8px;
+  background:var(--green);
+  border-radius:0;
+  box-shadow:0 0 6px rgba(0,255,65,0.6);
+  animation:blink 2s step-end infinite;
+}
+
+/* Gauge circle (ASCII style) */
+.gauge-wrap{
+  position:relative;width:120px;height:120px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto;
+}
+.gauge-ring{
+  position:absolute;inset:0;
+  border:2px solid rgba(0,255,65,0.15);
+  border-radius:50%;
+}
+.gauge-ring-fill{
+  position:absolute;inset:0;
+  border:2px solid var(--green);
+  border-radius:50%;
+  clip-path:polygon(0 0, 100% 0, 100% 86%, 50% 50%);
+  box-shadow:0 0 12px rgba(0,255,65,0.3);
+}
+.gauge-value{
+  font-size:1.8rem;font-weight:800;
+  color:var(--green);
+  text-shadow:0 0 15px rgba(0,255,65,0.5);
+  z-index:1;
+}
+.gauge-label{
+  position:absolute;bottom:-4px;
+  font-size:0.6rem;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:2px;
+}
+
+/* Terminal prompt animation */
+.typed-line{
+  overflow:hidden;white-space:nowrap;
+  border-right:2px solid var(--green);
+  animation:typeIn 1.5s steps(30) forwards, blink 1s step-end infinite 1.5s;
+  width:0;
+  display:inline-block;
+}
+
+/* Data stream background */
+.data-stream{
+  position:absolute;top:0;right:0;bottom:0;width:80px;
+  overflow:hidden;opacity:0.04;pointer-events:none;
+}
+.data-stream-inner{
+  font-size:0.5rem;line-height:1.2;color:var(--green);
+  word-break:break-all;
+  animation:dataStream 8s linear infinite;
+}
+
+/* Stagger animations */
+.card,.header{animation:fadeUp 0.4s ease both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* System status bar */
+.sys-bar{
+  display:flex;gap:1.5rem;
+  font-size:0.6rem;color:var(--text-muted);
+  margin-top:2rem;padding-top:0.8rem;
+  border-top:1px solid rgba(0,255,65,0.1);
+  flex-wrap:wrap;
+}
+.sys-bar span{letter-spacing:1px;}
+.sys-bar .ok{color:var(--green-dim);}
+</style>
+</head>
+<body>
+
+<div class="crt-vignette"></div>
+<div class="glow-ambient"></div>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">terminal_hacker</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <!-- HERO ROW -->
+  <div class="grid-hero">
+
+    <!-- Card 1: Sprint overview -->
+    <div class="card">
+      <div class="data-stream"><div class="data-stream-inner">01001010 11010010 00101101 01110100 10001011 01010011 11100110 00011010 10110100 01001101 11011000 00100111 01110010 10011101 01010110 11100001 00011100 10110111 01001000 11010011</div></div>
+      <div class="card-label">sprint.current</div>
+      <div class="card-title" style="font-size:1.1rem;">$ cat sprint_report.log</div>
+      <div class="card-body" style="margin-bottom:1rem;">
+        &gt; 42 tasks resolved across 3 workstreams.<br>
+        &gt; Two features shipped ahead of schedule.<br>
+        &gt; Zero rollbacks. Exit code 0.
+      </div>
+      <div style="display:flex;gap:2rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <div>
+          <div class="card-label" style="margin-bottom:0.15rem;">velocity</div>
+          <div class="big-num">42<span style="font-size:0.9rem;font-weight:400;color:var(--green-dim);"> pts</span></div>
+        </div>
+        <div>
+          <div class="card-label" style="margin-bottom:0.15rem;">target</div>
+          <div class="big-num">34<span style="font-size:0.9rem;font-weight:400;color:var(--green-dim);"> pts</span></div>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <span class="badge badge-green">+24%</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="btn btn-primary">./deploy.sh</button>
+        <button class="btn">cat details</button>
+      </div>
+    </div>
+
+    <!-- Card 2: Completion gauge -->
+    <div class="card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+      <div class="card-label" style="text-align:center;">completion.gauge</div>
+      <div class="gauge-wrap" style="margin:1rem 0;">
+        <div class="gauge-ring"></div>
+        <div class="gauge-ring-fill"></div>
+        <div class="gauge-value">86%</div>
+        <div class="gauge-label">complete</div>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;width:100%;">
+        <div class="progress-fill" style="width:86%;"></div>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <span class="badge badge-green">ON_TRACK</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THREE COLUMN ROW -->
+  <div class="grid-3">
+
+    <!-- Card 1: Deploys -->
+    <div class="card">
+      <div class="card-label">deploys.weekly</div>
+      <div style="display:flex;align-items:baseline;gap:0.5rem;">
+        <div class="big-num-sm">8</div>
+        <span style="font-size:0.7rem;color:var(--text-muted);">/week</span>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-col">
+          <div class="bar" style="height:35px;"></div>
+          <div class="bar-label">Mon</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:55px;"></div>
+          <div class="bar-label">Tue</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:25px;"></div>
+          <div class="bar-label">Wed</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:45px;"></div>
+          <div class="bar-label">Thu</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:65px;"></div>
+          <div class="bar-label">Fri</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Team -->
+    <div class="card">
+      <div class="card-label">team.active</div>
+      <div class="avatar-row" style="margin:0.7rem 0;">
+        <div class="avatar">P</div>
+        <div class="avatar">A</div>
+        <div class="avatar">M</div>
+        <div class="avatar">K</div>
+      </div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.6rem;">
+        <span class="tag">frontend</span>
+        <span class="tag">backend</span>
+        <span class="tag">devops</span>
+        <span class="tag">design</span>
+      </div>
+    </div>
+
+    <!-- Card 3: Latency -->
+    <div class="card">
+      <div class="card-label">latency.stats</div>
+      <div style="margin-top:0.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.6rem;">
+          <span style="font-size:0.7rem;color:var(--text-muted);">P50</span>
+          <span class="big-num-sm">38<span style="font-size:0.7rem;font-weight:400;color:var(--green-dim);">ms</span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.6rem;">
+          <span style="font-size:0.7rem;color:var(--text-muted);">P99</span>
+          <span class="big-num-sm" style="color:var(--amber);text-shadow:0 0 10px rgba(255,176,0,0.3);">112<span style="font-size:0.7rem;font-weight:400;">ms</span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.5rem;border-top:1px solid rgba(0,255,65,0.08);">
+          <span style="font-size:0.7rem;color:var(--text-muted);">UPTIME</span>
+          <span style="font-size:0.85rem;font-weight:700;color:var(--green);">
+            <span class="status-dot" style="margin-right:4px;"></span>
+            99.97%
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TWO COLUMN ROW -->
+  <div class="grid-2">
+
+    <!-- Card 1: Tasks -->
+    <div class="card">
+      <div class="card-label">tasks.queue</div>
+      <div style="margin-top:0.5rem;">
+        <div class="task-item">
+          <div class="task-check done">&#x2713;</div>
+          <div class="task-text done">Refactor auth middleware</div>
+        </div>
+        <div class="task-item">
+          <div class="task-check done">&#x2713;</div>
+          <div class="task-text done">Fix race condition in worker</div>
+        </div>
+        <div class="task-item">
+          <div class="task-check"></div>
+          <div class="task-text">Migrate DB to v3 schema</div>
+        </div>
+        <div class="task-item">
+          <div class="task-check"></div>
+          <div class="task-text">Add rate limiter to API</div>
+        </div>
+        <div class="task-item">
+          <div class="task-check"></div>
+          <div class="task-text">Write integration tests</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Activity -->
+    <div class="card">
+      <div class="card-label">activity.log</div>
+      <div style="margin-top:0.5rem;">
+        <div class="feed-item">
+          <div class="feed-icon">&gt;</div>
+          <div class="feed-text"><strong>Paul</strong> merged PR#421</div>
+          <div class="feed-time">2m</div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-icon" style="color:var(--red);">!</div>
+          <div class="feed-text"><strong>Anna</strong> opened Bug#89</div>
+          <div class="feed-time">18m</div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-icon" style="color:var(--amber);">$</div>
+          <div class="feed-text"><strong>Kai</strong> deployed v2.4.1</div>
+          <div class="feed-time">1h</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- System status bar -->
+  <div class="sys-bar">
+    <span>SYS <span class="ok">OK</span></span>
+    <span>MEM 42% USED</span>
+    <span>CPU 12%</span>
+    <span>NET <span class="ok">UP</span></span>
+    <span>PID 31337</span>
+    <span>SHELL /bin/zsh</span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var ctx = null;
+  function ensureCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // Keystroke click
+  function playKeystroke(){
+    var c = ensureCtx(), t = c.currentTime;
+    // Short noise burst
+    var bufSize = c.sampleRate * 0.02;
+    var buf = c.createBuffer(1, bufSize, c.sampleRate);
+    var d = buf.getChannelData(0);
+    for(var i = 0; i < bufSize; i++) d[i] = (Math.random() * 2 - 1);
+    var src = c.createBufferSource();
+    src.buffer = buf;
+    var gain = c.createGain();
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    var filt = c.createBiquadFilter();
+    filt.type = 'highpass'; filt.frequency.value = 2000;
+    src.connect(filt).connect(gain).connect(c.destination);
+    src.start(t);
+    // Subtle click tone
+    var osc = c.createOscillator();
+    var og = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(4000, t);
+    osc.frequency.exponentialRampToValueAtTime(1500, t + 0.01);
+    og.gain.setValueAtTime(0.04, t);
+    og.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
+    osc.connect(og).connect(c.destination);
+    osc.start(t); osc.stop(t + 0.03);
+  }
+
+  // Terminal beep
+  function playBeep(){
+    var c = ensureCtx(), t = c.currentTime;
+    var osc = c.createOscillator();
+    var gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, t);
+    gain.gain.setValueAtTime(0.06, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t); osc.stop(t + 0.12);
+  }
+
+  // Modem-like connection tone
+  function playModem(){
+    var c = ensureCtx(), t = c.currentTime;
+    var osc1 = c.createOscillator();
+    var osc2 = c.createOscillator();
+    var gain = c.createGain();
+    osc1.type = 'sine';
+    osc2.type = 'sine';
+    osc1.frequency.setValueAtTime(1070, t);
+    osc1.frequency.linearRampToValueAtTime(2250, t + 0.15);
+    osc1.frequency.linearRampToValueAtTime(980, t + 0.3);
+    osc2.frequency.setValueAtTime(2025, t);
+    osc2.frequency.linearRampToValueAtTime(1650, t + 0.15);
+    osc2.frequency.linearRampToValueAtTime(2400, t + 0.3);
+    gain.gain.setValueAtTime(0.04, t);
+    gain.gain.linearRampToValueAtTime(0.06, t + 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc1.start(t); osc1.stop(t + 0.35);
+    osc2.start(t); osc2.stop(t + 0.35);
+  }
+
+  // Data burst (rapid tones like data transfer)
+  function playDataBurst(){
+    var c = ensureCtx(), t = c.currentTime;
+    for(var i = 0; i < 6; i++){
+      var osc = c.createOscillator();
+      var gain = c.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(1200 + Math.random() * 2000, t + i * 0.03);
+      gain.gain.setValueAtTime(0.03, t + i * 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.03 + 0.025);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t + i * 0.03); osc.stop(t + i * 0.03 + 0.03);
+    }
+  }
+
+  // Boot/intro sound
+  var introPlayed = false;
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    var c = ensureCtx(), t = c.currentTime;
+    // Low hum
+    var hum = c.createOscillator();
+    var humGain = c.createGain();
+    hum.type = 'sawtooth';
+    hum.frequency.setValueAtTime(60, t);
+    hum.frequency.linearRampToValueAtTime(120, t + 0.3);
+    var humFilter = c.createBiquadFilter();
+    humFilter.type = 'lowpass'; humFilter.frequency.value = 200;
+    humGain.gain.setValueAtTime(0, t);
+    humGain.gain.linearRampToValueAtTime(0.04, t + 0.1);
+    humGain.gain.linearRampToValueAtTime(0, t + 0.5);
+    hum.connect(humFilter).connect(humGain).connect(c.destination);
+    hum.start(t); hum.stop(t + 0.6);
+    // Beep sequence
+    var freqs = [440, 660, 880, 1320];
+    for(var i = 0; i < freqs.length; i++){
+      var osc = c.createOscillator();
+      var g = c.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freqs[i];
+      g.gain.setValueAtTime(0.03, t + 0.1 + i * 0.08);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.1 + i * 0.08 + 0.06);
+      osc.connect(g).connect(c.destination);
+      osc.start(t + 0.1 + i * 0.08);
+      osc.stop(t + 0.1 + i * 0.08 + 0.07);
+    }
+  }
+
+  // Attach events
+  var hoverCount = 0;
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){
+      hoverCount++;
+      if(hoverCount % 3 === 0) playBeep();
+      else if(hoverCount % 3 === 1) playKeystroke();
+      else playDataBurst();
+      playIntro();
+    });
+    el.addEventListener('click', function(){ playModem(); playIntro(); });
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playKeystroke(); playBeep(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playDataBurst(); playIntro(); });
+  });
+})();
+</script>
+</body>
+</html>

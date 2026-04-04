@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candy Pop - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-start: #FFF0F5;
+  --bg-end: #F0F0FF;
+  --bg-card: #ffffff;
+  --ink: #2D1754;
+  --ink-soft: #5A3D7A;
+  --ink-muted: #9B85B3;
+  --hot-pink: #FF3399;
+  --electric-purple: #7C3AED;
+  --sunny-yellow: #FFD60A;
+  --teal: #06D6A0;
+  --coral: #FF6B6B;
+  --sky: #38BDF8;
+  --shadow-pink: 0 8px 30px rgba(255,51,153,0.15), 0 2px 8px rgba(124,58,237,0.1);
+  --shadow-purple: 0 8px 30px rgba(124,58,237,0.15), 0 2px 8px rgba(255,51,153,0.1);
+  --shadow-teal: 0 8px 30px rgba(6,214,160,0.15), 0 2px 8px rgba(56,189,248,0.1);
+  --shadow-yellow: 0 8px 30px rgba(255,214,10,0.2), 0 2px 8px rgba(255,107,107,0.1);
+}
+
+body{
+  min-height:100vh;
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(135deg, var(--bg-start), var(--bg-end));
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Floating bubble decorations */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(circle 120px at 10% 15%, rgba(255,51,153,0.08) 0%, transparent 100%),
+    radial-gradient(circle 80px at 85% 10%, rgba(124,58,237,0.08) 0%, transparent 100%),
+    radial-gradient(circle 100px at 90% 80%, rgba(6,214,160,0.08) 0%, transparent 100%),
+    radial-gradient(circle 60px at 5% 85%, rgba(255,214,10,0.1) 0%, transparent 100%),
+    radial-gradient(circle 40px at 50% 5%, rgba(56,189,248,0.06) 0%, transparent 100%);
+  animation: bubblesFloat 10s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* Confetti-like dots */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(circle 4px at 12% 25%, var(--hot-pink) 2px, transparent 2px),
+    radial-gradient(circle 3px at 88% 18%, var(--electric-purple) 1.5px, transparent 1.5px),
+    radial-gradient(circle 5px at 75% 70%, var(--sunny-yellow) 2.5px, transparent 2.5px),
+    radial-gradient(circle 3px at 20% 75%, var(--teal) 1.5px, transparent 1.5px),
+    radial-gradient(circle 4px at 55% 90%, var(--coral) 2px, transparent 2px),
+    radial-gradient(circle 3px at 40% 12%, var(--sky) 1.5px, transparent 1.5px),
+    radial-gradient(circle 4px at 65% 40%, var(--hot-pink) 2px, transparent 2px),
+    radial-gradient(circle 3px at 30% 55%, var(--electric-purple) 1.5px, transparent 1.5px);
+  opacity:0.5;
+  animation: confettiDrift 8s ease-in-out infinite;
+  pointer-events:none;
+}
+
+@keyframes bubblesFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-8px) scale(1.02)}
+}
+
+@keyframes confettiDrift{
+  0%,100%{transform:translate(0,0) rotate(0deg)}
+  25%{transform:translate(3px,-2px) rotate(0.5deg)}
+  50%{transform:translate(-2px,3px) rotate(-0.3deg)}
+  75%{transform:translate(1px,-1px) rotate(0.2deg)}
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* -- HEADER -- */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Poppins',sans-serif;font-weight:900;font-size:2.2rem;
+  letter-spacing:-1px;
+  background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple), var(--teal));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation: logoWiggle 3s ease-in-out infinite;
+  position:relative;
+}
+.logo::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;height:4px;
+  border-radius:4px;
+  background:linear-gradient(90deg, var(--hot-pink), var(--sunny-yellow), var(--teal));
+}
+
+@keyframes logoWiggle{
+  0%,100%{transform:rotate(0deg)}
+  25%{transform:rotate(1deg)}
+  75%{transform:rotate(-1deg)}
+}
+
+.nav-pills{display:flex;gap:0.6rem;flex-wrap:wrap;}
+.nav-pill{
+  background:var(--bg-card);
+  border:2.5px solid transparent;border-radius:50px;
+  padding:0.6rem 1.3rem;
+  font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:800;
+  cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  text-transform:uppercase;letter-spacing:1px;
+  color:var(--ink-muted);
+  box-shadow:0 4px 12px rgba(124,58,237,0.08);
+}
+.nav-pill:hover{
+  transform:scale(1.05) translateY(-2px);
+  border-color:var(--hot-pink);
+  color:var(--hot-pink);
+  box-shadow:0 6px 20px rgba(255,51,153,0.2);
+}
+.nav-pill.active{
+  background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple));
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 6px 20px rgba(255,51,153,0.3);
+}
+
+/* -- CARDS -- */
+.card{
+  background:var(--bg-card);
+  border:3px solid rgba(124,58,237,0.1);
+  border-radius:24px;
+  box-shadow:var(--shadow-pink);
+  padding:1.8rem;
+  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;overflow:hidden;
+}
+.card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:0 12px 40px rgba(255,51,153,0.2), 0 4px 12px rgba(124,58,237,0.15);
+}
+
+/* Card color variants */
+.card-pink{border-color:rgba(255,51,153,0.2);box-shadow:var(--shadow-pink);}
+.card-purple{border-color:rgba(124,58,237,0.2);box-shadow:var(--shadow-purple);}
+.card-teal{border-color:rgba(6,214,160,0.2);box-shadow:var(--shadow-teal);}
+.card-yellow{border-color:rgba(255,214,10,0.25);box-shadow:var(--shadow-yellow);}
+
+/* Playful blob decoration inside cards */
+.card::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg, rgba(255,51,153,0.06), rgba(124,58,237,0.06));
+  pointer-events:none;
+}
+.card-teal::before{background:linear-gradient(135deg, rgba(6,214,160,0.08), rgba(56,189,248,0.06));}
+.card-yellow::before{background:linear-gradient(135deg, rgba(255,214,10,0.1), rgba(255,107,107,0.06));}
+
+/* -- GRIDS -- */
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* -- TYPOGRAPHY -- */
+.card-title{
+  font-family:'Poppins',sans-serif;font-weight:800;font-size:1.3rem;
+  margin-bottom:0.5rem;color:var(--ink);
+}
+.card-subtitle{
+  font-size:0.7rem;margin-bottom:1rem;
+  text-transform:uppercase;letter-spacing:2px;color:var(--ink-muted);
+  font-weight:700;
+}
+.card-body{font-size:0.85rem;line-height:1.65;color:var(--ink-soft);}
+
+/* -- STATS (gradient text) -- */
+.stat-value{
+  font-family:'Poppins',sans-serif;font-weight:900;font-size:2.4rem;
+  background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;
+}
+.stat-value-teal{
+  background:linear-gradient(135deg, var(--teal), var(--sky));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-value-yellow{
+  background:linear-gradient(135deg, var(--coral), var(--hot-pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-label{
+  font-size:0.6rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--ink-muted);margin-top:4px;font-weight:700;
+}
+
+/* -- PROGRESS -- */
+.progress-track{
+  width:100%;height:14px;
+  border-radius:50px;
+  background:linear-gradient(135deg, #F5F0FF, #FFF0F5);
+  overflow:hidden;margin-top:0.7rem;
+  position:relative;
+  border:2px solid rgba(124,58,237,0.08);
+}
+.progress-fill{
+  height:100%;
+  border-radius:50px;
+  position:relative;
+}
+.progress-fill::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    transparent 0px,transparent 6px,
+    rgba(255,255,255,0.25) 6px,rgba(255,255,255,0.25) 8px
+  );
+  border-radius:inherit;
+  animation: stripeScroll 1s linear infinite;
+}
+@keyframes stripeScroll{
+  0%{background-position:0 0}
+  100%{background-position:16px 0}
+}
+.pf-pink{background:linear-gradient(90deg, var(--hot-pink), var(--electric-purple));}
+.pf-teal{background:linear-gradient(90deg, var(--teal), var(--sky));}
+.pf-yellow{background:linear-gradient(90deg, var(--sunny-yellow), var(--coral));}
+.pf-purple{background:linear-gradient(90deg, var(--electric-purple), var(--hot-pink));}
+
+/* -- BADGE -- */
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:linear-gradient(135deg, var(--teal), var(--sky));
+  border-radius:50px;padding:0.35rem 0.85rem;
+  font-size:0.7rem;font-weight:800;
+  color:#fff;
+  box-shadow:0 4px 12px rgba(6,214,160,0.25);
+}
+.badge-pink{
+  background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple));
+  box-shadow:0 4px 12px rgba(255,51,153,0.25);
+}
+
+/* -- TAGS -- */
+.tag{
+  display:inline-block;
+  border-radius:50px;
+  padding:0.25rem 0.75rem;font-size:0.65rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;margin:0.15rem;
+  border:2px solid transparent;
+}
+.tag-pink{background:rgba(255,51,153,0.12);color:var(--hot-pink);border-color:rgba(255,51,153,0.2);}
+.tag-purple{background:rgba(124,58,237,0.1);color:var(--electric-purple);border-color:rgba(124,58,237,0.2);}
+.tag-teal{background:rgba(6,214,160,0.12);color:#059669;border-color:rgba(6,214,160,0.25);}
+.tag-yellow{background:rgba(255,214,10,0.15);color:#B8860B;border-color:rgba(255,214,10,0.3);}
+.tag-coral{background:rgba(255,107,107,0.12);color:#E05252;border-color:rgba(255,107,107,0.2);}
+.tag-sky{background:rgba(56,189,248,0.12);color:#0284C7;border-color:rgba(56,189,248,0.2);}
+
+/* -- AVATARS -- */
+.avatar-row{display:flex;gap:0.7rem;margin-bottom:1rem;}
+.avatar{
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Poppins',sans-serif;font-weight:800;font-size:0.8rem;
+  color:#fff;
+  position:relative;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.avatar:hover{transform:scale(1.15) translateY(-3px);}
+.avatar::before{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  border:2.5px dashed rgba(255,51,153,0.3);
+  animation: avatarSpin 8s linear infinite;
+}
+@keyframes avatarSpin{
+  0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}
+}
+
+/* -- KNOB -- */
+.candy-knob{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple));
+  box-shadow:0 6px 20px rgba(255,51,153,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Poppins',sans-serif;font-weight:900;font-size:1.1rem;
+  color:#fff;flex-shrink:0;
+}
+.candy-knob-teal{background:linear-gradient(135deg, var(--teal), var(--sky));}
+.candy-knob-yellow{background:linear-gradient(135deg, var(--sunny-yellow), var(--coral));}
+
+/* -- TASK LIST -- */
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.65rem 0;
+  border-bottom:2px dashed rgba(124,58,237,0.1);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg, #F5F0FF, #FFF0F5);
+  border:2.5px solid rgba(124,58,237,0.2);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:800;color:var(--ink);
+  transition:all 0.2s;
+}
+.task-check.done{
+  background:linear-gradient(135deg, var(--teal), var(--sky));
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 3px 10px rgba(6,214,160,0.3);
+}
+.task-text{font-size:0.85rem;color:var(--ink-soft);font-weight:600;}
+.task-text.done{text-decoration:line-through;opacity:0.4;}
+
+/* -- BUTTON -- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:0.7rem 1.4rem;
+  border:2.5px solid transparent;border-radius:50px;
+  cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  background:var(--bg-card);
+  box-shadow:0 4px 16px rgba(124,58,237,0.12);
+  color:var(--ink);
+}
+.btn:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.2);}
+.btn-candy{
+  background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple));
+  color:#fff;
+  box-shadow:0 6px 20px rgba(255,51,153,0.3);
+}
+.btn-candy:hover{
+  box-shadow:0 8px 28px rgba(255,51,153,0.4);
+}
+
+/* -- SPARKLINE BAR CHART -- */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:60px;margin:1rem 0 0.5rem;}
+.bar{
+  flex:1;border-radius:10px 10px 4px 4px;
+  min-width:20px;
+  transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;
+}
+.bar:hover{transform:scaleY(1.08);filter:brightness(1.1);}
+
+/* -- GAUGE -- */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;margin:1rem 0;}
+.gauge-circle{
+  width:120px;height:120px;border-radius:50%;
+  background:conic-gradient(
+    var(--hot-pink) 0deg,
+    var(--electric-purple) 180deg,
+    rgba(124,58,237,0.1) 180deg,
+    rgba(124,58,237,0.1) 360deg
+  );
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:0 8px 30px rgba(255,51,153,0.15);
+}
+.gauge-inner{
+  width:92px;height:92px;border-radius:50%;
+  background:var(--bg-card);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  box-shadow:inset 0 2px 8px rgba(124,58,237,0.08);
+}
+
+/* -- ANIMATION (fade up) -- */
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(24px) scale(0.97)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+.card,.header{animation:fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+
+/* Bouncy hover on stat values */
+@keyframes bouncePulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.03)}
+}
+.stat-value{animation:bouncePulse 3s ease-in-out infinite;}
+
+/* Confetti burst keyframes */
+@keyframes confettiBurst{
+  0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}
+  100%{opacity:0;transform:translateY(-60px) rotate(720deg) scale(0.3)}
+}
+
+/* Bubble float decoration */
+@keyframes bubbleFloat{
+  0%,100%{transform:translateY(0) scale(1);opacity:0.15;}
+  50%{transform:translateY(-12px) scale(1.1);opacity:0.25;}
+}
+
+/* Divider */
+.candy-divider{
+  height:6px;margin:0.5rem 0 1.5rem;
+  border-radius:50px;
+  background:linear-gradient(90deg, var(--hot-pink), var(--sunny-yellow), var(--teal), var(--electric-purple), var(--hot-pink));
+  background-size:200% 100%;
+  animation:rainbowSlide 4s linear infinite;
+  opacity:0.4;
+}
+@keyframes rainbowSlide{
+  0%{background-position:0% 0}
+  100%{background-position:200% 0}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Candy Pop</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <!-- HERO GRID -->
+  <div class="grid-hero">
+    <div class="card card-pink">
+      <div class="card-subtitle">Sprint Overview</div>
+      <div class="card-title" style="font-size:1.5rem;">We're crushing it this sprint!</div>
+      <div style="display:flex;align-items:flex-end;gap:1.5rem;margin:1.2rem 0;">
+        <div>
+          <div class="stat-value" style="font-size:3rem;">42</div>
+          <div class="stat-label">Velocity (pts)</div>
+        </div>
+        <div>
+          <div class="stat-value stat-value-teal" style="font-size:1.6rem;">34</div>
+          <div class="stat-label">Target (pts)</div>
+        </div>
+        <div class="badge" style="margin-bottom:0.3rem;">+24%</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-pink" style="width:82%"></div>
+      </div>
+      <div style="margin-top:1.2rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-candy">View Sprint</button>
+        <button class="btn">Details</button>
+      </div>
+    </div>
+
+    <div class="card card-purple">
+      <div class="card-subtitle">Completion</div>
+      <div class="gauge-wrap">
+        <div class="gauge-circle" style="background:conic-gradient(var(--hot-pink) 0deg, var(--electric-purple) 310deg, rgba(124,58,237,0.1) 310deg, rgba(124,58,237,0.1) 360deg);">
+          <div class="gauge-inner">
+            <div class="stat-value" style="font-size:2.2rem;">86%</div>
+            <div class="stat-label">Complete</div>
+          </div>
+        </div>
+      </div>
+      <div class="progress-track" style="margin-top:0.5rem;">
+        <div class="progress-fill pf-purple" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.6rem;text-align:center;">
+        <span class="badge badge-pink">On Track</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAINBOW DIVIDER -->
+  <div class="candy-divider"></div>
+
+  <!-- 3-COL GRID -->
+  <div class="grid-3">
+    <div class="card card-yellow">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div class="candy-knob-yellow candy-knob">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">Deploys</div>
+          <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+        </div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar" style="height:55%;background:linear-gradient(to top, var(--sunny-yellow), var(--coral));"></div>
+        <div class="bar" style="height:80%;background:linear-gradient(to top, var(--hot-pink), var(--electric-purple));"></div>
+        <div class="bar" style="height:45%;background:linear-gradient(to top, var(--teal), var(--sky));"></div>
+        <div class="bar" style="height:90%;background:linear-gradient(to top, var(--electric-purple), var(--hot-pink));"></div>
+        <div class="bar" style="height:65%;background:linear-gradient(to top, var(--sunny-yellow), var(--hot-pink));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:0.3rem;">
+        <span style="font-size:0.6rem;color:var(--ink-muted);font-weight:700;">Mon</span>
+        <span style="font-size:0.6rem;color:var(--ink-muted);font-weight:700;">Tue</span>
+        <span style="font-size:0.6rem;color:var(--ink-muted);font-weight:700;">Wed</span>
+        <span style="font-size:0.6rem;color:var(--ink-muted);font-weight:700;">Thu</span>
+        <span style="font-size:0.6rem;color:var(--ink-muted);font-weight:700;">Fri</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:linear-gradient(135deg, var(--hot-pink), var(--electric-purple));">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg, var(--teal), var(--sky));">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg, var(--sunny-yellow), var(--coral));">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg, var(--electric-purple), var(--hot-pink));">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 members &middot; 3 active now</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-pink">Frontend</span>
+        <span class="tag tag-purple">Backend</span>
+        <span class="tag tag-teal">DevOps</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;">
+        <div class="progress-fill pf-teal" style="width:75%"></div>
+      </div>
+    </div>
+
+    <div class="card card-teal">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div class="stat-value stat-value-teal" style="font-size:1.8rem;">38ms</div>
+          <div class="stat-label">P50</div>
+        </div>
+        <div style="width:3px;border-radius:2px;background:linear-gradient(to bottom, var(--hot-pink), var(--electric-purple));opacity:0.2;"></div>
+        <div style="text-align:center;">
+          <div class="stat-value stat-value-yellow" style="font-size:1.8rem;">112ms</div>
+          <div class="stat-label">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-teal" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:var(--ink-muted);font-weight:700;">Uptime</span>
+        <span style="font-size:0.65rem;font-weight:800;background:linear-gradient(135deg,var(--teal),var(--sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAINBOW DIVIDER -->
+  <div class="candy-divider"></div>
+
+  <!-- 2-COL GRID -->
+  <div class="grid-2">
+    <div class="card card-purple">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-purple" style="font-size:0.55rem;">3 remaining</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Update design tokens</span>
+        <span class="tag tag-pink" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Fix auth redirect bug</span>
+        <span class="tag tag-coral" style="margin-left:auto;font-size:0.55rem;">Bug</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Implement search filters</span>
+        <span class="tag tag-teal" style="margin-left:auto;font-size:0.55rem;">Feature</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write API documentation</span>
+        <span class="tag tag-sky" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Deploy staging environment</span>
+        <span class="tag tag-yellow" style="margin-left:auto;font-size:0.55rem;">DevOps</span>
+      </div>
+    </div>
+
+    <div class="card card-pink">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:linear-gradient(135deg, rgba(255,51,153,0.05), rgba(124,58,237,0.05));border-radius:16px;border:2px solid rgba(255,51,153,0.1);">
+          <div class="candy-knob" style="width:36px;height:36px;font-size:0.75rem;">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;font-weight:700;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div>
+            <span class="tag tag-purple" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);font-weight:700;">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:linear-gradient(135deg, rgba(6,214,160,0.05), rgba(56,189,248,0.05));border-radius:16px;border:2px solid rgba(6,214,160,0.1);">
+          <div class="candy-knob candy-knob-teal" style="width:36px;height:36px;font-size:0.75rem;">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;font-weight:700;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div>
+            <span class="tag tag-coral" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);font-weight:700;">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.7rem 1rem;background:linear-gradient(135deg, rgba(255,214,10,0.05), rgba(255,107,107,0.05));border-radius:16px;border:2px solid rgba(255,214,10,0.12);">
+          <div class="candy-knob candy-knob-yellow" style="width:36px;height:36px;font-size:0.75rem;">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;font-weight:700;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div>
+            <span class="tag tag-teal" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);font-weight:700;">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new AudioContext();
+    return ctx;
+  }
+
+  function ensureCtx(){
+    const c = getCtx();
+    if(c.state === 'suspended') c.resume();
+    return c;
+  }
+
+  // Bubble pop sound (card hover)
+  function playBubblePop(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, t);
+    osc.frequency.exponentialRampToValueAtTime(1200, t + 0.04);
+    osc.frequency.exponentialRampToValueAtTime(300, t + 0.1);
+    gain.gain.setValueAtTime(0.12, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t); osc.stop(t + 0.13);
+    // High pop overtone
+    const osc2 = c.createOscillator();
+    const gain2 = c.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1800, t + 0.02);
+    osc2.frequency.exponentialRampToValueAtTime(2400, t + 0.05);
+    gain2.gain.setValueAtTime(0.04, t + 0.02);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    osc2.connect(gain2).connect(c.destination);
+    osc2.start(t + 0.02); osc2.stop(t + 0.1);
+  }
+
+  // Bright chime (card click)
+  function playBrightChime(){
+    const c = ensureCtx(), t = c.currentTime;
+    const notes = [1047, 1319, 1568]; // C6, E6, G6 - major triad
+    notes.forEach(function(freq, i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.06, t + i * 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.05 + 0.35);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t + i * 0.05);
+      osc.stop(t + i * 0.05 + 0.38);
+    });
+  }
+
+  // Candy crunch (nav pill click) - bright filtered noise burst
+  function playCandyCrunch(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.exponentialRampToValueAtTime(1760, t + 0.03);
+    osc.frequency.exponentialRampToValueAtTime(440, t + 0.08);
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    const filter = c.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.value = 600;
+    osc.connect(filter).connect(gain).connect(c.destination);
+    osc.start(t); osc.stop(t + 0.12);
+    // Sparkle overtone
+    const osc2 = c.createOscillator();
+    const gain2 = c.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = 2637; // E7
+    gain2.gain.setValueAtTime(0.03, t + 0.04);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    osc2.connect(gain2).connect(c.destination);
+    osc2.start(t + 0.04); osc2.stop(t + 0.17);
+  }
+
+  // Bubbly boop (button click) - bouncy pitch rise
+  function playBubblyBoop(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(300, t);
+    osc.frequency.exponentialRampToValueAtTime(900, t + 0.08);
+    osc.frequency.exponentialRampToValueAtTime(600, t + 0.15);
+    gain.gain.setValueAtTime(0.1, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t); osc.stop(t + 0.2);
+    // Sub bubble
+    const osc2 = c.createOscillator();
+    const gain2 = c.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(150, t);
+    osc2.frequency.exponentialRampToValueAtTime(400, t + 0.06);
+    gain2.gain.setValueAtTime(0.06, t);
+    gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+    osc2.connect(gain2).connect(c.destination);
+    osc2.start(t); osc2.stop(t + 0.12);
+  }
+
+  // Intro jingle - happy ascending arpeggio
+  function playIntroJingle(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = ensureCtx(), t = c.currentTime;
+    const notes = [523, 659, 784, 1047, 1319]; // C5, E5, G5, C6, E6
+    notes.forEach(function(freq, i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, t + i * 0.06);
+      gain.gain.linearRampToValueAtTime(0.06, t + i * 0.06 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.06 + 0.25);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t + i * 0.06);
+      osc.stop(t + i * 0.06 + 0.28);
+    });
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playBubblePop(); playIntroJingle(); });
+    el.addEventListener('click', function(){ playBrightChime(); playIntroJingle(); });
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playCandyCrunch(); playIntroJingle(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playBubblyBoop(); playIntroJingle(); });
+  });
+})();
+</script>
+</body>
+</html>

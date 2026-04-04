@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earthy Organic - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #F5F0EB;
+  --bg-card: #ffffff;
+  --ink: #2A1F14;
+  --ink-soft: #5C4A3A;
+  --ink-muted: #9B8A7A;
+  --terracotta: #C4654A;
+  --sage: #7A9E7E;
+  --clay: #D4A574;
+  --clay-light: #E8C9A0;
+  --sage-light: #B5D4B8;
+  --terracotta-light: #E8A08A;
+  --shadow-warm: 0 4px 24px rgba(90,60,30,0.08), 0 1px 6px rgba(90,60,30,0.05);
+  --shadow-warm-lg: 0 8px 40px rgba(90,60,30,0.12), 0 2px 10px rgba(90,60,30,0.06);
+  --shadow-warm-sm: 0 2px 12px rgba(90,60,30,0.06);
+}
+
+body{
+  min-height:100vh;
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Grain texture overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+  pointer-events:none;
+  opacity:0.6;
+}
+
+/* Organic blob shapes */
+body::after{
+  content:'';position:fixed;top:-10%;right:-10%;
+  width:50vw;height:50vw;
+  border-radius:62% 38% 70% 30% / 42% 58% 42% 58%;
+  background:radial-gradient(ellipse, rgba(122,158,126,0.07) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+  animation:blobFloat 20s ease-in-out infinite;
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Leaf decorative element */
+.container::before{
+  content:'';position:fixed;bottom:5%;left:3%;
+  width:35vw;height:35vw;
+  border-radius:30% 70% 60% 40% / 50% 30% 70% 50%;
+  background:radial-gradient(ellipse, rgba(196,101,74,0.05) 0%, transparent 70%);
+  pointer-events:none;z-index:0;
+  animation:blobFloat 16s ease-in-out infinite reverse;
+}
+
+/* -- HEADER -- */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Fraunces',serif;font-weight:800;font-size:2rem;
+  color:var(--terracotta);
+  letter-spacing:-1px;
+  position:relative;
+}
+.logo::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;
+  height:3px;border-radius:2px;
+  background:linear-gradient(90deg, var(--terracotta), var(--clay), var(--sage));
+  opacity:0.6;
+}
+
+.nav-pills{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.nav-pill{
+  background:transparent;
+  border:1.5px solid rgba(42,31,20,0.1);
+  border-radius:50px;
+  padding:0.55rem 1.2rem;
+  font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;
+  cursor:pointer;transition:all 0.25s;
+  text-transform:lowercase;letter-spacing:0.5px;
+  color:var(--ink-muted);
+}
+.nav-pill:hover{
+  border-color:var(--terracotta);color:var(--terracotta);
+  background:rgba(196,101,74,0.05);
+}
+.nav-pill.active{
+  background:var(--terracotta);
+  border-color:var(--terracotta);
+  color:#fff;
+}
+
+/* -- CARDS -- */
+.card{
+  background:var(--bg-card);
+  border:none;
+  border-radius:20px;
+  box-shadow:var(--shadow-warm);
+  padding:1.8rem;
+  transition:all 0.3s cubic-bezier(0.22,1,0.36,1);
+  position:relative;overflow:hidden;
+}
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-warm-lg);
+}
+
+/* Subtle organic border accent on cards */
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:20px 20px 0 0;
+  opacity:0;transition:opacity 0.3s;
+}
+.card:hover::before{opacity:1;}
+.card-terracotta::before{background:linear-gradient(90deg, var(--terracotta), var(--clay));}
+.card-sage::before{background:linear-gradient(90deg, var(--sage), var(--sage-light));}
+.card-clay::before{background:linear-gradient(90deg, var(--clay), var(--terracotta-light));}
+.card-warm::before{background:linear-gradient(90deg, var(--clay-light), var(--terracotta));}
+.card-earth::before{background:linear-gradient(90deg, var(--sage), var(--clay));}
+
+/* -- GRIDS -- */
+.grid-hero{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1.5fr 1fr;
+  margin-bottom:1.5rem;
+}
+.grid-3{
+  display:grid;gap:1.5rem;
+  grid-template-columns:repeat(3,1fr);
+  margin-bottom:1.5rem;
+}
+.grid-2{
+  display:grid;gap:1.5rem;
+  grid-template-columns:1fr 1fr;
+}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* -- TYPOGRAPHY -- */
+.card-title{
+  font-family:'Fraunces',serif;font-weight:600;font-size:1.25rem;
+  margin-bottom:0.4rem;color:var(--ink);
+  letter-spacing:-0.3px;
+}
+.card-subtitle{
+  font-size:0.72rem;margin-bottom:0.8rem;
+  text-transform:lowercase;letter-spacing:1.5px;color:var(--ink-muted);
+  font-weight:500;
+}
+.card-body{font-size:0.85rem;line-height:1.7;color:var(--ink-soft);}
+
+/* -- GAUGE (organic circle) -- */
+.gauge-circle{
+  width:110px;height:110px;border-radius:50%;
+  background:linear-gradient(145deg, #faf7f3, #f0ebe4);
+  box-shadow:inset 0 2px 8px rgba(90,60,30,0.08), var(--shadow-warm-sm);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto;
+  position:relative;
+}
+.gauge-circle::before{
+  content:'';position:absolute;inset:6px;border-radius:50%;
+  border:3px solid rgba(122,158,126,0.2);
+  border-top-color:var(--sage);
+  border-right-color:var(--sage);
+  transform:rotate(45deg);
+}
+.gauge-val{
+  font-family:'Fraunces',serif;font-weight:800;font-size:1.8rem;
+  color:var(--ink);line-height:1;
+}
+.gauge-lbl{
+  font-size:0.55rem;text-transform:lowercase;letter-spacing:1.5px;
+  color:var(--ink-muted);margin-top:2px;
+}
+
+/* -- PROGRESS -- */
+.progress-track{
+  width:100%;height:8px;
+  border-radius:10px;
+  background:rgba(42,31,20,0.06);
+  overflow:hidden;margin-top:0.7rem;
+}
+.progress-fill{height:100%;border-radius:10px;transition:width 1s ease;}
+.pf-sage{background:linear-gradient(90deg, var(--sage), var(--sage-light));}
+.pf-terracotta{background:linear-gradient(90deg, var(--terracotta), var(--terracotta-light));}
+.pf-clay{background:linear-gradient(90deg, var(--clay), var(--clay-light));}
+
+/* -- BADGE -- */
+.badge{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  background:rgba(122,158,126,0.12);
+  border-radius:50px;padding:0.3rem 0.7rem;
+  font-size:0.7rem;font-weight:700;
+  color:var(--sage);
+}
+.badge-terracotta{
+  background:rgba(196,101,74,0.1);color:var(--terracotta);
+}
+
+/* -- TAG -- */
+.tag{
+  display:inline-block;
+  border-radius:50px;
+  padding:0.22rem 0.65rem;font-size:0.65rem;font-weight:500;
+  text-transform:lowercase;letter-spacing:0.5px;margin:0.15rem;
+  border:none;
+}
+.tag-terracotta{background:rgba(196,101,74,0.1);color:var(--terracotta);}
+.tag-sage{background:rgba(122,158,126,0.12);color:#5A8060;}
+.tag-clay{background:rgba(212,165,116,0.15);color:#A07840;}
+.tag-brown{background:rgba(42,31,20,0.06);color:var(--ink-soft);}
+
+/* -- AVATAR -- */
+.avatar-row{display:flex;gap:0.6rem;margin-bottom:1rem;}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  box-shadow:var(--shadow-warm-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:0.8rem;
+  color:#fff;border:2px solid var(--bg-card);
+}
+
+/* -- BUTTON -- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;
+  text-transform:lowercase;letter-spacing:0.3px;
+  padding:0.65rem 1.3rem;
+  border:none;border-radius:50px;
+  cursor:pointer;transition:all 0.2s;
+  background:var(--bg);
+  box-shadow:var(--shadow-warm-sm);
+  color:var(--ink);
+}
+.btn:hover{
+  box-shadow:var(--shadow-warm);
+  transform:translateY(-1px);
+}
+.btn-primary{
+  background:var(--terracotta);
+  color:#fff;
+}
+.btn-primary:hover{
+  background:#B55A40;
+}
+
+/* -- TASK LIST -- */
+.task-item{
+  display:flex;align-items:center;gap:0.75rem;
+  padding:0.6rem 0;
+  border-bottom:1px solid rgba(42,31,20,0.05);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--bg);
+  border:1.5px solid rgba(42,31,20,0.12);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;font-weight:700;color:#fff;
+  transition:all 0.2s;
+}
+.task-check.done{
+  background:var(--sage);
+  border-color:var(--sage);
+}
+.task-text{font-size:0.85rem;color:var(--ink-soft);}
+.task-text.done{text-decoration:line-through;opacity:0.35;}
+
+/* -- STAT KNOB -- */
+.stat-knob{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(145deg, #faf7f3, #f0ebe4);
+  box-shadow:var(--shadow-warm-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:800;font-size:0.95rem;
+  color:var(--terracotta);flex-shrink:0;
+}
+
+/* -- DIVIDER -- */
+.organic-divider{
+  height:1px;margin:0.3rem 3rem 1.2rem;
+  background:linear-gradient(90deg, transparent, rgba(212,165,116,0.3), rgba(122,158,126,0.3), transparent);
+  border-radius:1px;
+}
+
+/* -- ANIMATIONS -- */
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(18px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.card,.header{animation:fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.08s}
+.grid-hero .card:nth-child(2){animation-delay:0.14s}
+.grid-3 .card:nth-child(1){animation-delay:0.20s}
+.grid-3 .card:nth-child(2){animation-delay:0.26s}
+.grid-3 .card:nth-child(3){animation-delay:0.32s}
+.grid-2 .card:nth-child(1){animation-delay:0.38s}
+.grid-2 .card:nth-child(2){animation-delay:0.44s}
+
+@keyframes blobFloat{
+  0%,100%{transform:translate(0,0) rotate(0deg) scale(1)}
+  33%{transform:translate(15px,-20px) rotate(3deg) scale(1.03)}
+  66%{transform:translate(-10px,10px) rotate(-2deg) scale(0.97)}
+}
+
+/* Leaf sway on logo */
+@keyframes leafSway{
+  0%,100%{transform:rotate(0deg)}
+  25%{transform:rotate(1deg)}
+  75%{transform:rotate(-0.5deg)}
+}
+.logo{animation:leafSway 6s ease-in-out infinite;}
+
+/* Organic shimmer on divider */
+@keyframes organicShimmer{
+  0%{background-position:0% 50%}
+  100%{background-position:200% 50%}
+}
+.organic-divider{
+  background:linear-gradient(90deg, transparent, rgba(212,165,116,0.3), rgba(122,158,126,0.3), rgba(196,101,74,0.2), transparent);
+  background-size:200% 100%;
+  animation:organicShimmer 6s linear infinite;
+}
+
+/* Gentle breathe on gauge */
+@keyframes breathe{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.02)}
+}
+.gauge-circle{animation:breathe 5s ease-in-out infinite;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Earthy Organic</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-terracotta">
+      <div class="card-subtitle">this sprint</div>
+      <div class="card-title" style="font-size:1.45rem;">Sprint velocity is climbing</div>
+      <div class="card-body">
+        Resolved 42 tasks across three workstreams. Two features shipped ahead of schedule with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.2rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div style="font-size:0.6rem;text-transform:lowercase;letter-spacing:1.5px;color:var(--ink-muted);">velocity</div>
+          <div style="font-family:'Fraunces',serif;font-weight:800;font-size:1.8rem;">42 pts</div>
+        </div>
+        <div>
+          <div style="font-size:0.6rem;text-transform:lowercase;letter-spacing:1.5px;color:var(--ink-muted);">target</div>
+          <div style="font-family:'Fraunces',serif;font-weight:800;font-size:1.8rem;">34 pts</div>
+        </div>
+        <span class="badge">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-primary">view report &rarr;</button>
+        <button class="btn">share</button>
+      </div>
+    </div>
+
+    <div class="card card-sage">
+      <div class="card-subtitle">completion</div>
+      <div class="gauge-circle" style="margin:1.2rem auto;">
+        <div class="gauge-val">86%</div>
+        <div class="gauge-lbl">done</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-sage" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="organic-divider"></div>
+
+  <div class="grid-3">
+    <div class="card card-clay">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div class="stat-knob">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">deploys</div>
+          <div style="font-size:0.7rem;color:var(--ink-muted);">this week</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;height:70px;margin:1rem 0 1.4rem;">
+        <div style="flex:1;height:30%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--terracotta),rgba(196,101,74,0.2));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Mon</span>
+        </div>
+        <div style="flex:1;height:55%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--clay),rgba(212,165,116,0.2));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Tue</span>
+        </div>
+        <div style="flex:1;height:80%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--sage),rgba(122,158,126,0.2));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Wed</span>
+        </div>
+        <div style="flex:1;height:45%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--clay),rgba(212,165,116,0.2));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Thu</span>
+        </div>
+        <div style="flex:1;height:100%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--terracotta),var(--clay));position:relative;">
+          <span style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:0.55rem;color:var(--ink-muted);">Fri</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-sage">
+      <div class="card-subtitle">team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:linear-gradient(135deg,var(--terracotta),#D4805A);">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--sage),#90B894);">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg,var(--clay),#C4A070);">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#8B7060,var(--ink-soft));">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.2rem;">
+        <span class="tag tag-terracotta">design</span>
+        <span class="tag tag-sage">frontend</span>
+        <span class="tag tag-clay">backend</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;">
+        <div class="progress-fill pf-terracotta" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div class="card card-earth">
+      <div class="card-subtitle">latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div style="font-family:'Fraunces',serif;font-weight:800;font-size:1.8rem;color:var(--ink);">38ms</div>
+          <div style="font-size:0.55rem;text-transform:lowercase;color:var(--ink-muted);letter-spacing:1.5px;">p50</div>
+        </div>
+        <div style="width:1px;background:rgba(42,31,20,0.08);border-radius:1px;"></div>
+        <div style="text-align:center;">
+          <div style="font-family:'Fraunces',serif;font-weight:800;font-size:1.8rem;color:var(--ink);">112ms</div>
+          <div style="font-size:0.55rem;text-transform:lowercase;color:var(--ink-muted);letter-spacing:1.5px;">p99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-sage" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:var(--ink-muted);">uptime</span>
+        <span style="font-size:0.65rem;font-weight:700;color:var(--sage);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="organic-divider"></div>
+
+  <div class="grid-2">
+    <div class="card card-sage">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-sage" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&#10003;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag tag-terracotta" style="margin-left:auto;font-size:0.55rem;">design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&#10003;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag tag-clay" style="margin-left:auto;font-size:0.55rem;">backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag tag-sage" style="margin-left:auto;font-size:0.55rem;">frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag tag-brown" style="margin-left:auto;font-size:0.55rem;">ux</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag tag-clay" style="margin-left:auto;font-size:0.55rem;">docs</span>
+      </div>
+    </div>
+
+    <div class="card card-warm">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.65rem 1rem;background:rgba(196,101,74,0.04);border-radius:14px;">
+          <div class="stat-knob" style="width:34px;height:34px;font-size:0.7rem;color:var(--terracotta);">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="color:var(--ink-muted);">merged</span></div>
+            <span class="tag tag-sage" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">2m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.65rem 1rem;background:rgba(122,158,126,0.04);border-radius:14px;">
+          <div class="stat-knob" style="width:34px;height:34px;font-size:0.7rem;color:var(--sage);">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="color:var(--ink-muted);">opened</span></div>
+            <span class="tag tag-terracotta" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">18m</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.7rem;padding:0.65rem 1rem;background:rgba(212,165,116,0.06);border-radius:14px;">
+          <div class="stat-knob" style="width:34px;height:34px;font-size:0.7rem;color:var(--clay);">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="color:var(--ink-muted);">deployed</span></div>
+            <span class="tag tag-clay" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ink-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let ctx;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // Warm wooden tap sound
+  function playWoodTap(freq, dur, vol){
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    const f = c.createBiquadFilter();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(freq || 200, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime((freq||200)*0.4, c.currentTime + (dur||0.1));
+    f.type = 'bandpass';
+    f.frequency.setValueAtTime(freq || 200, c.currentTime);
+    f.Q.setValueAtTime(8, c.currentTime);
+    g.gain.setValueAtTime(vol || 0.06, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + (dur||0.1));
+    o.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + (dur||0.1));
+  }
+
+  // Soft nature tone — warm sine with gentle filter
+  function playNatureTone(freq, dur, vol){
+    const c = getCtx();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    const f = c.createBiquadFilter();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    f.type = 'lowpass';
+    f.frequency.setValueAtTime(1200, c.currentTime);
+    f.frequency.exponentialRampToValueAtTime(300, c.currentTime + dur);
+    g.gain.setValueAtTime(0, c.currentTime);
+    g.gain.linearRampToValueAtTime(vol || 0.04, c.currentTime + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    o.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur);
+  }
+
+  // Breathy rustle — filtered noise
+  function playRustle(dur, vol){
+    const c = getCtx();
+    const bufSize = c.sampleRate * dur;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const data = buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) data[i] = Math.random()*2-1;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const f = c.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.setValueAtTime(2000, c.currentTime);
+    f.Q.setValueAtTime(2, c.currentTime);
+    const g = c.createGain();
+    g.gain.setValueAtTime(vol || 0.015, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    src.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    src.start();
+    src.stop(c.currentTime + dur);
+  }
+
+  // Earthy intro — warm pentatonic tones like a wooden wind chime
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    playNatureTone(262, 0.6, 0.04);  // C
+    setTimeout(function(){ playNatureTone(330, 0.5, 0.03); }, 120);  // E
+    setTimeout(function(){ playNatureTone(392, 0.45, 0.025); }, 240);  // G
+    setTimeout(function(){ playRustle(0.3, 0.01); }, 100);
+  }
+
+  // Card hover: soft wooden tap
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){
+      playIntro();
+      playWoodTap(280, 0.08, 0.05);
+    });
+    // Card click: warm resonant tone
+    el.addEventListener('click', function(){
+      playNatureTone(330, 0.3, 0.05);
+      setTimeout(function(){ playNatureTone(440, 0.2, 0.03); }, 60);
+    });
+  });
+
+  // Nav pill: leaf rustle + gentle tap
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playRustle(0.15, 0.02);
+      playWoodTap(350, 0.06, 0.04);
+    });
+  });
+
+  // Button click: warm ascending tones like a wooden xylophone
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      playIntro();
+      playWoodTap(300, 0.1, 0.05);
+      setTimeout(function(){ playWoodTap(400, 0.08, 0.04); }, 70);
+      setTimeout(function(){ playNatureTone(500, 0.2, 0.03); }, 130);
+    });
+  });
+
+  // Task check: earthy click
+  document.querySelectorAll('.task-check').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playWoodTap(220, 0.06, 0.05);
+      setTimeout(function(){ playNatureTone(350, 0.15, 0.03); }, 40);
+    });
+  });
+})();
+</script>
+</body>
+</html>

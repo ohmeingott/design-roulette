@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soft Matte - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg: #F7F5F3;
+  --sage: #9CAF88;
+  --rose: #C4918E;
+  --blue: #8BA4B8;
+  --lavender: #A89CC8;
+  --ink: #2D2D2D;
+  --ink-soft: #5A5A5A;
+  --ink-muted: #8E8E8E;
+  --sage-light: #E8EDE4;
+  --rose-light: #F2E0DE;
+  --blue-light: #DFE8EE;
+  --lavender-light: #E8E4F0;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-weight:300;
+  background:var(--bg);
+  color:var(--ink);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  letter-spacing:0.01em;
+  line-height:1.6;
+}
+
+.container{max-width:920px;margin:0 auto;}
+
+/* -- HEADER -- */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Instrument Serif',serif;font-size:2.2rem;
+  letter-spacing:-0.5px;
+  color:var(--ink);
+  font-weight:400;
+}
+
+.nav-pills{display:flex;gap:0.3rem;}
+.nav-pill{
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.78rem;font-weight:500;
+  letter-spacing:0.5px;text-transform:uppercase;
+  padding:0.55rem 1.2rem;
+  border-radius:50px;
+  cursor:pointer;transition:all 0.25s ease;
+  color:var(--ink-soft);
+  background:transparent;
+}
+.nav-pill:hover{color:var(--ink);background:var(--sage-light);}
+.nav-pill.active{
+  background:var(--sage);
+  color:#fff;
+}
+
+/* -- GRID LAYOUTS -- */
+.grid-hero{display:grid;grid-template-columns:1.4fr 0.6fr;gap:1.2rem;margin-bottom:1.2rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:1.2rem;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+
+@media(max-width:720px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* -- CARD -- */
+.card{
+  border-radius:16px;
+  padding:1.6rem;
+  position:relative;
+  transition:transform 0.3s ease;
+}
+.card:hover{transform:translateY(-2px);}
+
+/* Matte color cards */
+.card-sage{background:var(--sage);}
+.card-rose{background:var(--rose);}
+.card-blue{background:var(--blue);}
+.card-lavender{background:var(--lavender);}
+.card-sage-light{background:var(--sage-light);}
+.card-rose-light{background:var(--rose-light);}
+.card-blue-light{background:var(--blue-light);}
+.card-lavender-light{background:var(--lavender-light);}
+
+/* Dark cards get light text */
+.card-sage,.card-rose,.card-blue,.card-lavender{color:#fff;}
+.card-sage .card-subtitle,.card-rose .card-subtitle,.card-blue .card-subtitle,.card-lavender .card-subtitle{color:rgba(255,255,255,0.7);}
+.card-sage .stat-label,.card-rose .stat-label,.card-blue .stat-label,.card-lavender .stat-label{color:rgba(255,255,255,0.65);}
+.card-sage .ink-muted,.card-rose .ink-muted,.card-blue .ink-muted,.card-lavender .ink-muted{color:rgba(255,255,255,0.55);}
+
+/* Light cards keep dark text */
+.card-sage-light,.card-rose-light,.card-blue-light,.card-lavender-light{color:var(--ink);}
+
+.card-subtitle{
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.7rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--ink-muted);
+  margin-bottom:0.5rem;
+}
+.card-title{
+  font-family:'Instrument Serif',serif;font-size:1.2rem;font-weight:400;
+  line-height:1.3;margin-bottom:0.6rem;
+}
+.card-body{font-size:0.85rem;color:var(--ink-soft);line-height:1.7;}
+
+/* -- STATS -- */
+.stat-value{
+  font-family:'Instrument Serif',serif;font-size:2rem;font-weight:400;
+  line-height:1;
+}
+.stat-label{
+  font-size:0.65rem;font-weight:500;text-transform:uppercase;
+  letter-spacing:1px;color:var(--ink-muted);margin-top:0.2rem;
+}
+
+/* -- BADGE -- */
+.badge{
+  display:inline-block;
+  font-size:0.65rem;font-weight:500;
+  padding:0.3rem 0.7rem;
+  border-radius:50px;
+  letter-spacing:0.5px;
+}
+.badge-sage{background:rgba(156,175,136,0.15);color:var(--sage);}
+.badge-rose{background:rgba(196,145,142,0.15);color:var(--rose);}
+.badge-blue{background:rgba(139,164,184,0.15);color:var(--blue);}
+.badge-on-dark{background:rgba(255,255,255,0.2);color:#fff;}
+
+/* -- BUTTON -- */
+.btn{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:0.75rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:1px;
+  padding:0.65rem 1.3rem;
+  border:none;border-radius:50px;
+  cursor:pointer;transition:all 0.25s ease;
+}
+.btn-primary{
+  background:#fff;color:var(--ink);
+}
+.btn-primary:hover{background:var(--sage-light);}
+.btn-secondary{
+  background:rgba(255,255,255,0.2);color:#fff;
+}
+.btn-secondary:hover{background:rgba(255,255,255,0.35);}
+
+/* -- PROGRESS BAR -- */
+.progress-track{
+  height:5px;border-radius:3px;
+  background:rgba(0,0,0,0.06);
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:3px;
+  transition:width 0.6s ease;
+}
+.pf-sage{background:var(--sage);}
+.pf-rose{background:var(--rose);}
+.pf-blue{background:var(--blue);}
+.pf-white{background:rgba(255,255,255,0.6);}
+
+/* -- BAR CHART -- */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:60px;margin:1rem 0 0.5rem;}
+.bar{
+  flex:1;border-radius:4px 4px 0 0;
+  transition:height 0.4s ease;
+}
+.bar-sage{background:rgba(255,255,255,0.35);}
+.bar-labels{display:flex;justify-content:space-between;}
+.bar-labels span{font-size:0.6rem;color:rgba(255,255,255,0.55);}
+
+/* -- AVATAR -- */
+.avatar-row{display:flex;gap:0.5rem;margin:0.8rem 0;}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Instrument Serif',serif;font-size:0.9rem;font-weight:400;
+  color:#fff;
+  background:var(--sage);
+}
+
+/* -- TAG -- */
+.tag{
+  display:inline-block;font-size:0.6rem;font-weight:500;
+  padding:0.2rem 0.6rem;border-radius:50px;
+  letter-spacing:0.5px;text-transform:uppercase;
+}
+.tag-sage{background:rgba(156,175,136,0.15);color:var(--sage);}
+.tag-rose{background:rgba(196,145,142,0.15);color:var(--rose);}
+.tag-blue{background:rgba(139,164,184,0.15);color:var(--blue);}
+.tag-on-dark{background:rgba(255,255,255,0.15);color:#fff;}
+
+/* -- GAUGE -- */
+.gauge-wrap{
+  width:110px;height:110px;border-radius:50%;
+  margin:1rem auto;
+  background:rgba(255,255,255,0.15);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.gauge-value{
+  font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:400;
+  line-height:1;color:#fff;
+}
+.gauge-label{
+  font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:rgba(255,255,255,0.65);margin-top:3px;
+}
+
+/* -- TASKS -- */
+.task-item{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.6rem 0;
+  border-bottom:1px solid rgba(0,0,0,0.04);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(0,0,0,0.04);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;font-weight:600;color:var(--ink);
+  border:none;cursor:pointer;
+  transition:all 0.2s ease;
+}
+.task-check.done{
+  background:var(--sage);
+  color:#fff;
+}
+.task-text{font-size:0.82rem;color:var(--ink-soft);font-weight:400;}
+.task-text.done{text-decoration:line-through;opacity:0.4;}
+
+/* -- ACTIVITY -- */
+.activity-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.7rem 0.9rem;
+  background:rgba(0,0,0,0.02);
+  border-radius:12px;
+  margin-bottom:0.4rem;
+}
+.activity-avatar{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Instrument Serif',serif;font-size:0.75rem;font-weight:400;
+  color:#fff;flex-shrink:0;
+}
+.activity-text{font-size:0.8rem;flex:1;color:var(--ink-soft);}
+.activity-text strong{font-weight:500;color:var(--ink);}
+.activity-time{font-size:0.65rem;color:var(--ink-muted);white-space:nowrap;}
+
+/* -- ANIMATION -- */
+@keyframes fadeUp{
+  0%{opacity:0;transform:translateY(16px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+.card,.header{animation:fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;}
+.header{animation-delay:0s}
+.grid-hero .card:nth-child(1){animation-delay:0.06s}
+.grid-hero .card:nth-child(2){animation-delay:0.12s}
+.grid-3 .card:nth-child(1){animation-delay:0.18s}
+.grid-3 .card:nth-child(2){animation-delay:0.24s}
+.grid-3 .card:nth-child(3){animation-delay:0.30s}
+.grid-2 .card:nth-child(1){animation-delay:0.36s}
+.grid-2 .card:nth-child(2){animation-delay:0.42s}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Soft Matte</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <!-- HERO GRID -->
+  <div class="grid-hero">
+    <div class="card card-sage">
+      <div class="card-subtitle">Sprint Overview</div>
+      <div class="card-title" style="font-size:1.5rem;">Current Sprint Progress</div>
+      <div class="card-body" style="color:rgba(255,255,255,0.75);">
+        On track for delivery. Two features completed ahead of schedule, one in final review. Team velocity trending upward with clean merge history.
+      </div>
+      <div style="display:flex;gap:1.5rem;margin-top:1.3rem;flex-wrap:wrap;align-items:center;">
+        <div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.6);">Velocity</div>
+          <div class="stat-value" style="color:#fff;">42 pts</div>
+        </div>
+        <div>
+          <div class="stat-label" style="color:rgba(255,255,255,0.6);">Target</div>
+          <div class="stat-value" style="color:#fff;">34 pts</div>
+        </div>
+        <span class="badge badge-on-dark">&uarr; 24%</span>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.5rem;">
+        <button class="btn btn-primary">View Details &rarr;</button>
+        <button class="btn btn-secondary">Export</button>
+      </div>
+    </div>
+
+    <div class="card card-rose">
+      <div class="card-subtitle" style="color:rgba(255,255,255,0.65);">Completion</div>
+      <div class="gauge-wrap">
+        <div class="gauge-value">86%</div>
+        <div class="gauge-label">Complete</div>
+      </div>
+      <div class="progress-track" style="background:rgba(255,255,255,0.15);">
+        <div class="progress-fill pf-white" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge badge-on-dark">&uarr; 18% from last sprint</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-COL GRID -->
+  <div class="grid-3">
+    <div class="card card-blue">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.6rem;">
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-size:1.2rem;color:#fff;">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;color:rgba(255,255,255,0.6);">Deploys</div>
+          <div class="ink-muted" style="font-size:0.7rem;color:rgba(255,255,255,0.5);">this week</div>
+        </div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar bar-sage" style="height:55%"></div>
+        <div class="bar bar-sage" style="height:80%"></div>
+        <div class="bar bar-sage" style="height:45%"></div>
+        <div class="bar bar-sage" style="height:95%"></div>
+        <div class="bar bar-sage" style="height:70%"></div>
+      </div>
+      <div class="bar-labels">
+        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>
+      </div>
+    </div>
+
+    <div class="card card-lavender">
+      <div class="card-subtitle" style="color:rgba(255,255,255,0.6);">Team</div>
+      <div class="avatar-row">
+        <div class="avatar" style="background:rgba(255,255,255,0.25);">P</div>
+        <div class="avatar" style="background:rgba(255,255,255,0.2);">A</div>
+        <div class="avatar" style="background:rgba(255,255,255,0.15);">M</div>
+        <div class="avatar" style="background:rgba(255,255,255,0.1);">K</div>
+      </div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.7);margin-bottom:0.6rem;">4 members &middot; 2 active now</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+        <span class="tag tag-on-dark">Frontend</span>
+        <span class="tag tag-on-dark">Backend</span>
+        <span class="tag tag-on-dark">Design</span>
+      </div>
+      <div class="progress-track" style="margin-top:1rem;background:rgba(255,255,255,0.15);">
+        <div class="progress-fill pf-white" style="width:72%"></div>
+      </div>
+    </div>
+
+    <div class="card card-sage-light">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div class="stat-value" style="font-size:1.8rem;color:var(--sage);">38ms</div>
+          <div class="stat-label">P50</div>
+        </div>
+        <div style="width:1px;background:rgba(0,0,0,0.06);"></div>
+        <div style="text-align:center;">
+          <div class="stat-value" style="font-size:1.8rem;color:var(--rose);">112ms</div>
+          <div class="stat-label">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill pf-sage" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.5rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:var(--ink-muted);">Uptime</span>
+        <span style="font-size:0.65rem;font-weight:500;color:var(--sage);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2-COL GRID -->
+  <div class="grid-2">
+    <div class="card card-rose-light">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag tag-rose" style="font-size:0.55rem;">3 remaining</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Update design tokens</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Fix API response caching</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Refactor grid layout component</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Improve onboarding flow</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes for v2.5</span>
+      </div>
+    </div>
+
+    <div class="card card-blue-light">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;display:flex;flex-direction:column;gap:0.4rem;">
+        <div class="activity-item">
+          <div class="activity-avatar" style="background:var(--sage);">P</div>
+          <div class="activity-text"><strong>Paul</strong> merged <span style="color:var(--sage);font-weight:500;">PR #421</span></div>
+          <span class="activity-time">2m ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar" style="background:var(--rose);">A</div>
+          <div class="activity-text"><strong>Anna</strong> opened <span style="color:var(--rose);font-weight:500;">Bug #89</span></div>
+          <span class="activity-time">18m ago</span>
+        </div>
+        <div class="activity-item">
+          <div class="activity-avatar" style="background:var(--blue);">K</div>
+          <div class="activity-text"><strong>Kai</strong> deployed <span style="color:var(--blue);font-weight:500;">v2.4.1</span></div>
+          <span class="activity-time">1h ago</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new AudioContext();
+    return ctx;
+  }
+
+  function ensureCtx(){
+    const c = getCtx();
+    if(c.state === 'suspended') c.resume();
+    return c;
+  }
+
+  // Soft tap (card hover) - gentle muted click
+  function playSoftTap(){
+    const c = ensureCtx(), t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600, t);
+    osc.frequency.exponentialRampToValueAtTime(400, t + 0.06);
+    gain.gain.setValueAtTime(0.04, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t);
+    osc.stop(t + 0.1);
+  }
+
+  // Quiet whoosh (card click) - very soft filtered noise
+  function playQuietWhoosh(){
+    const c = ensureCtx(), t = c.currentTime;
+    const bufSize = c.sampleRate * 0.15;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i = 0; i < bufSize; i++){
+      d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.4));
+    }
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const filter = c.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1200, t);
+    filter.frequency.exponentialRampToValueAtTime(600, t + 0.12);
+    filter.Q.value = 1.5;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.03, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+    src.connect(filter).connect(gain).connect(c.destination);
+    src.start(t);
+  }
+
+  // Gentle chime (nav pill click) - soft bell tone
+  function playGentleChime(){
+    const c = ensureCtx(), t = c.currentTime;
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    notes.forEach(function(freq, i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.025, t + i * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.06 + 0.25);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t + i * 0.06);
+      osc.stop(t + i * 0.06 + 0.28);
+    });
+  }
+
+  // Soft breath (button click) - ultra-quiet airy sound
+  function playSoftBreath(){
+    const c = ensureCtx(), t = c.currentTime;
+    const bufSize = c.sampleRate * 0.2;
+    const buf = c.createBuffer(1, bufSize, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i = 0; i < bufSize; i++) d[i] = (Math.random() * 2 - 1);
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const filter = c.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(800, t);
+    filter.frequency.linearRampToValueAtTime(1400, t + 0.08);
+    filter.frequency.linearRampToValueAtTime(600, t + 0.2);
+    filter.Q.value = 5;
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(0.025, t + 0.06);
+    gain.gain.linearRampToValueAtTime(0, t + 0.2);
+    src.connect(filter).connect(gain).connect(c.destination);
+    src.start(t);
+  }
+
+  // Intro: two very gentle tones
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = ensureCtx(), t = c.currentTime;
+    [392, 523.25].forEach(function(freq, i){
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.03, t + i * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.15 + 0.35);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t + i * 0.15);
+      osc.stop(t + i * 0.15 + 0.4);
+    });
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ playSoftTap(); playIntro(); });
+    el.addEventListener('click', function(){ playQuietWhoosh(); playIntro(); });
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playGentleChime(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playSoftBreath(); playIntro(); });
+  });
+})();
+</script>
+</body>
+</html>

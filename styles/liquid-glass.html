@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liquid Glass - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --glass-bg: rgba(255,255,255,0.45);
+  --glass-bg-light: rgba(255,255,255,0.25);
+  --glass-border: 1px solid rgba(255,255,255,0.6);
+  --glass-blur: blur(40px);
+  --glass-shadow: 0 8px 32px rgba(0,50,120,0.08);
+  --glass-shadow-lg: 0 16px 48px rgba(0,50,120,0.12);
+  --apple-blue: #0071E3;
+  --apple-green: #34C759;
+  --apple-orange: #FF9500;
+  --apple-red: #FF3B30;
+  --apple-purple: #AF52DE;
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --radius: 24px;
+}
+body{
+  min-height:100vh;
+  font-family:-apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', sans-serif;
+  background:linear-gradient(145deg, #e8eef5 0%, #f0f4f8 50%, #e4ecf4 100%);
+  color:var(--text-primary);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Floating glass orbs */
+body::before, body::after{
+  content:'';
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+}
+body::before{
+  width:400px;height:400px;
+  top:-100px;right:-80px;
+  background:radial-gradient(circle, rgba(0,113,227,0.12) 0%, rgba(0,113,227,0.03) 50%, transparent 70%);
+  animation:orbFloat 12s ease-in-out infinite;
+}
+body::after{
+  width:500px;height:500px;
+  bottom:-150px;left:-120px;
+  background:radial-gradient(circle, rgba(52,199,89,0.1) 0%, rgba(175,82,222,0.04) 40%, transparent 70%);
+  animation:orbFloat 16s ease-in-out infinite reverse;
+}
+
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(30px,-20px) scale(1.05)}
+  50%{transform:translate(-10px,30px) scale(0.95)}
+  75%{transform:translate(20px,10px) scale(1.02)}
+}
+
+/* Additional floating orbs via pseudo elements on container */
+.container{
+  max-width:900px;margin:0 auto;
+  position:relative;z-index:1;
+}
+.container::before{
+  content:'';position:absolute;
+  width:200px;height:200px;
+  top:40%;left:-80px;
+  background:radial-gradient(circle, rgba(255,149,0,0.1) 0%, transparent 60%);
+  border-radius:50%;
+  pointer-events:none;
+  animation:orbFloat 10s ease-in-out infinite 2s;
+  z-index:-1;
+}
+
+/* Header */
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;
+  backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);
+  background:rgba(255,255,255,0.55);
+  border:1px solid rgba(255,255,255,0.7);
+  border-radius:50px;
+  padding:0.65rem 1.2rem;
+  box-shadow:0 4px 24px rgba(0,50,120,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.logo{
+  font-weight:700;font-size:1.1rem;
+  letter-spacing:-0.02em;
+  color:var(--text-primary);
+  padding:0.3rem 0.8rem;
+  background:linear-gradient(135deg, var(--apple-blue), #5AC8FA);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-pills{display:flex;gap:0.3rem;}
+.nav-pill{
+  padding:0.45rem 1rem;border-radius:50px;
+  font-size:0.82rem;font-weight:500;
+  color:var(--text-secondary);
+  cursor:pointer;transition:all 0.3s cubic-bezier(0.25,0.1,0.25,1);
+  position:relative;
+}
+.nav-pill:hover{color:var(--text-primary);background:rgba(255,255,255,0.5);}
+.nav-pill.active{
+  color:#fff;
+  background:linear-gradient(135deg, var(--apple-blue), #5AC8FA);
+  box-shadow:0 2px 12px rgba(0,113,227,0.3);
+}
+
+/* Card base */
+.card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  border:var(--glass-border);
+  border-radius:var(--radius);
+  padding:1.6rem;
+  box-shadow:var(--glass-shadow);
+  transition:all 0.4s cubic-bezier(0.25,0.1,0.25,1);
+  position:relative;
+  overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+}
+/* Prismatic refraction edge */
+.card::after{
+  content:'';position:absolute;top:-50%;right:-50%;
+  width:100%;height:100%;
+  background:linear-gradient(
+    220deg,
+    transparent 40%,
+    rgba(0,113,227,0.04) 45%,
+    rgba(52,199,89,0.04) 50%,
+    rgba(255,149,0,0.04) 55%,
+    rgba(175,82,222,0.04) 60%,
+    transparent 65%
+  );
+  pointer-events:none;
+  transition:transform 0.6s ease;
+}
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--glass-shadow-lg);
+  background:rgba(255,255,255,0.55);
+}
+.card:hover::after{
+  transform:translate(-10%, 10%);
+}
+
+.card-title{
+  font-size:0.78rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.06em;
+  color:var(--text-secondary);
+  margin-bottom:1rem;
+}
+
+/* Grids */
+.grid-hero{display:grid;grid-template-columns:1.5fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.25rem;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;}
+
+/* Metric big */
+.metric{font-size:2.2rem;font-weight:700;letter-spacing:-0.03em;line-height:1.1;}
+.metric-label{font-size:0.82rem;color:var(--text-secondary);margin-top:0.15rem;}
+.metric-row{display:flex;align-items:baseline;gap:0.75rem;margin-bottom:0.3rem;}
+.metric-sub{font-size:1.1rem;font-weight:600;color:var(--text-secondary);}
+
+/* Badge */
+.badge{
+  display:inline-flex;align-items:center;gap:0.25rem;
+  font-size:0.72rem;font-weight:600;
+  padding:0.25rem 0.6rem;border-radius:50px;
+  background:rgba(52,199,89,0.12);color:var(--apple-green);
+}
+.badge.blue{background:rgba(0,113,227,0.1);color:var(--apple-blue);}
+.badge.orange{background:rgba(255,149,0,0.1);color:var(--apple-orange);}
+
+/* Buttons */
+.btn-row{display:flex;gap:0.6rem;margin-top:1.2rem;}
+.btn{
+  padding:0.55rem 1.1rem;border-radius:50px;
+  font-size:0.8rem;font-weight:600;
+  cursor:pointer;transition:all 0.3s ease;
+  border:none;font-family:inherit;
+}
+.btn-primary{
+  background:linear-gradient(135deg, var(--apple-blue), #5AC8FA);
+  color:#fff;
+  box-shadow:0 2px 12px rgba(0,113,227,0.25);
+}
+.btn-primary:hover{box-shadow:0 4px 20px rgba(0,113,227,0.35);transform:scale(1.03);}
+.btn-secondary{
+  background:rgba(255,255,255,0.5);
+  color:var(--text-primary);
+  border:1px solid rgba(255,255,255,0.6);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.btn-secondary:hover{background:rgba(255,255,255,0.7);}
+
+/* Progress bar */
+.progress-wrap{
+  width:100%;height:6px;border-radius:3px;
+  background:rgba(0,0,0,0.06);
+  margin:0.6rem 0;overflow:hidden;
+}
+.progress-bar{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg, var(--apple-blue), #5AC8FA);
+  transition:width 0.6s ease;
+}
+.progress-bar.green{background:linear-gradient(90deg, var(--apple-green), #30D158);}
+
+/* Gauge */
+.gauge-wrap{display:flex;align-items:center;gap:1.2rem;margin:0.5rem 0;}
+.gauge{
+  width:80px;height:80px;border-radius:50%;
+  background:conic-gradient(var(--apple-blue) 0deg, #5AC8FA 309.6deg, rgba(0,0,0,0.05) 309.6deg);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  box-shadow:0 4px 16px rgba(0,113,227,0.12);
+}
+.gauge::after{
+  content:'';position:absolute;
+  width:60px;height:60px;border-radius:50%;
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.gauge-value{
+  position:relative;z-index:1;
+  font-size:1.1rem;font-weight:700;color:var(--text-primary);
+}
+
+/* Bar chart */
+.bar-chart{display:flex;align-items:flex-end;gap:0.5rem;height:80px;margin:0.8rem 0;}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:0.3rem;flex:1;}
+.bar{
+  width:100%;border-radius:6px;
+  background:linear-gradient(180deg, var(--apple-blue), #5AC8FA);
+  transition:height 0.4s ease;
+  min-height:4px;
+  box-shadow:0 2px 8px rgba(0,113,227,0.15);
+}
+.bar-label{font-size:0.65rem;color:var(--text-secondary);font-weight:500;}
+
+/* Avatars */
+.avatar-row{display:flex;gap:-0.3rem;margin:0.6rem 0;}
+.avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:700;color:#fff;
+  border:2px solid rgba(255,255,255,0.8);
+  margin-right:-6px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+.avatar:nth-child(1){background:linear-gradient(135deg, var(--apple-blue), #5AC8FA);}
+.avatar:nth-child(2){background:linear-gradient(135deg, var(--apple-purple), #DA8FFF);}
+.avatar:nth-child(3){background:linear-gradient(135deg, var(--apple-green), #30D158);}
+.avatar:nth-child(4){background:linear-gradient(135deg, var(--apple-orange), #FFB340);}
+.avatar-meta{font-size:0.78rem;color:var(--text-secondary);margin:0.3rem 0 0.6rem;}
+
+/* Tags */
+.tag-row{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.tag{
+  padding:0.2rem 0.6rem;border-radius:50px;
+  font-size:0.68rem;font-weight:600;
+  background:rgba(0,113,227,0.08);color:var(--apple-blue);
+}
+.tag.green{background:rgba(52,199,89,0.1);color:var(--apple-green);}
+.tag.purple{background:rgba(175,82,222,0.1);color:var(--apple-purple);}
+.tag.orange{background:rgba(255,149,0,0.1);color:var(--apple-orange);}
+
+/* Task list */
+.task-list{display:flex;flex-direction:column;gap:0.5rem;}
+.task-item{
+  display:flex;align-items:center;gap:0.65rem;
+  padding:0.55rem 0.7rem;border-radius:14px;
+  background:rgba(255,255,255,0.35);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.5);
+  font-size:0.82rem;
+  transition:all 0.25s ease;
+}
+.task-item:hover{background:rgba(255,255,255,0.55);}
+.task-check{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid rgba(0,0,0,0.15);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:0.65rem;
+}
+.task-check.done{
+  background:linear-gradient(135deg, var(--apple-green), #30D158);
+  border-color:transparent;color:#fff;
+}
+.task-text{flex:1;font-weight:500;}
+.task-text.done{text-decoration:line-through;color:var(--text-secondary);}
+.task-tag{
+  padding:0.15rem 0.5rem;border-radius:50px;
+  font-size:0.65rem;font-weight:600;
+  background:rgba(0,113,227,0.08);color:var(--apple-blue);
+}
+.task-tag.orange{background:rgba(255,149,0,0.1);color:var(--apple-orange);}
+.task-tag.green{background:rgba(52,199,89,0.1);color:var(--apple-green);}
+.task-tag.purple{background:rgba(175,82,222,0.1);color:var(--apple-purple);}
+.task-tag.red{background:rgba(255,59,48,0.1);color:var(--apple-red);}
+
+/* Activity feed */
+.activity-feed{display:flex;flex-direction:column;gap:0.6rem;}
+.activity-item{
+  display:flex;align-items:flex-start;gap:0.7rem;
+  padding:0.6rem 0.7rem;border-radius:14px;
+  background:rgba(255,255,255,0.3);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.4);
+  transition:all 0.25s ease;
+}
+.activity-item:hover{background:rgba(255,255,255,0.5);}
+.activity-dot{
+  width:8px;height:8px;border-radius:50%;
+  margin-top:0.4rem;flex-shrink:0;
+}
+.activity-dot.blue{background:var(--apple-blue);box-shadow:0 0 8px rgba(0,113,227,0.3);}
+.activity-dot.red{background:var(--apple-red);box-shadow:0 0 8px rgba(255,59,48,0.3);}
+.activity-dot.green{background:var(--apple-green);box-shadow:0 0 8px rgba(52,199,89,0.3);}
+.activity-text{font-size:0.82rem;font-weight:500;line-height:1.4;}
+.activity-time{font-size:0.72rem;color:var(--text-secondary);margin-top:0.15rem;}
+.activity-bold{font-weight:700;}
+
+/* Latency stats */
+.latency-row{display:flex;gap:1.2rem;margin:0.5rem 0;}
+.latency-stat{}
+.latency-value{font-size:1.5rem;font-weight:700;letter-spacing:-0.02em;}
+.latency-label{font-size:0.72rem;color:var(--text-secondary);font-weight:500;}
+.uptime-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem;}
+.uptime-dot{width:8px;height:8px;border-radius:50%;background:var(--apple-green);box-shadow:0 0 8px rgba(52,199,89,0.4);}
+.uptime-text{font-size:0.82rem;font-weight:600;}
+
+/* Shimmer animation */
+@keyframes shimmer{
+  0%{background-position:-200% 0}
+  100%{background-position:200% 0}
+}
+.shimmer{
+  background:linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+  background-size:200% 100%;
+  animation:shimmer 4s ease-in-out infinite;
+}
+
+/* Float animation for cards */
+@keyframes gentleFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-4px)}
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+  .header{border-radius:20px;padding:0.8rem 1rem;}
+  .nav-pills{width:100%;justify-content:center;}
+  body{padding:1.5rem 1rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">Liquid Glass</div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <!-- GRID HERO -->
+  <div class="grid-hero">
+    <div class="card">
+      <div class="card-title">Sprint Overview</div>
+      <div class="metric-row">
+        <div class="metric">42<span style="font-size:0.9rem;font-weight:500;color:var(--text-secondary)"> pts</span></div>
+        <div class="badge">+24%</div>
+      </div>
+      <div class="metric-label">Velocity this sprint</div>
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.6rem;">
+        <span style="font-size:0.82rem;color:var(--text-secondary);">Target</span>
+        <span style="font-size:0.95rem;font-weight:700;">34 pts</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:82%;"></div></div>
+      <div class="btn-row">
+        <button class="btn btn-primary">View report</button>
+        <button class="btn btn-secondary">Share</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Completion</div>
+      <div class="gauge-wrap">
+        <div class="gauge"><span class="gauge-value">86%</span></div>
+        <div>
+          <div style="font-size:1.3rem;font-weight:700;">Done</div>
+          <div class="badge" style="margin-top:0.3rem;">+18% vs last</div>
+        </div>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar green" style="width:86%;"></div></div>
+    </div>
+  </div>
+
+  <!-- GRID 3 -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Deploys</div>
+      <div class="metric-row">
+        <div class="metric">8</div>
+        <span style="font-size:0.82rem;color:var(--text-secondary);">this week</span>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-col"><div class="bar" style="height:45%;"></div><div class="bar-label">Mon</div></div>
+        <div class="bar-col"><div class="bar" style="height:70%;"></div><div class="bar-label">Tue</div></div>
+        <div class="bar-col"><div class="bar" style="height:30%;"></div><div class="bar-label">Wed</div></div>
+        <div class="bar-col"><div class="bar" style="height:90%;"></div><div class="bar-label">Thu</div></div>
+        <div class="bar-col"><div class="bar" style="height:55%;"></div><div class="bar-label">Fri</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Team</div>
+      <div class="avatar-row">
+        <div class="avatar">P</div>
+        <div class="avatar">A</div>
+        <div class="avatar">M</div>
+        <div class="avatar">K</div>
+      </div>
+      <div class="avatar-meta">4 active · 2 in review</div>
+      <div class="tag-row">
+        <span class="tag purple">Design</span>
+        <span class="tag">Frontend</span>
+        <span class="tag green">Backend</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Latency</div>
+      <div class="latency-row">
+        <div class="latency-stat">
+          <div class="latency-value">38<span style="font-size:0.75rem;font-weight:500;">ms</span></div>
+          <div class="latency-label">P50</div>
+        </div>
+        <div class="latency-stat">
+          <div class="latency-value">112<span style="font-size:0.75rem;font-weight:500;">ms</span></div>
+          <div class="latency-label">P99</div>
+        </div>
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" style="width:34%;"></div></div>
+      <div class="uptime-row">
+        <div class="uptime-dot"></div>
+        <div class="uptime-text">Uptime 99.97%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID 2 -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Tasks</div>
+      <div class="task-list">
+        <div class="task-item">
+          <div class="task-check done">✓</div>
+          <div class="task-text done">Finalize API schema</div>
+          <span class="task-tag green">API</span>
+        </div>
+        <div class="task-item">
+          <div class="task-check done">✓</div>
+          <div class="task-text done">Deploy staging build</div>
+          <span class="task-tag">DevOps</span>
+        </div>
+        <div class="task-item">
+          <div class="task-check"></div>
+          <div class="task-text">Update auth middleware</div>
+          <span class="task-tag orange">Security</span>
+        </div>
+        <div class="task-item">
+          <div class="task-check"></div>
+          <div class="task-text">Refactor dashboard cards</div>
+          <span class="task-tag purple">UI</span>
+        </div>
+        <div class="task-item">
+          <div class="task-check"></div>
+          <div class="task-text">Write integration tests</div>
+          <span class="task-tag red">Testing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Activity</div>
+      <div class="activity-feed">
+        <div class="activity-item">
+          <div class="activity-dot blue"></div>
+          <div>
+            <div class="activity-text"><span class="activity-bold">Paul</span> merged PR #421</div>
+            <div class="activity-time">2m ago</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot red"></div>
+          <div>
+            <div class="activity-text"><span class="activity-bold">Anna</span> opened Bug #89</div>
+            <div class="activity-time">18m ago</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot green"></div>
+          <div>
+            <div class="activity-text"><span class="activity-bold">Kai</span> deployed v2.4.1</div>
+            <div class="activity-time">1h ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var ctx;
+  var introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  function playTone(freq, dur, type, vol, detune){
+    var c = getCtx();
+    var o = c.createOscillator();
+    var g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, c.currentTime);
+    if(detune) o.detune.setValueAtTime(detune, c.currentTime);
+    g.gain.setValueAtTime(vol || 0.04, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    o.connect(g);
+    g.connect(c.destination);
+    o.start(c.currentTime);
+    o.stop(c.currentTime + dur);
+  }
+
+  function playNoise(dur, vol, filterFreq, filterType){
+    var c = getCtx();
+    var bufSize = c.sampleRate * dur;
+    var buf = c.createBuffer(1, bufSize, c.sampleRate);
+    var data = buf.getChannelData(0);
+    for(var i=0;i<bufSize;i++) data[i] = Math.random()*2-1;
+    var src = c.createBufferSource();
+    src.buffer = buf;
+    var f = c.createBiquadFilter();
+    f.type = filterType || 'highpass';
+    f.frequency.setValueAtTime(filterFreq || 4000, c.currentTime);
+    var g = c.createGain();
+    g.gain.setValueAtTime(vol || 0.02, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+    src.connect(f);
+    f.connect(g);
+    g.connect(c.destination);
+    src.start();
+    src.stop(c.currentTime + dur);
+  }
+
+  // Soft glass chime intro
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    // Airy breath
+    playNoise(0.6, 0.02, 2000, 'bandpass');
+    // Soft ascending chime
+    playTone(880, 0.5, 'sine', 0.03);
+    setTimeout(function(){ playTone(1320, 0.4, 'sine', 0.025); }, 100);
+    setTimeout(function(){ playTone(1760, 0.3, 'sine', 0.02); }, 200);
+  }
+
+  // Card hover: gentle glass chime
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', function(){
+      playIntro();
+      playTone(1400, 0.25, 'sine', 0.035);
+      playTone(2100, 0.18, 'sine', 0.02, 3);
+      setTimeout(function(){ playTone(2800, 0.12, 'sine', 0.015); }, 50);
+    });
+    el.addEventListener('click', function(){
+      playTone(660, 0.12, 'sine', 0.04);
+      playTone(990, 0.1, 'sine', 0.03);
+      playNoise(0.05, 0.015, 5000, 'highpass');
+    });
+  });
+
+  // Nav pill: soft tap
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playTone(1800, 0.1, 'sine', 0.04);
+      playTone(2700, 0.08, 'sine', 0.025);
+      playNoise(0.03, 0.01, 6000, 'highpass');
+    });
+  });
+
+  // Button: confirmation chime
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){
+      playIntro();
+      playTone(523, 0.15, 'sine', 0.045);
+      playTone(784, 0.12, 'sine', 0.035);
+      setTimeout(function(){ playTone(1047, 0.1, 'sine', 0.025); }, 60);
+    });
+  });
+})();
+</script>
+</body>
+</html>

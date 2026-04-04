@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mono Electric - Design Roulette</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg: #0a1628;
+  --bg-card: #1a3a6a;
+  --blue: #0066FF;
+  --blue-dim: #003d99;
+  --blue-bright: #3388ff;
+  --blue-glow: #0066FF44;
+  --ice: #e0f0ff;
+  --ice-dim: #a0c4e8;
+  --ice-muted: #5a8ab5;
+  --navy-light: #122a4a;
+  --navy-border: #1e4a7a;
+}
+
+body{
+  min-height:100vh;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ice);
+  overflow-x:hidden;
+  padding:2.5rem 1.5rem;
+  position:relative;
+}
+
+/* Scan-line texture */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,102,255,0.015) 2px,
+    rgba(0,102,255,0.015) 4px
+  );
+  pointer-events:none;
+}
+
+/* Blue light streaks */
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    linear-gradient(135deg, rgba(0,102,255,0.08) 0%, transparent 40%),
+    linear-gradient(225deg, rgba(0,102,255,0.05) 0%, transparent 35%),
+    radial-gradient(ellipse at 20% 50%, rgba(0,102,255,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, rgba(0,102,255,0.04) 0%, transparent 40%);
+  animation:streakDrift 15s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes streakDrift{
+  0%{opacity:1;transform:translateX(0);}
+  50%{opacity:0.7;transform:translateX(10px);}
+  100%{opacity:1;transform:translateX(-5px);}
+}
+
+.container{max-width:920px;margin:0 auto;position:relative;z-index:1;}
+
+/* Header */
+.header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:2rem;flex-wrap:wrap;gap:1rem;
+}
+.logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;font-size:1.5rem;
+  color:#fff;
+  text-shadow:0 0 20px var(--blue-glow), 0 0 40px rgba(0,102,255,0.2);
+  letter-spacing:-0.5px;
+}
+.logo span{color:var(--blue);font-weight:400;}
+
+.nav-pills{display:flex;gap:0.4rem;}
+.nav-pill{
+  padding:0.45rem 1rem;border-radius:6px;font-size:0.75rem;font-weight:600;
+  cursor:pointer;transition:all 0.25s ease;
+  color:var(--ice-muted);
+  background:transparent;
+  border:1px solid transparent;
+  letter-spacing:0.3px;
+}
+.nav-pill:hover{
+  color:var(--ice);
+  background:rgba(0,102,255,0.1);
+  border-color:rgba(0,102,255,0.2);
+}
+.nav-pill.active{
+  color:#fff;
+  background:var(--blue);
+  border-color:var(--blue);
+  box-shadow:0 0 12px var(--blue-glow), 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* Cards */
+.card{
+  background:var(--bg-card);
+  border:1px solid var(--navy-border);
+  border-radius:8px;
+  padding:1.5rem;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s ease;
+}
+.card::after{
+  content:'';position:absolute;inset:0;border-radius:8px;
+  background:linear-gradient(135deg, rgba(0,102,255,0.06) 0%, transparent 50%);
+  pointer-events:none;
+  transition:opacity 0.3s ease;
+}
+.card:hover{
+  border-color:var(--blue);
+  box-shadow:0 0 20px rgba(0,102,255,0.15), 0 0 40px rgba(0,102,255,0.05);
+}
+.card:hover::after{
+  background:linear-gradient(135deg, rgba(0,102,255,0.1) 0%, transparent 40%, rgba(0,102,255,0.04) 100%);
+}
+
+.card-subtitle{
+  font-size:0.65rem;text-transform:uppercase;letter-spacing:1.8px;
+  color:var(--ice-muted);margin-bottom:0.5rem;font-weight:600;
+}
+.card-title{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;
+  color:#fff;margin-bottom:0.5rem;
+}
+.card-body{
+  font-size:0.8rem;line-height:1.6;color:var(--ice-dim);
+}
+
+/* Grids */
+.grid-hero{display:grid;grid-template-columns:1.4fr 1fr;gap:1rem;margin-bottom:1.2rem;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.2rem;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+@media(max-width:700px){
+  .grid-hero,.grid-3,.grid-2{grid-template-columns:1fr;}
+}
+
+/* Metric values */
+.metric-val{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.8rem;
+  color:#fff;
+  text-shadow:0 0 15px rgba(0,102,255,0.3);
+}
+.metric-lbl{
+  font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--ice-muted);
+}
+
+/* Badge */
+.badge{
+  display:inline-block;padding:0.25rem 0.7rem;border-radius:20px;
+  font-size:0.65rem;font-weight:700;
+  background:rgba(0,102,255,0.15);
+  border:1px solid rgba(0,102,255,0.3);
+  color:var(--blue-bright);
+  position:relative;overflow:hidden;
+}
+.badge::after{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(45deg, transparent 40%, rgba(0,102,255,0.2) 50%, transparent 60%);
+  animation:badgeShine 4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes badgeShine{
+  0%{transform:translateX(-100%);}
+  100%{transform:translateX(100%);}
+}
+
+/* Buttons */
+.btn{
+  padding:0.5rem 1.1rem;border-radius:6px;font-size:0.72rem;font-weight:600;
+  cursor:pointer;transition:all 0.25s ease;border:1px solid var(--navy-border);
+  background:var(--navy-light);color:var(--ice);font-family:'Inter',sans-serif;
+}
+.btn:hover{
+  border-color:var(--blue);
+  box-shadow:0 0 10px var(--blue-glow);
+}
+.btn-primary{
+  background:var(--blue);border-color:var(--blue);color:#fff;
+  box-shadow:0 0 12px var(--blue-glow);
+}
+.btn-primary:hover{
+  background:var(--blue-bright);
+  box-shadow:0 0 20px rgba(0,102,255,0.4);
+}
+
+/* Completion gauge */
+.gauge-wrap{
+  width:120px;height:120px;margin:1rem auto;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.gauge-ring{
+  width:100%;height:100%;border-radius:50%;
+  background:conic-gradient(var(--blue) 0% 86%, var(--navy-light) 86% 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 25px var(--blue-glow);
+  animation:gaugePulse 3s ease-in-out infinite;
+}
+@keyframes gaugePulse{
+  0%,100%{box-shadow:0 0 25px rgba(0,102,255,0.2);}
+  50%{box-shadow:0 0 40px rgba(0,102,255,0.35), 0 0 60px rgba(0,102,255,0.1);}
+}
+.gauge-inner{
+  width:80%;height:80%;border-radius:50%;
+  background:var(--bg-card);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.gauge-val{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.6rem;color:#fff;
+}
+.gauge-lbl{font-size:0.55rem;color:var(--ice-muted);text-transform:uppercase;letter-spacing:1.5px;}
+
+/* Progress bar */
+.progress-track{
+  width:100%;height:6px;border-radius:3px;
+  background:var(--navy-light);overflow:hidden;
+}
+.progress-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg, var(--blue-dim), var(--blue), var(--blue-bright));
+  animation:progressGlow 3s ease-in-out infinite;
+}
+@keyframes progressGlow{
+  0%,100%{filter:brightness(1);}
+  50%{filter:brightness(1.3);}
+}
+
+/* Bar chart */
+.bar-chart{
+  display:flex;align-items:flex-end;gap:6px;height:80px;
+  margin:0.8rem 0 0.4rem;
+}
+.bar-col{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.bar{
+  width:100%;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg, var(--blue-bright), var(--blue));
+  transition:all 0.3s ease;
+  position:relative;
+}
+.bar:hover{
+  background:linear-gradient(180deg, #55aaff, var(--blue-bright));
+  box-shadow:0 0 10px var(--blue-glow);
+}
+.bar-lbl{font-size:0.55rem;color:var(--ice-muted);}
+
+/* Avatars */
+.avatar-stack{display:flex;margin:0.5rem 0;}
+.avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.75rem;
+  color:#fff;margin-right:-10px;
+  border:2px solid var(--bg-card);
+  box-shadow:0 0 8px rgba(0,102,255,0.2);
+}
+
+/* Tags */
+.tag{
+  display:inline-block;padding:0.15rem 0.55rem;border-radius:4px;
+  font-size:0.6rem;font-weight:600;
+  background:rgba(0,102,255,0.12);
+  color:var(--blue-bright);
+  border:1px solid rgba(0,102,255,0.2);
+}
+
+/* Tasks */
+.task-item{
+  display:flex;align-items:center;gap:0.6rem;
+  padding:0.55rem 0;
+  border-bottom:1px solid rgba(0,102,255,0.08);
+}
+.task-item:last-child{border-bottom:none;}
+.task-check{
+  width:18px;height:18px;border-radius:4px;
+  border:1.5px solid var(--ice-muted);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;color:transparent;
+  flex-shrink:0;transition:all 0.2s ease;
+}
+.task-check.done{
+  background:var(--blue);border-color:var(--blue);
+  color:#fff;
+  box-shadow:0 0 8px var(--blue-glow);
+}
+.task-text{font-size:0.78rem;color:var(--ice);}
+.task-text.done{text-decoration:line-through;color:var(--ice-muted);}
+
+/* Activity feed */
+.feed-item{
+  display:flex;align-items:center;gap:0.7rem;
+  padding:0.6rem 0;
+  border-bottom:1px solid rgba(0,102,255,0.08);
+}
+.feed-item:last-child{border-bottom:none;}
+.feed-avatar{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.7rem;
+  color:#fff;flex-shrink:0;
+  border:1.5px solid var(--blue);
+  box-shadow:0 0 10px var(--blue-glow);
+}
+
+/* Divider */
+.mono-divider{
+  height:1px;margin:0.3rem 2rem 1rem;
+  background:linear-gradient(90deg, transparent, rgba(0,102,255,0.2), rgba(0,102,255,0.4), rgba(0,102,255,0.2), transparent);
+}
+
+/* Fade-up animation */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.card{animation:fadeUp 0.5s ease both;}
+.grid-hero .card:nth-child(1){animation-delay:0.05s;}
+.grid-hero .card:nth-child(2){animation-delay:0.12s;}
+.grid-3 .card:nth-child(1){animation-delay:0.18s;}
+.grid-3 .card:nth-child(2){animation-delay:0.24s;}
+.grid-3 .card:nth-child(3){animation-delay:0.30s;}
+.grid-2 .card:nth-child(1){animation-delay:0.36s;}
+.grid-2 .card:nth-child(2){animation-delay:0.42s;}
+
+/* Pulsing glow on key metrics */
+@keyframes metricPulse{
+  0%,100%{text-shadow:0 0 15px rgba(0,102,255,0.3);}
+  50%{text-shadow:0 0 25px rgba(0,102,255,0.5), 0 0 45px rgba(0,102,255,0.15);}
+}
+.metric-val{animation:metricPulse 3s ease-in-out infinite;}
+
+/* Monochromatic gradient overlay on hero cards */
+.card-gradient-a{
+  background:linear-gradient(135deg, #0d2040 0%, #1a3a6a 40%, #0a1f45 100%);
+}
+.card-gradient-b{
+  background:linear-gradient(135deg, #0f2a50 0%, #1a3a6a 50%, #122a4a 100%);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">Mono <span>Electric</span></div>
+    <nav class="nav-pills">
+      <div class="nav-pill active">Dashboard</div>
+      <div class="nav-pill">Projects</div>
+      <div class="nav-pill">Signals</div>
+    </nav>
+  </div>
+
+  <div class="grid-hero">
+    <div class="card card-gradient-a">
+      <div class="card-subtitle">This sprint</div>
+      <div class="card-title" style="font-size:1.55rem;">Momentum is accelerating</div>
+      <div class="card-body">
+        42 tasks resolved across 3 workstreams. Two features shipped ahead of schedule, with zero rollbacks.
+      </div>
+      <div style="display:flex;gap:1.2rem;margin-top:1.3rem;flex-wrap:wrap;">
+        <div>
+          <div class="metric-lbl">Velocity</div>
+          <div class="metric-val">42 pts</div>
+        </div>
+        <div>
+          <div class="metric-lbl">Target</div>
+          <div class="metric-val">34 pts</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <span class="badge">&uarr; 24%</span>
+        </div>
+      </div>
+      <div style="margin-top:1.3rem;display:flex;gap:0.6rem;">
+        <button class="btn btn-primary">View report &rarr;</button>
+        <button class="btn">Share</button>
+      </div>
+    </div>
+
+    <div class="card card-gradient-b">
+      <div class="card-subtitle">Completion</div>
+      <div class="gauge-wrap">
+        <div class="gauge-ring">
+          <div class="gauge-inner">
+            <div class="gauge-val">86%</div>
+            <div class="gauge-lbl">Done</div>
+          </div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:86%"></div>
+      </div>
+      <div style="margin-top:0.8rem;text-align:center;">
+        <span class="badge">&uarr; 18% vs last</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mono-divider"></div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:0.8rem;">
+        <div class="feed-avatar" style="width:40px;height:40px;font-size:1rem;background:rgba(0,102,255,0.15);">8</div>
+        <div>
+          <div class="card-subtitle" style="margin:0;">Deploys</div>
+          <div style="font-size:0.7rem;color:var(--ice-muted);">this week</div>
+        </div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-col">
+          <div class="bar" style="height:30%;"></div>
+          <div class="bar-lbl">Mon</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:55%;"></div>
+          <div class="bar-lbl">Tue</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:80%;"></div>
+          <div class="bar-lbl">Wed</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:45%;"></div>
+          <div class="bar-lbl">Thu</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar" style="height:100%;"></div>
+          <div class="bar-lbl">Fri</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-subtitle">Team</div>
+      <div class="avatar-stack" style="margin-bottom:0.8rem;">
+        <div class="avatar" style="background:linear-gradient(135deg,#003d99,#0066FF);z-index:4;">P</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#004db3,#3388ff);z-index:3;">A</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#002266,#0055dd);z-index:2;">M</div>
+        <div class="avatar" style="background:linear-gradient(135deg,#1a4f8a,#0066FF);z-index:1;">K</div>
+      </div>
+      <div class="card-body" style="margin-bottom:0.6rem;">4 active &middot; 2 in review</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.3rem;">
+        <span class="tag">Design</span>
+        <span class="tag">Frontend</span>
+        <span class="tag">Backend</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-subtitle">Latency</div>
+      <div style="display:flex;justify-content:space-around;margin:1rem 0;">
+        <div style="text-align:center;">
+          <div class="metric-val">38ms</div>
+          <div class="metric-lbl">P50</div>
+        </div>
+        <div style="width:1px;background:linear-gradient(180deg, transparent, rgba(0,102,255,0.3), transparent);"></div>
+        <div style="text-align:center;">
+          <div class="metric-val">112ms</div>
+          <div class="metric-lbl">P99</div>
+        </div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width:96%"></div>
+      </div>
+      <div style="margin-top:0.6rem;display:flex;justify-content:space-between;">
+        <span style="font-size:0.65rem;color:var(--ice-muted);">Uptime</span>
+        <span style="font-size:0.65rem;font-weight:700;color:var(--blue-bright);">99.97%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mono-divider"></div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="display:flex;align-items:center;gap:0.5rem;">
+        Tasks
+        <span class="tag" style="font-size:0.55rem;">3 open</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">Design system audit</span>
+        <span class="tag" style="margin-left:auto;font-size:0.55rem;">Design</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check done">&check;</div>
+        <span class="task-text done">API rate-limit fix</span>
+        <span class="tag" style="margin-left:auto;font-size:0.55rem;">Backend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Dashboard chart refactor</span>
+        <span class="tag" style="margin-left:auto;font-size:0.55rem;">Frontend</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Onboarding flow v2</span>
+        <span class="tag" style="margin-left:auto;font-size:0.55rem;">UX</span>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <span class="task-text">Write release notes</span>
+        <span class="tag" style="margin-left:auto;font-size:0.55rem;">Docs</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Activity</div>
+      <div style="margin-top:0.6rem;">
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:rgba(0,102,255,0.2);">P</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Paul</strong> <span style="opacity:0.5;">merged</span></div>
+            <span class="tag" style="font-size:0.5rem;padding:0.1rem 0.5rem;">PR #421</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ice-muted);">2m</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:rgba(0,102,255,0.15);">A</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Anna</strong> <span style="opacity:0.5;">opened</span></div>
+            <span class="tag" style="font-size:0.5rem;padding:0.1rem 0.5rem;">Bug #89</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ice-muted);">18m</span>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar" style="background:rgba(0,102,255,0.25);">K</div>
+          <div style="flex:1;">
+            <div style="font-size:0.8rem;"><strong>Kai</strong> <span style="opacity:0.5;">deployed</span></div>
+            <span class="tag" style="font-size:0.5rem;padding:0.1rem 0.5rem;">v2.4.1</span>
+          </div>
+          <span style="font-size:0.65rem;color:var(--ice-muted);">1h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  let ctx = null;
+  let introPlayed = false;
+
+  function getCtx(){
+    if(!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    return ctx;
+  }
+
+  // Hover: clean electric ping
+  function playHoverTone(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1320, c.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.04, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.1);
+  }
+
+  // Click: electric snap
+  function playClickSnap(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(200, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(80, c.currentTime + 0.08);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(600, c.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(900, c.currentTime + 0.06);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.12);
+    osc2.stop(c.currentTime + 0.12);
+  }
+
+  // Nav: digital blip
+  function playNavBlip(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(660, c.currentTime);
+    osc.frequency.setValueAtTime(990, c.currentTime + 0.04);
+    osc.frequency.setValueAtTime(1320, c.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.05, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+    osc.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + 0.15);
+  }
+
+  // Button confirm: electric chord
+  function playBtnConfirm(){
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, c.currentTime);
+    osc.frequency.setValueAtTime(660, c.currentTime + 0.06);
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(880, c.currentTime + 0.04);
+    osc2.frequency.setValueAtTime(1100, c.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.06, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.18);
+    osc.connect(gain);
+    osc2.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.18);
+    osc2.stop(c.currentTime + 0.18);
+  }
+
+  // Electric intro sweep
+  function playIntro(){
+    if(introPlayed) return;
+    introPlayed = true;
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const osc2 = c.createOscillator();
+    const filter = c.createBiquadFilter();
+    const gain = c.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(60, c.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(220, c.currentTime + 0.5);
+    osc.frequency.exponentialRampToValueAtTime(110, c.currentTime + 0.8);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(110, c.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(440, c.currentTime + 0.4);
+    osc2.frequency.exponentialRampToValueAtTime(220, c.currentTime + 0.7);
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(150, c.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(1200, c.currentTime + 0.4);
+    filter.frequency.exponentialRampToValueAtTime(300, c.currentTime + 0.8);
+    filter.Q.value = 5;
+    gain.gain.setValueAtTime(0.001, c.currentTime);
+    gain.gain.linearRampToValueAtTime(0.05, c.currentTime + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.9);
+    osc.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(c.destination);
+    osc.start(c.currentTime);
+    osc2.start(c.currentTime);
+    osc.stop(c.currentTime + 0.9);
+    osc2.stop(c.currentTime + 0.9);
+  }
+
+  document.querySelectorAll('.card').forEach(function(el){
+    el.addEventListener('mouseenter', playHoverTone);
+    el.addEventListener('click', playClickSnap);
+  });
+  document.querySelectorAll('.nav-pill').forEach(function(el){
+    el.addEventListener('click', function(){ playNavBlip(); playIntro(); });
+  });
+  document.querySelectorAll('.btn').forEach(function(el){
+    el.addEventListener('click', function(){ playBtnConfirm(); playIntro(); });
+  });
+  document.addEventListener('click', playIntro, {once:true});
+})();
+</script>
+</body>
+</html>
